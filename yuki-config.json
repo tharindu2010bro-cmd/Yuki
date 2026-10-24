@@ -1,5 +1,5 @@
 {
-  "v": 2,
+  "v": 3,
   "sources": {
     "off": [],
     "order": [
@@ -19,6 +19,11 @@
   },
   "app": {
     "build": "45.20"
+  },
+  "maintenance": {
+    "on": true,
+    "title": "Ap",
+    "text": "Yuki will be back soon."
   },
   "flags": {
     "ai": true,
