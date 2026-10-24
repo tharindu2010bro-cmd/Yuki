@@ -68,6 +68,18 @@ jobs:
           open(p, 'w', encoding='utf-8').write(s)
           PY
 
+            - name: Fix bottom spacing
+              run: |
+          python3 - <<'PY'
+          import re
+          p = 'www/index.html'
+          s = open(p, encoding='utf-8').read()
+          s, n = re.subn(r'env\(safe-area-inset-bottom(?:\s*,\s*0px)?\)', 'var(--sab,0px)', s)
+          i = s.find('<head>')
+          s = s[:i+6] + '<style>:root{--sab:6px}</style>' + s[i+6:]
+          open(p, 'w', encoding='utf-8').write(s)
+          print('replaced', n)
+          PY
       - run: npx cap add android
 
       - name: App icon
