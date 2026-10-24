@@ -29,6 +29,11 @@ jobs:
           key: yuki-debug-keystore-v1
 
       - run: npm install
+      - name: Prepare web files
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+          [ -f bridge.js ] && cp bridge.js www/bridge.js || true
 
       - name: Apply tweaks
         run: python3 tweaks.py
