@@ -43,7 +43,31 @@ jobs:
           open(p, 'w', encoding='utf-8').write(s)
           PY
 
-      - run: npx cap add android
+       - name: Bundle images into the app
+        continue-on-error: true
+        run: |
+          mkdir -p www/img
+          python3 - <<'PY'
+          import urllib.request
+          U = {
+            'bg.png': 'https://i.ibb.co/cKHsySXs/upscaled-4k-143280.png',
+            'welcome.png': 'https://i.ibb.co/zVX9YvRJ/143272.png',
+            'nf.png': 'https://i.ibb.co/1f5KKn3q/144244.png'}
+          p = 'www/index.html'
+          s = open(p, encoding='utf-8').read()
+          for n, u in U.items():
+              try:
+                  req = urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'})
+                  d = urllib.request.urlopen(req, timeout=60).read()
+                  if len(d) > 1000:
+                      open('www/img/' + n, 'wb').write(d)
+                      s = s.replace(u, '/img/' + n)
+                      print('ok', n, len(d))
+              except Exception as e:
+                  print('fail', n, e)
+          open(p, 'w', encoding='utf-8').write(s)
+          PY     
+- run: npx cap add android
 
       - name: App icon
         continue-on-error: true
