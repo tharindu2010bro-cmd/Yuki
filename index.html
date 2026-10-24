@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script>window.YUKI_BUILD='45.20';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='45.21';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5178,8 +5178,16 @@ function force(a){
   if(rdy){lockUI('yForce','Update required','The new version is ready.',[['Restart',function(){location.reload()}]]);return}
   lockUI('yForce','Update required','This version is too old. Downloading the update…',[]);
   ota(nb,function(){force(a)},function(){lockUI('yForce','Update required','Could not download the update automatically.',link)})}
+function logoCss(l){
+  var st=document.getElementById('yLogoCss');
+  if(!l||!l.url){if(st)st.remove();return}
+  var u=/^https:\/\//.test(l.url)?l.url:H+String(l.url).replace(/^\/+/,'');
+  u+=(u.indexOf('?')<0?'?':'&')+'v='+encodeURIComponent(l.v||'1');
+  if(!st){st=document.createElement('style');st.id='yLogoCss';document.head.appendChild(st)}
+  st.textContent='.av,#ddAv{background-image:url("'+u.replace(/"/g,'')+'")!important;background-size:cover!important;background-position:center!important}'}
 function apply(c){
   if(!c)return;
+  try{if(c.logo&&c.logo.url){ls('yukiLogo_v1',JSON.stringify(c.logo));logoCss(c.logo)}else{ls('yukiLogo_v1',null);logoCss(null)}}catch(e){}
   var fl=c.flags||{};ls('yukiFlags_v1',JSON.stringify(fl));applyFlags(fl);
   if(c.maintenance&&c.maintenance.on){ls('yukiMaint_v1',JSON.stringify({t:Date.now(),title:c.maintenance.title,text:c.maintenance.text}));maint(c.maintenance)}else{ls('yukiMaint_v1',null);unlock('yMaint')}
   if(c.app&&c.app.min&&cmp(c.app.min,B)>0)force(c.app);else unlock('yForce');
@@ -5214,6 +5222,7 @@ addEventListener('load',function(){setTimeout(function(){ls('yukiOtaTry',null);p
 setInterval(function(){if(!document.hidden){pull();autoCheck()}},30*60*1000);
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-(+ls('yukiPullAt')||0)>10*60*1000){ls('yukiPullAt',String(Date.now()));pull();autoCheck()}});
 window.yukiPull=pull;
+try{logoCss(JSON.parse(ls('yukiLogo_v1')||'null'))}catch(e){}
 try{applyFlags(JSON.parse(ls('yukiFlags_v1')||'{}'));var mm=JSON.parse(ls('yukiMaint_v1')||'null');if(mm&&Date.now()-mm.t<864e5)maint(mm)}catch(e){}
 })();</script>
 </body></html>
