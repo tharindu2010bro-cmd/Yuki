@@ -41,6 +41,16 @@ jobs:
           PY
 
       - run: npx cap add android
+      - name: App icon
+        continue-on-error: true
+        run: |
+          ICON=$(ls *.png 2>/dev/null | head -n1)
+          if [ -n "$ICON" ]; then
+            mkdir -p assets
+            cp "$ICON" assets/icon-only.png
+            npx --yes @capacitor/assets generate --android --iconBackgroundColor '#0a1040'
+            rm -rf android/app/src/main/res/mipmap-anydpi-v26
+          fi
       - run: npx cap sync android
 
       - name: Add permissions
