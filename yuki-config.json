@@ -1,5 +1,5 @@
 {
-  "v": 1,
+  "v": 2,
   "sources": {
     "off": [],
     "order": [
@@ -10,6 +10,12 @@
       "AnimeThemes",
       "TVmaze"
     ]
+  },
+  "notice": {
+    "id": "2249825",
+    "title": "Hi",
+    "text": "",
+    "url": ""
   },
   "app": {
     "build": "45.20"
