@@ -43,7 +43,7 @@ jobs:
           open(p, 'w', encoding='utf-8').write(s)
           PY
 
-       - name: Bundle images into the app
+      - name: Bundle images into the app
         continue-on-error: true
         run: |
           mkdir -p www/img
@@ -66,8 +66,9 @@ jobs:
               except Exception as e:
                   print('fail', n, e)
           open(p, 'w', encoding='utf-8').write(s)
-          PY     
-- run: npx cap add android
+          PY
+
+      - run: npx cap add android
 
       - name: App icon
         continue-on-error: true
