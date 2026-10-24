@@ -1,0 +1,22 @@
+{
+  "v": 1,
+  "sources": {
+    "off": [],
+    "order": [
+      "AniList",
+      "Jikan",
+      "Shikimori",
+      "Kitsu",
+      "AnimeThemes",
+      "TVmaze"
+    ]
+  },
+  "app": {
+    "build": "45.20"
+  },
+  "flags": {
+    "ai": true,
+    "news": true,
+    "quiz": true
+  }
+}
