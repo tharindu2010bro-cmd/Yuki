@@ -1,0 +1,58 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: yuki-debug-keystore-v1
+
+      - run: npm install
+
+      - name: Inject native bridge into index.html (build only)
+        run: |
+          cp bridge.js www/bridge.js
+          python3 - <<'PY'
+          p = 'www/index.html'
+          s = open(p, encoding='utf-8').read()
+          i = s.find('<head>')
+          if i < 0:
+              raise SystemExit('<head> not found in www/index.html')
+          s = s[:i+6] + '<script src="bridge.js"></script>' + s[i+6:]
+          open(p, 'w', encoding='utf-8').write(s)
+          PY
+
+      - run: npx cap add android
+      - run: npx cap sync android
+
+      - name: Add permissions
+        run: |
+          M=android/app/src/main/AndroidManifest.xml
+          sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n    <uses-permission android:name="android.permission.VIBRATE"/>\n    <application#' $M
+
+      - name: Build APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yuki-anime-tracker-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
