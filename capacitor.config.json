@@ -1,5 +1,5 @@
-      - name: Prepare web files
-        run: |
-          mkdir -p www
-          cp index.html www/index.html
-          [ -f bridge.js ] && cp bridge.js www/bridge.js || true
+{
+  "appId": "...",
+  "appName": "Yuki",
+  "webDir": "www"
+}
