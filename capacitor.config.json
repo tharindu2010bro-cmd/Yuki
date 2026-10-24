@@ -1,0 +1,6 @@
+{
+  "appId": "com.yuki.animetracker",
+  "appName": "Yuki Anime Tracker",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}
