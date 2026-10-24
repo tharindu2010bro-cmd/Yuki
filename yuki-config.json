@@ -20,6 +20,11 @@
   "app": {
     "build": "45.20"
   },
+  "maintenance": {
+    "on": true,
+    "title": "Ap",
+    "text": "Yuki will be back soon."
+  },
   "flags": {
     "ai": true,
     "news": true,
