@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c0a16">
+<title>Yuki’s API Status</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0a16;--card:#151226;--line:#2a2447;--t:#ece8fb;--s:#9a93b8;--up:#34d399;--slow:#fbbf24;--down:#fb7185;--pink:#f5a3d0;--idle:#3a3358}
+*{box-sizing:border-box;margin:0}
+body{background:radial-gradient(70% 40% at 15% 0%,rgba(245,163,208,.14),transparent 70%),radial-gradient(60% 35% at 100% 10%,rgba(45,212,191,.10),transparent 70%),var(--bg);color:var(--t);font-family:'Zen Maru Gothic',system-ui,sans-serif;font-weight:500;line-height:1.45;min-height:100vh;padding:20px 16px 48px}
+main{max-width:640px;margin:0 auto}
+.top{font-size:.85rem;color:var(--s);margin-bottom:6px}
+h1{font-size:2.1rem;font-weight:900;line-height:1.1;letter-spacing:-.5px}
+h1.ok{color:var(--up)}h1.mid{color:var(--slow)}h1.bad{color:var(--down)}
+.sub{color:var(--s);font-size:.9rem;margin:6px 0 14px}
+.strip{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:16px}
+.strip i{width:14px;height:22px;border-radius:5px;background:var(--idle)}
+.strip i.up{background:var(--up)}.strip i.slow{background:var(--slow)}.strip i.down{background:var(--down)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:11px 18px;background:linear-gradient(135deg,#f5a3d0,#a78bfa);color:#1a1230;cursor:pointer}
+button:disabled{opacity:.55}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+label{font-size:.88rem;color:var(--s);display:flex;gap:8px;align-items:center}
+h2{font-size:1rem;font-weight:700;color:var(--pink);margin:20px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.row{display:grid;grid-template-columns:12px 1fr auto;gap:12px;align-items:center;padding:13px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--idle)}
+.up .dot{background:var(--up);box-shadow:0 0 10px var(--up)}.slow .dot{background:var(--slow)}.down .dot{background:var(--down)}
+.run .dot{animation:p 1s infinite alternate}@keyframes p{to{opacity:.25}}
+.nm{font-weight:700}.err{font-size:.78rem;color:var(--down);overflow-wrap:anywhere}
+.hist{display:flex;gap:2px;margin-top:5px}.hist b{width:6px;height:12px;border-radius:2px;background:var(--idle)}
+.hist b.u{background:var(--up)}.hist b.s{background:var(--slow)}.hist b.d{background:var(--down)}
+.st{font-size:.85rem;text-align:right;color:var(--s);white-space:nowrap}
+.up .st{color:var(--up)}.slow .st{color:var(--slow)}.down .st{color:var(--down)}
+details{margin-top:24px;color:var(--s);font-size:.88rem}summary{cursor:pointer;font-weight:700}
+input{width:100%;margin:10px 0 6px;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--t);font:inherit}
+.row.c{grid-template-columns:1fr auto auto}.mv{padding:6px 12px;border-radius:10px;background:var(--line);color:var(--t)}
+.note{font-size:.8rem;color:var(--s);margin-top:18px}
+@media (prefers-reduced-motion:reduce){.run .dot{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<p class="top">Yuki’s Anime Tracker</p>
+<h1 id="sum">Checking…</h1>
+<p class="sub" id="meta">Running live checks from your browser</p>
+<div class="strip" id="strip" aria-hidden="true"></div>
+<div class="bar">
+  <button id="go">Check now</button>
+  <label><input type="checkbox" id="auto" checked style="width:auto;margin:0"> Auto-refresh every 60 s</label>
+</div>
+<div id="list"></div>
+<div class="bar" style="margin-bottom:6px"><label><input type="checkbox" id="alr" style="width:auto;margin:0"> Alert me when something goes down (sound + notification)</label><button id="tst" type="button">Test alert</button></div>
+<h2>Yuki app controls</h2>
+<div class="card" id="ctl"></div>
+<div class="bar" style="margin-top:12px"><button id="dis" type="button">Turn off down sources</button><button id="rst" type="button">Reset app’s dead-host cache</button></div>
+<p class="note" style="margin:0 0 6px">Sources are used by Discover search, in this order, and unticked ones are skipped. They apply on this device straight away and go into the config you publish below.</p>
+<h2>Publish update to Yuki app</h2>
+<div class="card" style="padding:14px">
+ <input id="ghr" aria-label="GitHub repo" placeholder="owner/repo" autocomplete="off">
+ <input id="ght" type="password" aria-label="GitHub token" placeholder="GitHub token (for one-tap publish)" autocomplete="off">
+ <input id="ntt" aria-label="Notice title" placeholder="Notice title (optional)">
+ <input id="ntx" aria-label="Notice text" placeholder="Notice text (optional)">
+ <input id="ntu" aria-label="Notice link" placeholder="Notice link (optional)">
+ <input id="bld" aria-label="Latest app build" placeholder="Latest app build (optional, found automatically)">
+ <input id="mnb" aria-label="Minimum build" placeholder="Minimum build, forces older apps to update">
+ <input id="apu" aria-label="APK link" placeholder="APK download link (fallback, optional)">
+ <label style="margin-top:10px"><input type="checkbox" id="mtOn" style="width:auto;margin:0"> Maintenance mode (locks the app)</label>
+ <input id="mtt" aria-label="Maintenance title" placeholder="Maintenance title">
+ <input id="mtx" aria-label="Maintenance message" placeholder="Maintenance message">
+ <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:.9rem;color:var(--s)">Features:
+  <label><input type="checkbox" id="fAi" checked style="width:auto;margin:0"> AI chat</label>
+  <label><input type="checkbox" id="fNw" checked style="width:auto;margin:0"> News</label>
+  <label><input type="checkbox" id="fQz" checked style="width:auto;margin:0"> Quiz</label></div>
+</div>
+<div class="bar" style="margin-top:12px"><button id="pub" type="button">Publish to GitHub</button><button id="dl" type="button">Download config</button></div>
+<p id="pubst" class="note" style="margin:0 0 6px">Publishing writes yuki-config.json to your repo. The Yuki app reads it on launch and every 30 minutes. App updates need no publish at all: upload the new index.html and the app notices its higher build number by itself.</p>
+<h2>Upload new app version</h2>
+<div class="card" style="padding:14px">
+ <input id="upf" type="file" accept=".html,text/html" aria-label="New index.html">
+ <p id="ups" class="note" style="margin:6px 0 0">Pick the new index.html. It goes straight to your repo, and the Yuki app updates itself from there.</p>
+</div>
+<div class="bar" style="margin-top:12px"><button id="upb" type="button">Upload to host</button></div>
+<details>
+  <summary>My proxy (Cloudflare Worker)</summary>
+  <input id="wk" type="url" placeholder="https://your-worker.workers.dev" autocomplete="off">
+  <button id="sv" type="button">Save proxy URL</button>
+</details>
+<p class="note">Green is under 2.5 s, amber is slow, red is down. Services marked “reachable” only prove the host answers, because the browser cannot read their reply.</p>
+</main>
+<script>
+(function(){
+var W0='https://yukiant.brotharu292.workers.dev',HK='yuki-status-h',TO=10000,SLOW=2500;
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+var W=(lsGet('yukiProxy')||W0).replace(/\/+$/,'');
+function bad(){throw new Error('Unexpected reply')}
+function J(u,s,o){o=o||{};o.signal=s;return fetch(u,o).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})}
+function R(u){return function(s){return fetch(u,{mode:'no-cors',cache:'no-store',signal:s})}}
+var G=[
+['Anime data',[
+ ['AniList',function(s){return J('https://graphql.anilist.co',s,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:'{Page(perPage:1){media(type:ANIME){id}}}'})}).then(function(j){if(!j.data)bad()})}],
+ ['Jikan (MyAnimeList)',function(s){return J('https://api.jikan.moe/v4/anime/1',s).then(function(j){if(!j.data)bad()})}],
+ ['Shikimori (.io)',function(s){return J('https://shikimori.io/api/animes?limit=1',s).then(function(j){if(!Array.isArray(j))bad()})}],
+ ['Shikimori (.one)',function(s){return J('https://shikimori.one/api/animes?limit=1',s).then(function(j){if(!Array.isArray(j))bad()})}],
+ ['Kitsu',function(s){return J('https://kitsu.io/api/edge/anime?page[limit]=1',s,{headers:{Accept:'application/vnd.api+json'}}).then(function(j){if(!j.data)bad()})}],
+ ['AnimeThemes',function(s){return J('https://api.animethemes.moe/anime?page[size]=1',s).then(function(j){if(!j.anime)bad()})}],
+ ['TVmaze',function(s){return J('https://api.tvmaze.com/search/shows?q=naruto',s).then(function(j){if(!Array.isArray(j))bad()})}],
+ ['Trace.moe',function(s){return J('https://api.trace.moe/me',s).then(function(j){if(!j)bad()})}],
+ ['Wikipedia',function(s){return J('https://en.wikipedia.org/w/api.php?action=query&meta=siteinfo&format=json&origin=*',s).then(function(j){if(!j.query)bad()})}]
+]],
+['AI services (reachable)',[
+ ['Google Gemini',R('https://generativelanguage.googleapis.com/')],
+ ['Groq',R('https://api.groq.com/')],
+ ['OpenRouter',R('https://openrouter.ai/')],
+ ['AI Horde',R('https://aihorde.net/api/v2/status/heartbeat')]
+]],
+['Images and media (reachable)',[
+ ['ImgBB images',R('https://i.ibb.co/')],
+ ['Pollinations',R('https://image.pollinations.ai/')],
+ ['YouTube',R('https://www.youtube.com/favicon.ico')]
+]],
+['My proxy',[
+ ['Proxy · online',function(s){if(!W)throw new Error('No proxy URL set');return fetch(W+'/',{mode:'no-cors',cache:'no-store',signal:s})}],
+ ['Proxy · Jikan',function(s){if(!W)throw new Error('No proxy URL set');return J(W+'/jikan/v4/anime/1',s).then(function(j){if(!j.data)bad()})}],
+ ['Proxy · Shikimori',function(s){if(!W)throw new Error('No proxy URL set');return J(W+'/shiki/api/animes?limit=1',s).then(function(j){if(!Array.isArray(j))bad()})}]
+]]];
+var H={};try{H=JSON.parse(lsGet(HK)||'{}')}catch(e){}
+var rows=[],list=document.getElementById('list'),strip=document.getElementById('strip');
+G.forEach(function(g){
+  var h=document.createElement('h2');h.textContent=g[0];list.appendChild(h);
+  var c=document.createElement('div');c.className='card';list.appendChild(c);
+  g[1].forEach(function(it){
+    var el=document.createElement('div');el.className='row';
+    el.innerHTML='<span class="dot"></span><div><div class="nm"></div><div class="err"></div><div class="hist"></div></div><div class="st">Waiting</div>';
+    el.querySelector('.nm').textContent=it[0];c.appendChild(el);
+    var sq=document.createElement('i');strip.appendChild(sq);
+    rows.push({n:it[0],f:it[1],el:el,sq:sq,state:''});
+  });
+});
+function paintHist(r){
+  var h=H[r.n]||'',box=r.el.querySelector('.hist');box.textContent='';
+  h.split('').forEach(function(ch){var b=document.createElement('b');b.className=ch;box.appendChild(b)});
+}
+rows.forEach(paintHist);
+function summary(){
+  var up=0,sl=0,dn=0,done=0;
+  rows.forEach(function(r){if(r.state){done++;if(r.state==='up')up++;else if(r.state==='slow')sl++;else dn++}});
+  var h=document.getElementById('sum');
+  if(!done){h.textContent='Checking…';h.className='';return}
+  h.textContent=(up+sl)+' of '+rows.length+' online';
+  h.className=dn?(dn>2?'bad':'mid'):(sl?'mid':'ok');
+  document.getElementById('meta').textContent=(dn?dn+' down':'Nothing down')+(sl?', '+sl+' slow':'')+' · checked '+new Date().toLocaleTimeString();
+}
+function check(r){
+  r.el.classList.add('run');r.el.querySelector('.st').textContent='Checking';
+  var c=new AbortController(),t=setTimeout(function(){c.abort()},TO),t0=performance.now(),p;
+  try{p=Promise.resolve(r.f(c.signal))}catch(e){p=Promise.reject(e)}
+  return p.then(function(){return {ok:1,ms:Math.round(performance.now()-t0)}},function(e){return {ok:0,e:(e&&e.name==='AbortError')?'Timed out after 10 s':(e&&e.message==='Failed to fetch'?'Blocked or unreachable':(e&&e.message)||'Failed')}})
+  .then(function(x){
+    clearTimeout(t);
+    var was=r.state;r.state=!x.ok?'down':(x.ms>=SLOW?'slow':'up');
+    if(was&&was!=='down'&&r.state==='down')alertMe(r.n+' is down',1);
+    if(was==='down'&&r.state!=='down')alertMe(r.n+' is back online',0);
+    r.el.className='row '+r.state;r.sq.className=r.state;
+    r.el.querySelector('.st').textContent=x.ok?(x.ms+' ms'):'Down';
+    r.el.querySelector('.err').textContent=x.ok?'':x.e;
+    H[r.n]=((H[r.n]||'')+(r.state==='up'?'u':r.state==='slow'?'s':'d')).slice(-24);
+    paintHist(r);summary();
+  });
+}
+var busy=false,btn=document.getElementById('go');
+function runAll(){
+  if(busy)return;busy=true;btn.disabled=true;btn.textContent='Checking…';
+  Promise.all(rows.map(check)).then(function(){lsSet(HK,JSON.stringify(H));busy=false;btn.disabled=false;btn.textContent='Check now'});
+}
+btn.onclick=runAll;
+var timer=null,auto=document.getElementById('auto');
+function sched(){clearInterval(timer);if(auto.checked)timer=setInterval(function(){if(!document.hidden)runAll()},60000)}
+auto.onchange=sched;sched();
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&auto.checked)runAll()});
+var wi=document.getElementById('wk');wi.value=lsGet('yukiProxy')||W0;
+document.getElementById('sv').onclick=function(){W=wi.value.trim().replace(/\/+$/,'');lsSet('yukiProxy',W);runAll()};
+var SRC=['AniList','Jikan','Shikimori','Kitsu','AnimeThemes','TVmaze'],MAP={AniList:['AniList'],Jikan:['Jikan (MyAnimeList)'],Shikimori:['Shikimori (.io)','Shikimori (.one)'],Kitsu:['Kitsu'],AnimeThemes:['AnimeThemes'],TVmaze:['TVmaze']};
+var P={off:[],order:SRC.slice()};
+try{var q=JSON.parse(lsGet('yukiApi_v1')||'{}');if(q.off)P.off=q.off.filter(function(n){return SRC.indexOf(n)>-1});if(q.order&&q.order.length)P.order=q.order.filter(function(n){return SRC.indexOf(n)>-1}).concat(SRC.filter(function(n){return q.order.indexOf(n)<0}))}catch(e){}
+function saveP(){lsSet('yukiApi_v1',JSON.stringify(P));drawC()}
+function drawC(){
+ var box=document.getElementById('ctl');box.textContent='';
+ P.order.forEach(function(n,i){
+  var r=document.createElement('div');r.className='row c';
+  r.innerHTML='<label class="nm"><input type="checkbox" style="width:auto;margin:0 8px 0 0"><span></span></label><button type="button" class="mv" aria-label="Move up">▲</button><button type="button" class="mv" aria-label="Move down">▼</button>';
+  r.querySelector('span').textContent=n;
+  var cb=r.querySelector('input'),bt=r.querySelectorAll('button');cb.checked=P.off.indexOf(n)<0;
+  cb.onchange=function(){var k=P.off.indexOf(n);if(cb.checked&&k>-1)P.off.splice(k,1);if(!cb.checked&&k<0)P.off.push(n);saveP()};
+  bt[0].onclick=function(){if(i>0){P.order.splice(i-1,0,P.order.splice(i,1)[0]);saveP()}};
+  bt[1].onclick=function(){if(i<P.order.length-1){P.order.splice(i+1,0,P.order.splice(i,1)[0]);saveP()}};
+  box.appendChild(r)});
+}
+drawC();
+function st(n){var x=rows.filter(function(r){return r.n===n})[0];return x&&x.state}
+document.getElementById('dis').onclick=function(){
+ var off=SRC.filter(function(n){var m=MAP[n].map(st).filter(Boolean);return m.length&&m.every(function(s){return s==='down'})});
+ if(off.length>=SRC.length){alert('Everything looks down, so nothing was turned off.');return}
+ P.off=off;saveP();this.textContent=off.length?'Turned off '+off.length+' ✓':'Nothing is down ✓';var b=this;setTimeout(function(){b.textContent='Turn off down sources'},2500)};
+document.getElementById('rst').onclick=function(){lsSet('yukiCmd_v1','reset'+Date.now());var b=this;b.textContent='Sent ✓';setTimeout(function(){b.textContent='Reset app’s dead-host cache'},2500)};
+function $(i){return document.getElementById(i)}
+$('ghr').value=lsGet('yukiGhRepo')||'tharindu2010bro-cmd/Yuki';$('ght').value=lsGet('yukiGhToken')||'';
+function hostUrl(){var p=$('ghr').value.trim().split('/');return 'https://'+p[0]+'.github.io/'+p[1]+'/'}
+fetch(hostUrl()+'index.html?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(x){var m=/YUKI_BUILD='([^']+)'/.exec(x);if(m&&!$('bld').value)$('bld').value=m[1]}).catch(function(){});
+function hash(x){var h=0;for(var i=0;i<x.length;i++)h=(h*31+x.charCodeAt(i))|0;return String(h)}
+function cfg(old){
+ var c={v:(+old.v||0)+1,sources:{off:P.off,order:P.order}};
+ if(W&&W!==W0)c.proxy=W;
+ var n=$('ntt').value.trim(),x=$('ntx').value.trim(),u=$('ntu').value.trim();
+ if(n||x)c.notice={id:hash(n+'|'+x+'|'+u),title:n,text:x,url:u};
+ var ap={},bl=$('bld').value.trim(),mn=$('mnb').value.trim(),au=$('apu').value.trim();if(bl)ap.build=bl;if(mn)ap.min=mn;if(au)ap.url=au;if(bl||mn||au)c.app=ap;
+ if($('mtOn').checked)c.maintenance={on:true,title:$('mtt').value.trim()||'Under maintenance',text:$('mtx').value.trim()||'Yuki will be back soon.'};
+ c.flags={ai:$('fAi').checked,news:$('fNw').checked,quiz:$('fQz').checked};
+ return c}
+function oldCfg(cb){fetch(hostUrl()+'yuki-config.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():{v:0}}).catch(function(){return {v:0}}).then(cb)}
+oldCfg(function(o){
+ if(o.flags){$('fAi').checked=o.flags.ai!==false;$('fNw').checked=o.flags.news!==false;$('fQz').checked=o.flags.quiz!==false}
+ if(o.maintenance&&o.maintenance.on){$('mtOn').checked=true;$('mtt').value=o.maintenance.title||'';$('mtx').value=o.maintenance.text||''}
+ if(o.app){$('mnb').value=o.app.min||'';$('apu').value=o.app.url||'';if(o.app.build&&!$('bld').value)$('bld').value=o.app.build}
+ if(o.notice){$('ntt').value=o.notice.title||'';$('ntx').value=o.notice.text||'';$('ntu').value=o.notice.url||''}});
+var alr=$('alr');alr.checked=lsGet('yuki-status-alert')==='1';
+function beep(){try{var a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.value=.15;o.connect(g);g.connect(a.destination);o.start();setTimeout(function(){o.stop();a.close()},400)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
+function alertMe(msg,loud){
+ if(!alr.checked)return;
+ if(loud)beep();
+ try{if('Notification' in window&&Notification.permission==='granted')new Notification('Yuki API status',{body:msg})}catch(e){}}
+window.alertMe=alertMe;
+alr.onchange=function(){lsSet('yuki-status-alert',alr.checked?'1':'0');if(alr.checked){beep();try{'Notification' in window&&Notification.requestPermission()}catch(e){}}};
+$('tst').onclick=function(){var was=alr.checked;alr.checked=true;alertMe('This is a test alert',1);alr.checked=was};
+var upBuild='',hostBuild='';
+function cv(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
+function b64(buf){var u=new Uint8Array(buf),t='';for(var i=0;i<u.length;i+=8192)t+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(t)}
+$('upf').onchange=function(){
+ var f=this.files[0],o=$('ups');if(!f)return;upBuild='';hostBuild='';
+ f.text().then(function(t){
+  var m=/YUKI_BUILD='([0-9.]+)'/.exec(t.slice(0,20000));
+  if(!m||t.length<200000||t.indexOf('</html>')<0){o.textContent='This does not look like the Yuki index.html (no build number found).';return}
+  upBuild=m[1];o.textContent='Selected build '+upBuild+'. Checking the host…';
+  return fetch(hostUrl()+'index.html?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(h){
+   var hm=/YUKI_BUILD='([0-9.]+)'/.exec(h.slice(0,20000));hostBuild=hm?hm[1]:'';
+   o.textContent='Selected build '+upBuild+(hostBuild?'. The host has '+hostBuild+'.':'. The host has no build yet.')+(hostBuild&&cv(upBuild,hostBuild)<=0?' This is not higher, so users will not update.':'')
+  }).catch(function(){o.textContent='Selected build '+upBuild+'.'})})};
+$('upb').onclick=function(){
+ var f=$('upf').files[0],tk=$('ght').value.trim(),rp=$('ghr').value.trim(),o=$('ups');
+ if(!f||!upBuild){o.textContent='Pick a valid index.html first.';return}
+ if(!tk||rp.indexOf('/')<1){o.textContent='Add the repo and a GitHub token above first.';return}
+ if(hostBuild&&cv(upBuild,hostBuild)<=0&&!confirm('Build '+upBuild+' is not higher than the host ('+hostBuild+'). Users will not update. Upload anyway?'))return;
+ lsSet('yukiGhRepo',rp);lsSet('yukiGhToken',tk);o.textContent='Uploading…';
+ var u='https://api.github.com/repos/'+rp+'/contents/index.html',hd={Authorization:'Bearer '+tk,Accept:'application/vnd.github+json'};
+ f.arrayBuffer().then(function(buf){
+  return fetch(u,{headers:hd}).then(function(r){return r.ok?r.json():{}}).then(function(x){
+   var b={message:'Yuki app '+upBuild,content:b64(buf)};if(x.sha)b.sha=x.sha;
+   return fetch(u,{method:'PUT',headers:hd,body:JSON.stringify(b)})})
+ }).then(function(r){if(r.ok){$('bld').value=upBuild;return 'Uploaded build '+upBuild+'. GitHub Pages can take a few minutes, then the app updates itself.'}return r.json().then(function(j){return 'Failed: '+(j.message||r.status)})})
+ .then(function(m){o.textContent=m}).catch(function(e){o.textContent='Failed: '+e.message})};
+$('dl').onclick=function(){oldCfg(function(old){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(cfg(old),null,2)],{type:'application/json'}));a.download='yuki-config.json';a.click();$('pubst').textContent='Downloaded. Upload it to the repo root as yuki-config.json.'})};
+$('pub').onclick=function(){
+ var tk=$('ght').value.trim(),rp=$('ghr').value.trim(),out=$('pubst');
+ if(!tk||rp.indexOf('/')<1){out.textContent='Add the repo and a GitHub token first, or use Download config.';return}
+ lsSet('yukiGhRepo',rp);lsSet('yukiGhToken',tk);out.textContent='Publishing…';
+ oldCfg(function(old){
+  var c=cfg(old),u='https://api.github.com/repos/'+rp+'/contents/yuki-config.json',hd={Authorization:'Bearer '+tk,Accept:'application/vnd.github+json'};
+  fetch(u,{headers:hd}).then(function(r){return r.ok?r.json():{}}).then(function(f){
+   var b={message:'Yuki config v'+c.v,content:btoa(unescape(encodeURIComponent(JSON.stringify(c,null,2))))};if(f.sha)b.sha=f.sha;
+   return fetch(u,{method:'PUT',headers:hd,body:JSON.stringify(b)})
+  }).then(function(r){return r.ok?'Published v'+c.v+'. GitHub Pages can take about a minute.':r.json().then(function(j){return 'Failed: '+(j.message||r.status)})})
+  .then(function(m){out.textContent=m}).catch(function(e){out.textContent='Failed: '+e.message})})};
+runAll();
+})();
+</script>
+</body>
+</html>
