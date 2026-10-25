@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<script>window.YUKI_BUILD='45.25';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}';document.head.appendChild(_s)}}catch(e){}</script>
+<script>window.YUKI_BUILD='45.27';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -4969,6 +4969,7 @@ window.stOv=function(){var h=_o.apply(this,arguments);try{var t=window.stTi(),k=
 .nw-card:active,.nw-hero:active{transform:scale(.98)}
 .nw-th{position:relative;width:98px;height:98px;flex:0 0 98px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,rgba(124,58,237,.45),rgba(56,189,248,.2));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#ffffff88}
 .nw-th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.nw-th .nw-av{width:56px;height:56px;margin:0;flex:none;animation:none;border-width:2px}
 .nw-card .nw-i{min-width:0;flex:1;display:flex;flex-direction:column;gap:5px}
 .nw-card .nw-t{font-weight:800;font-size:.9rem;line-height:1.28;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--t)}
 .nw-card .nw-d{font-size:.74rem;color:var(--s);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -5029,7 +5030,7 @@ for(var k=0;k<list.length;k++){try{var d=(JSON.parse(await jget('https://api.jik
 await sleep(480)}return out}
 function ago(t){if(!t)return'';var m=Math.max(1,Math.round((Date.now()-t)/6e4));if(m<60)return m+'m ago';var h=Math.round(m/60);if(h<24)return h+'h ago';var d=Math.round(h/24);return d+'d ago'}
 function ini(s){return esc((s||'?').charAt(0).toUpperCase())}
-function thumb(i){return'<div class="nw-th">'+ini(i.sn)+(i.i?'<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(i.i)+'" alt="" onerror="this.remove()">':'')+'</div>'}
+function thumb(i){return'<div class="nw-th"><span class="av nw-av"></span>'+(i.i?'<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(i.i)+'" alt="" onerror="this.remove()">':'')+'</div>'}
 function cards(){var L=st.items.filter(function(i){return st.src==='all'||i.s===st.src});
 if(st.loading&&!st.items.length){var s='';for(var k=0;k<5;k++)s+='<div class="nw-sk"><div></div><div><i style="width:92%"></i><i style="width:78%"></i><i style="width:40%"></i></div></div>';return s}
 if(!L.length){var nm=st.src==='all'?'':(SRC.filter(function(x){return x.id===st.src})[0]||{}).name;return'<div class="nw-msg"><b>📭</b>'+(st.err||(nm?'No stories from '+esc(nm)+' right now.':'No news yet.'))+'<br><button onclick="yNewsLoad(true)">Try again</button></div>'}
