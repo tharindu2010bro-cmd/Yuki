@@ -18,7 +18,7 @@
     "url": ""
   },
   "app": {
-    "build": "45.32"
+    "build": "46.0"
   },
   "flags": {
     "ai": true,
