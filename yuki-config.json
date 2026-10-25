@@ -1,5 +1,5 @@
 {
-  "v": 24,
+  "v": 25,
   "sources": {
     "off": [],
     "order": [
@@ -12,13 +12,13 @@
     ]
   },
   "notice": {
-    "id": "-1221904447",
-    "title": "New update please",
-    "text": "",
+    "id": "1658912436",
+    "title": "New update",
+    "text": "Fetch app",
     "url": ""
   },
   "app": {
-    "build": "46.12"
+    "build": "46.15"
   },
   "flags": {
     "ai": true,
