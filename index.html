@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.4';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.5';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5056,7 +5056,7 @@ if(!L.length){var nm=st.src==='all'?'':(SRC.filter(function(x){return x.id===st.
 var h='',n=0;
 L.forEach(function(i,k){var ix=st.items.indexOf(i),dl='style="animation-delay:'+Math.min(k,10)*40+'ms"',bd='<span class="nw-badge s-'+esc(i.s)+'">'+esc(i.sn)+'</span>';
 if(k===0&&i.i)h+='<div class="nw-hero" '+dl+' onclick="yNewsOpen('+ix+')"><img referrerpolicy="no-referrer" src="'+esc(i.i)+'" alt="" onerror="this.remove()"><div class="nw-hg"></div><div class="nw-hb">'+bd+'<div class="nw-ht">'+esc(i.t)+'</div><div class="nw-hm">'+ago(i.ts)+'</div></div></div>';
-else h+='<div class="nw-card" '+dl+' onclick="yNewsOpen('+ix+')">'+thumb(i)+'<div class="nw-i"><div class="nw-t">'+esc(i.t)+'</div>'+(i.d?'<div class="nw-d">'+esc(i.d)+'</div>':'')+'<div class="nw-m">'+bd+'<span>'+ago(i.ts)+'</span></div></div></div>'});
+else h+='<div class="nw-card" data-ix="'+ix+'" '+dl+' onclick="yNewsOpen('+ix+')">'+thumb(i)+'<div class="nw-i"><div class="nw-t">'+esc(i.t)+'</div>'+(i.d?'<div class="nw-d">'+esc(i.d)+'</div>':'')+'<div class="nw-m">'+bd+'<span>'+ago(i.ts)+'</span></div></div></div>'});
 return h}
 function statHtml(){if(!st.loading)return'';var pc=st.total?Math.max(6,Math.round(st.done/st.total*100)):6;
 var P=SRC.map(function(s){var v=st.stat[s.id];return'<span class="'+(v==='ok'?'ok':v==='bad'?'bad':'')+'">'+(v==='ok'?'✓ ':v==='bad'?'✕ ':'⏳ ')+esc(s.name)+'</span>'}).join('');
@@ -5064,8 +5064,13 @@ return'<div class="nw-stat"><div class="nw-sl"><span>Loading all sources…</spa
 function infoHtml(){if(st.loading||!st.items.length)return'';var bad=SRC.filter(function(s){return st.stat[s.id]==='bad'}).map(function(s){return s.name});
 return'<div class="nw-info">'+st.items.length+' stories · updated '+(ago(st.ts)||'just now')+(st.more?' · loading more from MAL…':'')+(bad.length?' · '+esc(bad.join(', '))+' unavailable':'')+'</div>'}
 function chips(){return[{id:'all',name:'All'}].concat(SRC).map(function(s){var n=st.items.filter(function(i){return s.id==='all'||i.s===s.id}).length;return'<button class="'+(st.src===s.id?'on':'')+'" onclick="yNewsSrc(\''+s.id+'\')">'+esc(s.name)+(n?'<i>'+n+'</i>':'')+'</button>'}).join('')}
+var imgBusy=0,imgQ=[],imgTried={},imgN=0;
+function ogImg(h){var m=/<meta[^>]+(?:property|name)=["'](?:og:image|twitter:image)["'][^>]*content=["']([^"']+)["']/i.exec(h)||/<meta[^>]+content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:og:image|twitter:image)["']/i.exec(h);return m?m[1].replace(/&amp;/g,'&'):''}
+/* ANN's feed has no pictures: read each article's og:image (native app only), a few at a time */
+function fillImgs(){if(!natHttp()||st.loading)return;st.items.forEach(function(it,ix){if(it.i||imgTried[it.l]||imgN>=60||imgQ.length>=24)return;imgN++;imgTried[it.l]=1;imgQ.push(ix)});pump()}
+function pump(){while(imgBusy<3&&imgQ.length){var ix=imgQ.shift(),it=st.items[ix];if(!it)continue;imgBusy++;(function(ix,it){ftxt(it.l,9000).then(function(h){var u=ogImg(String(h).slice(0,80000));if(u&&/^https?:/.test(u)){it.i=u;var c=document.querySelector('.nw-card[data-ix="'+ix+'"] .nw-th');if(c&&!c.querySelector('img')){var im=document.createElement('img');im.referrerPolicy='no-referrer';im.loading='lazy';im.src=u;im.onerror=function(){im.remove()};c.appendChild(im)}}}).catch(function(){}).then(function(){imgBusy--;if(!imgQ.length&&!imgBusy){try{localStorage.setItem(KEY,JSON.stringify({items:st.items,ts:st.ts}))}catch(e){}}pump()})})(ix,it)}}
 function paint(){var $=function(i){return document.getElementById(i)};if($('yNewsBody'))$('yNewsBody').innerHTML=cards();if($('yNewsStat'))$('yNewsStat').innerHTML=statHtml()+infoHtml();if($('yNewsChips'))$('yNewsChips').innerHTML=chips();
-var r=$('yNewsRef');if(r){r.classList.toggle('spin',st.loading);r.querySelector('span').textContent=st.loading?'Loading':'Refresh'}}
+var r=$('yNewsRef');if(r){r.classList.toggle('spin',st.loading);r.querySelector('span').textContent=st.loading?'Loading':'Refresh'}try{fillImgs()}catch(e){}}
 window.yNewsOpen=function(i){var n=st.items[i];if(n&&n.l)window.open(n.l,'_blank')};
 window.yNewsProxy=function(){var u=prompt('Paste your Cloudflare Worker URL (https://….workers.dev)',WORKER||'');if(u&&/^https:\/\//.test(u.trim()))window.setYukiProxy(u.trim())};
 window.yNewsSrc=function(k){st.src=k;paint()};
