@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.12';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.15';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened from a blob: URL (document.write after window.stop() leaves a blank page in Chromium). ORIGINAL NOTE: document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */var sh='<script>try{window.Capacitor=window.Capacitor||parent.Capacitor;window.CapacitorHttp=window.CapacitorHttp||parent.CapacitorHttp}catch(e){}<\/script>';window.stop();setTimeout(function(){try{var d=document,h=d.documentElement;h.style.cssText='margin:0;height:100%;background:#080910';var m=d.createElement('meta');m.name='viewport';m.content='width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover';(d.head||h.appendChild(d.createElement('head'))).appendChild(m);var b=d.body||h.appendChild(d.createElement('body'));b.style.cssText='margin:0;height:100%;background:#080910';var f=d.createElement('iframe');f.id='yOtaFrame';f.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#080910';f.srcdoc=j.html.replace('<head>','<head>'+sh);b.appendChild(f)}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.15 · ring animation always on; v46.14 · avatar ring, polish; v46.13 · quick search, undo, tonight's pick; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -5300,6 +5300,79 @@ try{applyFlags(JSON.parse(ls('yukiFlags_v1')||'{}'));var mm=JSON.parse(ls('yukiM
 })();
 </script>
 
+<script>
+/* v46.14 · avatar ring, UI polish, Tonight card, Undo */
+(function(){
+var $=function(id){return document.getElementById(id)},
+esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+try{if(window.Capacitor||location.hostname==='localhost')document.documentElement.classList.add('ycap')}catch(e){}
+var css=document.createElement('style');
+css.textContent=
+/* avatar: gradient ring + halo */
+'.av.lg{overflow:visible}'
++'.av.lg::before{content:"";position:absolute;inset:-8px;border-radius:50%;pointer-events:none;background:conic-gradient(from 200deg,#c084fc,#f472b6,#fbbf24,#38bdf8,#818cf8,#c084fc);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));filter:drop-shadow(0 0 8px rgba(192,132,252,.7))}'
++'.av.lg::after{content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 28px rgba(192,132,252,.35),inset 0 0 18px rgba(56,189,248,.18)}'
++'.av.lg::before{animation:yspin 8s linear infinite;will-change:transform}'
++'@keyframes yspin{to{transform:rotate(360deg)}}'
++'@media(prefers-reduced-motion:reduce){.av.lg::before{animation:none!important}}'
++'.hh .av.lg{border:3px solid rgba(10,10,20,.9);margin-top:6px;margin-bottom:18px}'
+/* general polish */
++'html{-webkit-tap-highlight-color:transparent}'
++'::selection{background:var(--pg)}'
++'button,.row,.card{transition:transform .15s ease,box-shadow .2s ease,background .2s ease}'
++'button:active,.row:active{transform:scale(.97)}'
++':focus-visible{outline:2px solid var(--p);outline-offset:2px}'
++'.card{border-radius:20px;box-shadow:var(--card-shadow),inset 0 1px 0 rgba(255,255,255,.06)}'
++'.fill{box-shadow:0 0 10px var(--pg);border-radius:99px}'
++'nav button.on{background:linear-gradient(135deg,var(--pg),transparent);border-radius:18px;box-shadow:inset 0 0 0 1px var(--b)}'
++'.sheet{border-radius:24px}'
+/* tonight + undo */
++'.ytn{padding:14px;border-radius:20px}.ytn .t{font-weight:800;margin-bottom:8px}'
++'.ytn .qc{display:flex;gap:8px;flex-wrap:wrap}.ytn .qc button{flex:1;padding:10px 6px;border-radius:14px;border:1px solid var(--b);background:var(--inner);color:var(--t);font-weight:600}'
++'.ytn .qp{margin-top:10px;padding:12px;border-radius:14px;background:var(--inner2);line-height:1.55;cursor:pointer}'
++'.ynd{position:fixed;left:12px;right:84px;bottom:90px;padding:10px 14px;border-radius:16px;background:var(--sheet);color:var(--t);border:1px solid var(--b);display:flex;justify-content:space-between;align-items:center;z-index:1200;box-shadow:0 8px 24px rgba(0,0,0,.35)}'
++'.ynd button{border:0;background:none;color:var(--p);font-weight:800;font-size:15px}';
+document.head.appendChild(css);
+
+/* Undo */
+var uT,bar;
+function showUndo(msg,snap){
+  if(bar)bar.remove();clearTimeout(uT);
+  bar=document.createElement('div');bar.className='ynd';
+  bar.innerHTML='<span>'+esc(msg)+'</span><button>Undo</button>';
+  bar.querySelector('button').onclick=function(){
+    try{var r=JSON.parse(snap);animeList.length=0;r.forEach(function(x){animeList.push(x)});saveStorage();render()}catch(e){}
+    bar.remove();bar=null};
+  document.body.appendChild(bar);uT=setTimeout(function(){if(bar){bar.remove();bar=null}},6000)}
+[['addEpisode','+1 episode'],['subEpisode','−1 episode'],['quickComplete','Marked as done'],['rewatchAnime','Rewatch started'],['resumeAnime','Resumed']].forEach(function(p){
+  var f=window[p[0]];if(typeof f!=='function')return;
+  window[p[0]]=function(){var s;try{s=JSON.stringify(animeList)}catch(e){}
+    var r=f.apply(this,arguments);if(s)showUndo(p[1],s);return r}});
+
+/* Tonight's pick card on Home */
+function dur(a){try{return durOf(a)||24}catch(e){return 24}}
+function tonightCard(){
+  var left=0,eps=0;
+  (animeList||[]).forEach(function(a){if(a.category==='ongoing'&&a.total>(a.watched||0)){var n=a.total-(a.watched||0);eps+=n;left+=n*dur(a)}});
+  var d=document.createElement('div');d.className='card ytn';
+  d.innerHTML='<div class="t">🌙 Tonight\'s pick</div><div class="sub" style="margin-bottom:10px">Ongoing backlog: '+eps+' episodes · about '+Math.round(left/60)+' h</div>'
+  +'<div class="qc"><button data-m="30">30 min</button><button data-m="60">1 hour</button><button data-m="120">2 hours+</button></div><div class="qr"></div>';
+  d.querySelector('.qc').onclick=function(e){
+    var m=+e.target.getAttribute('data-m');if(!m)return;
+    var c=[];animeList.forEach(function(a,i){if(a.category==='ongoing'&&(!a.total||(a.watched||0)<a.total))c.push(i)});
+    var box=d.querySelector('.qr');
+    if(!c.length){box.innerHTML='<div class="qp">No ongoing shows with episodes left.</div>';return}
+    var i=c[Math.floor(Math.random()*c.length)],a=animeList[i],x=dur(a),n=Math.max(1,Math.floor(m/x)),f=(a.watched||0)+1,t=a.total?Math.min(a.total,f+n-1):f+n-1;
+    box.innerHTML='<div class="qp"><b>'+esc(a.name)+'</b><br>Episode '+f+(t>f?'–'+t:'')+' · about '+Math.round((t-f+1)*x)+' min<br><span class="sub">Tap to open · tap a time again to re-roll</span></div>';
+    box.firstChild.onclick=function(){openDetailsModal(i)}};
+  return d}
+var R=window.render;
+if(typeof R==='function')window.render=function(){
+  var r=R.apply(this,arguments);
+  try{if(view==='home'&&animeList&&animeList.length){var m=$('main');if(m&&!m.querySelector('.ytn')){var lv=m.querySelector('.lvc');if(lv)lv.insertAdjacentElement('afterend',tonightCard())}}}catch(e){}
+  return r};
+})();
+</script>
 </body></html>
 
 
