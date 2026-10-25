@@ -1,5 +1,5 @@
 {
-  "v": 9,
+  "v": 10,
   "sources": {
     "off": [],
     "order": [
@@ -24,5 +24,9 @@
     "ai": true,
     "news": true,
     "quiz": true
+  },
+  "logo": {
+    "url": "logo.png",
+    "v": "1792896886665"
   }
 }
