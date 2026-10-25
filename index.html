@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='45.40';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='45.41';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
-localStorage.setItem('yukiOtaTry',String(n+1));document.open();document.write(j.html);document.write('<plaintext style="display:none">');document.close()}catch(e){}})();</script>
+localStorage.setItem('yukiOtaTry',String(n+1));document.open();document.write(j.html);document.close()}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
 <title>Yuki's Anime Tracker ❄️💜</title>
@@ -5145,7 +5145,7 @@ H=H.replace(/\/?$/,'/');
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
 function cmp(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var box='position:fixed;z-index:2147483647;pointer-events:auto;';
-function restart(){/* reload so the OTA loader at the top of the page swaps in the new build BEFORE any let/const runs (document.write over a running page redeclares them -> SyntaxError) */ls('yukiOtaTry',null);location.reload()}
+function restart(){/* reload so the OTA loader at the top swaps in the new build BEFORE any let/const runs */ls('yukiOtaTry',null);location.reload()}
 function btn(t,f,p){var b=document.createElement('button');b.textContent=t;b.style.cssText='font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 16px;margin:'+(p||'0 8px 0 0')+';background:var(--p,#c084fc);color:#10091c';b.onclick=f;return b}
 function notice(n){
   if(!n||!n.id||!(n.title||n.text)||ls('yukiNoticeSeen')===String(n.id))return;
@@ -5196,8 +5196,12 @@ function logoCss(l){
   if(!l||!l.url){if(st)st.remove();return}
   var u=/^https:\/\//.test(l.url)?l.url:H+String(l.url).replace(/^\/+/,'');
   u+=(u.indexOf('?')<0?'?':'&')+'v='+encodeURIComponent(l.v||'1');
-  if(!st){st=document.createElement('style');st.id='yLogoCss';document.head.appendChild(st)}
-  st.textContent='#main .hh:not(.ph) .av.lg,#topAv{background-image:url("'+u.replace(/"/g,'')+'")!important;background-size:cover!important;background-position:center!important}'}
+  var css='#main .hh:not(.ph) .av.lg,#topAv{background-image:url("'+u.replace(/"/g,'')+'")!important;background-size:cover!important;background-position:center!important}';
+  /* apply the remote logo only once it really loads; a dead URL under !important used to blank every avatar */
+  var im=new Image();
+  im.onload=function(){var s2=document.getElementById('yLogoCss');if(!s2){s2=document.createElement('style');s2.id='yLogoCss';document.head.appendChild(s2)}s2.textContent=css;try{window.syncAv&&window.syncAv()}catch(e){}};
+  im.onerror=function(){var s2=document.getElementById('yLogoCss');if(s2)s2.remove();try{window.syncAv&&window.syncAv()}catch(e){}};
+  im.src=u}
 function apply(c){
   if(!c)return;
   try{if(c.logo&&c.logo.url){ls('yukiLogo_v1',JSON.stringify(c.logo));logoCss(c.logo)}else{ls('yukiLogo_v1',null);logoCss(null)}}catch(e){}
@@ -5261,7 +5265,6 @@ try{applyFlags(JSON.parse(ls('yukiFlags_v1')||'{}'));var mm=JSON.parse(ls('yukiM
 })();
 </script>
 
-<script id="yuki-ota-dedupe">/* if this page was written INLINE by an older OTA loader, the old page's remaining HTML would run after us and redeclare every let/const (seqBusy...). Swallow it. */try{var _n=0;[].forEach.call(document.scripts,function(x){if(x.textContent.indexOf('OTA loader: runs a newer'+' downloaded copy')>-1)_n++});if(_n>1)document.write('<plaintext style="display:none">')}catch(e){}</script>
 </body></html>
 
 
