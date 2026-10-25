@@ -6,7 +6,8 @@ function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i+
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */window.stop();setTimeout(function(){document.open();document.write(j.html);document.close()},0)}catch(e){}})();</script>
-<script>/* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
+<script>/* v46.6 · Save Backup now saves first (Share is a separate button) */
+/* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));location.reload()}catch(e){}}
 window.addEventListener('error',function(e){try{if((e.error&&e.error.name==='SyntaxError')||/already been declared/.test(e.message||''))bad()}catch(_){}});
