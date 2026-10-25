@@ -43,6 +43,18 @@ jobs:
 
       - name: Apply tweaks
         run: python3 tweaks.py
+      - name: Load app from GitHub Pages
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          p = 'capacitor.config.json'
+          c = json.load(open(p)) if os.path.exists(p) else {"appId": "com.yuki.tracker", "appName": "Yuki", "webDir": "www"}
+          s = c.setdefault('server', {})
+          s['url'] = 'https://tharindu2010bro-cmd.github.io/Yuki/'
+          s['cleartext'] = False
+          s['allowNavigation'] = ['tharindu2010bro-cmd.github.io']
+          json.dump(c, open(p, 'w'), indent=2)
+          EOF
 
       - run: npx cap add android
 
