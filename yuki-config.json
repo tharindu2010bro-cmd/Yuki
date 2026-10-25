@@ -1,5 +1,5 @@
 {
-  "v": 17,
+  "v": 18,
   "sources": {
     "off": [],
     "order": [
@@ -18,15 +18,11 @@
     "url": ""
   },
   "app": {
-    "build": "46.0"
+    "build": "46.5"
   },
   "flags": {
     "ai": true,
     "news": true,
     "quiz": true
-  },
-  "logo": {
-    "url": "logo.png",
-    "v": "1792897575610"
   }
 }
