@@ -1,5 +1,5 @@
 {
-  "v": 15,
+  "v": 16,
   "sources": {
     "off": [],
     "order": [
@@ -12,9 +12,9 @@
     ]
   },
   "notice": {
-    "id": "335265148",
-    "title": "New update 44.27",
-    "text": "",
+    "id": "3766655",
+    "title": "",
+    "text": "Hi",
     "url": ""
   },
   "app": {
