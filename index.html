@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.15';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.16';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened from a blob: URL (document.write after window.stop() leaves a blank page in Chromium). ORIGINAL NOTE: document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */var sh='<script>try{window.Capacitor=window.Capacitor||parent.Capacitor;window.CapacitorHttp=window.CapacitorHttp||parent.CapacitorHttp}catch(e){}<\/script>';window.stop();setTimeout(function(){try{var d=document,h=d.documentElement;h.style.cssText='margin:0;height:100%;background:#080910';var m=d.createElement('meta');m.name='viewport';m.content='width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover';(d.head||h.appendChild(d.createElement('head'))).appendChild(m);var b=d.body||h.appendChild(d.createElement('body'));b.style.cssText='margin:0;height:100%;background:#080910';var f=d.createElement('iframe');f.id='yOtaFrame';f.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#080910';f.srcdoc=j.html.replace('<head>','<head>'+sh);b.appendChild(f)}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.15 · ring animation always on; v46.14 · avatar ring, polish; v46.13 · quick search, undo, tonight's pick; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.16 · ring anchored to avatar; v46.15 · ring animation always on; v46.14 · avatar ring, polish; v46.13 · quick search, undo, tonight's pick; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -5309,7 +5309,7 @@ try{if(window.Capacitor||location.hostname==='localhost')document.documentElemen
 var css=document.createElement('style');
 css.textContent=
 /* avatar: gradient ring + halo */
-'.av.lg{overflow:visible}'
+'.av.lg{overflow:visible;position:relative!important}'
 +'.av.lg::before{content:"";position:absolute;inset:-8px;border-radius:50%;pointer-events:none;background:conic-gradient(from 200deg,#c084fc,#f472b6,#fbbf24,#38bdf8,#818cf8,#c084fc);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));filter:drop-shadow(0 0 8px rgba(192,132,252,.7))}'
 +'.av.lg::after{content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 28px rgba(192,132,252,.35),inset 0 0 18px rgba(56,189,248,.18)}'
 +'.av.lg::before{animation:yspin 8s linear infinite;will-change:transform}'
