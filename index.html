@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.16';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.24';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened from a blob: URL (document.write after window.stop() leaves a blank page in Chromium). ORIGINAL NOTE: document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */var sh='<script>try{window.Capacitor=window.Capacitor||parent.Capacitor;window.CapacitorHttp=window.CapacitorHttp||parent.CapacitorHttp}catch(e){}<\/script>';window.stop();setTimeout(function(){try{var d=document,h=d.documentElement;h.style.cssText='margin:0;height:100%;background:#080910';var m=d.createElement('meta');m.name='viewport';m.content='width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover';(d.head||h.appendChild(d.createElement('head'))).appendChild(m);var b=d.body||h.appendChild(d.createElement('body'));b.style.cssText='margin:0;height:100%;background:#080910';var f=d.createElement('iframe');f.id='yOtaFrame';f.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#080910';f.srcdoc=j.html.replace('<head>','<head>'+sh);b.appendChild(f)}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.16 · ring anchored to avatar; v46.15 · ring animation always on; v46.14 · avatar ring, polish; v46.13 · quick search, undo, tonight's pick; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.24 · mods consolidated into one block at the end of the file (see 'YUKI MODS'); older: v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -5300,7 +5300,130 @@ try{applyFlags(JSON.parse(ls('yukiFlags_v1')||'{}'));var mm=JSON.parse(ls('yukiM
 })();
 </script>
 
-<script>
+<!-- ===== YUKI MODS v46.24: edit here ===== -->
+<style id="yuki-mods-css">
+/* ============================================================
+   YUKI MODS CSS  ·  v46.24   (matching JS sections: see script#yuki-mods-js)
+   Tweak numbers here: ring speed, colours, radii.
+   ============================================================ */
+:root{--ring-speed:8s}
+
+/* ---- Chat ---- */
+/* v46.17 · chat redesign */
+#ycWrap{background:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--p) 20%,transparent),transparent 45%),radial-gradient(circle at 95% 100%,color-mix(in srgb,var(--a) 15%,transparent),transparent 45%),var(--bg)}
+#ycWrap .ych{gap:10px;padding-bottom:12px;border-bottom:0;background:linear-gradient(180deg,color-mix(in srgb,var(--p) 18%,var(--nav)),var(--nav))!important;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#ycWrap .ych button{flex:none;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--p) 30%,transparent);background:color-mix(in srgb,var(--p) 12%,transparent);color:var(--t);font-size:16px;display:flex;align-items:center;justify-content:center}
+#ycWrap .ych .nm{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;min-height:44px;padding-left:54px;font-weight:800;font-size:1.05rem}
+#ycWrap .ych .nm::before{content:"";position:absolute;left:0;top:50%;width:44px;height:44px;margin-top:-22px;border-radius:50%;background:var(--yav,none) center/cover no-repeat,var(--p);border:2px solid var(--p);box-shadow:0 0 0 3px var(--pg),0 0 16px var(--pg)}
+#ycWrap .ych .nm::after{content:"";position:absolute;left:33px;top:50%;margin-top:8px;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid var(--nav);box-shadow:0 0 8px #22c55e}
+#ycWrap .ych .nm small{font-weight:500;font-size:.72rem;color:var(--s)}
+#ycMsgs{padding:16px 14px;gap:10px}
+#ycWrap .ycm{max-width:85%;padding:11px 15px;border-radius:22px;font-size:.95rem;line-height:1.55}
+#ycWrap .ycm.y{background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid color-mix(in srgb,var(--p) 28%,transparent);border-bottom-left-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+#ycWrap .ycm.u{background:linear-gradient(135deg,var(--p),#ec4899);color:#fff;border-bottom-right-radius:6px;box-shadow:0 6px 18px var(--pg)}
+@keyframes ycPop{from{opacity:0;transform:translateY(8px) scale(.97)}}
+#ycWrap #ycMsgs .ycm:not(.yct):last-child{animation:ycPop .25s ease both}
+#ycWrap .ycf{align-items:center;gap:8px;border-top:0;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,transparent,var(--nav) 45%)}
+#ycWrap .ycf input{height:46px;padding:0 18px;border-radius:23px;background:var(--inner);border:1px solid color-mix(in srgb,var(--p) 32%,transparent);box-shadow:inset 0 2px 8px rgba(0,0,0,.2)}
+#ycWrap .ycf button{flex:none;width:44px;height:44px;border-radius:50%}
+#ycWrap #ycCam,#ycWrap #ycMic{background:var(--inner)!important;border:1px solid var(--b)!important;color:var(--t)!important;box-shadow:none!important}
+#ycWrap #ycSend{background:linear-gradient(135deg,var(--p),#ec4899);box-shadow:0 6px 16px var(--pg)}
+@media(prefers-reduced-motion:reduce){#ycWrap #ycMsgs .ycm{animation:none!important}}
+/* ---- Home hero + streak strip ---- */
+/* v46.18 · home redesign */
+#main .hh.hi:not(.ph):has(.av.lg){display:grid;grid-template-columns:auto 1fr;grid-template-areas:"av gr" "av ht";align-items:center;column-gap:4px;text-align:left;min-height:170px;padding:12px 16px 12px 4px}
+#main .hh.hi:not(.ph) .gr{grid-area:gr;align-self:end;margin:0 0 4px;text-align:left}
+#main .hh.hi:not(.ph) .av.lg{grid-area:av;margin:22px 22px 22px 22px}
+#main .hh.hi:not(.ph) .ht{grid-area:ht;align-self:start;text-align:left}
+#main .hh.hi:not(.ph) .ht h1{font-size:1.28rem;line-height:1.2}
+.yps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 14px}
+.yps>div{padding:12px 6px;border-radius:18px;text-align:center;background:var(--card);border:1px solid color-mix(in srgb,var(--p) 22%,var(--b));box-shadow:inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer}
+.yps i{font-style:normal;font-size:1.25rem;display:block}
+.yps b{display:block;font-size:1.4rem;line-height:1.25;color:var(--p)}
+.yps span{font-size:.7rem;color:var(--s)}
+/* ---- Tile / quick-action polish ---- */
+/* v46.19 · year in anime + polish */
+.yps>div{position:relative;overflow:hidden}
+.yps>div::before{content:"";position:absolute;left:18%;right:18%;top:0;height:3px;border-radius:0 0 4px 4px;background:var(--yc,var(--p));box-shadow:0 0 12px var(--yc,var(--p))}
+.yps>div:nth-child(1){--yc:#fb923c}.yps>div:nth-child(2){--yc:#38bdf8}.yps>div:nth-child(3){--yc:#f472b6}
+.yps b{text-shadow:0 0 14px var(--pg)}
+#main .qa button{border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07)}
+/* ---- Year recap ---- */
+/* v46.20 · Your year in anime redesign */
+.yw{padding:2px 0 0}
+.yw .yn{font-size:3.4rem;font-weight:900;line-height:1;background:linear-gradient(90deg,#c084fc,#f472b6,#fbbf24);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.yw .yu{font-size:.88rem;color:var(--t);margin:2px 0 16px}
+.yw .ym{display:flex;align-items:flex-end;gap:5px;height:70px;margin-bottom:4px}
+.yw .ym i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--p),var(--a));min-height:5px}
+.yw .ym i.z{opacity:.25}.yw .ym i.c{box-shadow:0 0 12px var(--pg)}
+.yw .yl{display:flex;gap:5px;margin-bottom:16px}.yw .yl span{flex:1;text-align:center;font-size:.62rem;color:var(--s)}
+.yw .yf{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.yw .yf div{padding:11px 12px;border-radius:16px;background:var(--inner2);border:1px solid color-mix(in srgb,var(--p) 24%,transparent)}
+.yw .yf small{display:block;font-size:.68rem;color:var(--s);margin-bottom:2px}
+.yw .yf b{font-size:.95rem;color:var(--t);word-break:break-word}
+.yw .yw1{grid-column:1/-1}
+.yw .ysh{width:100%;margin-top:6px;padding:14px;border:0;border-radius:16px;font-weight:800;font-size:.95rem;color:#fff;background:linear-gradient(135deg,var(--p),#ec4899);box-shadow:0 8px 20px var(--pg)}
+/* ---- Icons / year bar placement ---- */
+/* v46.21 · SVG icons, year card at the bottom */
+.yps i{display:flex;justify-content:center;color:var(--yc,var(--p));margin-bottom:3px}
+.ytn .t{display:flex;align-items:center;gap:8px;color:var(--t)}.ytn .t svg{color:var(--p);flex:none}
+.yw .ysh{display:flex;align-items:center;justify-content:center;gap:8px}
+#main .y7yir{margin:16px 0 8px}
+.y7yir .yic{flex:none;display:flex;color:var(--p)}
+.y7yir .ytt{flex:1;text-align:center;font-size:1.05rem;color:var(--t)}
+/* ---- Emoji->SVG + long recap ---- */
+/* v46.22 · emoji -> SVG (not in chat), long full-screen year recap */
+.yei{display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;line-height:1}
+.yei svg{width:100%;height:100%;display:block}
+#xO.yfull{align-items:stretch}
+#xO.yfull .xs{max-width:none;max-height:none;height:100%;border-radius:0;border:0;background:radial-gradient(circle at 90% 0%,color-mix(in srgb,#f472b6 22%,transparent),transparent 40%),radial-gradient(circle at 0% 60%,color-mix(in srgb,var(--a) 18%,transparent),transparent 45%),var(--bg)}
+.yw .yh{margin:22px 0 10px;font-size:1rem;font-weight:800;color:var(--t)}
+.yw .yr{display:flex;align-items:center;gap:12px;padding:8px 10px;margin-bottom:8px;border-radius:16px;background:var(--inner2);border:1px solid color-mix(in srgb,var(--p) 20%,transparent)}
+.yw .yr img{flex:none;width:44px;height:60px;border-radius:10px;object-fit:cover}
+.yw .yr b{flex:1;min-width:0;font-size:.92rem;color:var(--t);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.yw .yr span{flex:none;font-weight:800;color:var(--p)}
+.yw .yb{margin-bottom:10px}.yw .yb div{display:flex;justify-content:space-between;font-size:.82rem;color:var(--t);margin-bottom:4px}
+.yw .yb i{display:block;height:9px;border-radius:99px;background:var(--rem,rgba(255,255,255,.1));overflow:hidden}.yw .yb i u{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--p),#ec4899)}
+</style>
+<script id="yuki-mods-js">
+/* ============================================================
+   YUKI MODS  ·  v46.24
+   Everything added on top of the original app lives in this one block.
+   The original code above is untouched.  Edit sections independently.
+
+   CONTENTS
+    0. Core ........ YM helper: one render hook list + config
+    1. Icons ....... yIco(name,size)  - SVG icons used by the mods
+    2. Home ........ avatar ring, Undo bar, Tonight's pick, streak strip, year bar
+    3. Chat ........ Yuki avatar variable for the chat header
+    4. Year recap .. popup layout + share image
+    5. Emoji->SVG .. converts emoji everywhere except chat; long recap screen
+
+   CONFIG: change values in YM.cfg below.
+   ============================================================ */
+(function(){
+  var YM=window.YM={cfg:{undoMs:6000},hooks:[],onRender:function(f){YM.hooks.push(f)}};
+  var R=window.render;
+  if(typeof R==='function')window.render=function(){
+    var r=R.apply(this,arguments);
+    YM.hooks.forEach(function(f){try{f()}catch(e){try{yLog(e)}catch(_){}}});
+    return r};
+})();
+
+/* ============================================================
+   1 · Icons
+   ============================================================ */
+window.yIco=function(n,s){
+  var P={gift:'<path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 21V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/>',
+  flame:'<path d="M12 2c.8 3.6 5 5.6 5 10.2a5 5 0 0 1-10 0c0-2 1-3.6 2.2-4.6.1 2 .9 2.6 1.9 2.6C10.7 7.8 10.6 5 12 2z"/>',
+  tv:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 2l4 4 4-4"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  moon:'<path d="M21 13.5A9 9 0 1 1 10.5 3a7 7 0 0 0 10.5 10.5z"/>',
+  share:'<path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'};
+  s=s||24;return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(P[n]||'')+'</svg>'};
+/* ============================================================
+   2 · Home
+   ============================================================ */
 /* v46.14 · avatar ring, UI polish, Tonight card, Undo */
 (function(){
 var $=function(id){return document.getElementById(id)},
@@ -5312,7 +5435,7 @@ css.textContent=
 '.av.lg{overflow:visible;position:relative!important}'
 +'.av.lg::before{content:"";position:absolute;inset:-8px;border-radius:50%;pointer-events:none;background:conic-gradient(from 200deg,#c084fc,#f472b6,#fbbf24,#38bdf8,#818cf8,#c084fc);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));filter:drop-shadow(0 0 8px rgba(192,132,252,.7))}'
 +'.av.lg::after{content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 28px rgba(192,132,252,.35),inset 0 0 18px rgba(56,189,248,.18)}'
-+'.av.lg::before{animation:yspin 8s linear infinite;will-change:transform}'
++'.av.lg::before{animation:yspin var(--ring-speed,8s) linear infinite;will-change:transform}'
 +'@keyframes yspin{to{transform:rotate(360deg)}}'
 +'@media(prefers-reduced-motion:reduce){.av.lg::before{animation:none!important}}'
 +'.hh .av.lg{border:3px solid rgba(10,10,20,.9);margin-top:6px;margin-bottom:18px}'
@@ -5343,7 +5466,7 @@ function showUndo(msg,snap){
   bar.querySelector('button').onclick=function(){
     try{var r=JSON.parse(snap);animeList.length=0;r.forEach(function(x){animeList.push(x)});saveStorage();render()}catch(e){}
     bar.remove();bar=null};
-  document.body.appendChild(bar);uT=setTimeout(function(){if(bar){bar.remove();bar=null}},6000)}
+  document.body.appendChild(bar);uT=setTimeout(function(){if(bar){bar.remove();bar=null}},YM.cfg.undoMs)}
 [['addEpisode','+1 episode'],['subEpisode','−1 episode'],['quickComplete','Marked as done'],['rewatchAnime','Rewatch started'],['resumeAnime','Resumed']].forEach(function(p){
   var f=window[p[0]];if(typeof f!=='function')return;
   window[p[0]]=function(){var s;try{s=JSON.stringify(animeList)}catch(e){}
@@ -5355,7 +5478,7 @@ function tonightCard(){
   var left=0,eps=0;
   (animeList||[]).forEach(function(a){if(a.category==='ongoing'&&a.total>(a.watched||0)){var n=a.total-(a.watched||0);eps+=n;left+=n*dur(a)}});
   var d=document.createElement('div');d.className='card ytn';
-  d.innerHTML='<div class="t">🌙 Tonight\'s pick</div><div class="sub" style="margin-bottom:10px">Ongoing backlog: '+eps+' episodes · about '+Math.round(left/60)+' h</div>'
+  d.innerHTML='<div class="t">'+yIco('moon')+'Tonight\'s pick</div><div class="sub" style="margin-bottom:10px">Ongoing backlog: '+eps+' episodes · about '+Math.round(left/60)+' h</div>'
   +'<div class="qc"><button data-m="30">30 min</button><button data-m="60">1 hour</button><button data-m="120">2 hours+</button></div><div class="qr"></div>';
   d.querySelector('.qc').onclick=function(e){
     var m=+e.target.getAttribute('data-m');if(!m)return;
@@ -5366,11 +5489,123 @@ function tonightCard(){
     box.innerHTML='<div class="qp"><b>'+esc(a.name)+'</b><br>Episode '+f+(t>f?'–'+t:'')+' · about '+Math.round((t-f+1)*x)+' min<br><span class="sub">Tap to open · tap a time again to re-roll</span></div>';
     box.firstChild.onclick=function(){openDetailsModal(i)}};
   return d}
-var R=window.render;
-if(typeof R==='function')window.render=function(){
-  var r=R.apply(this,arguments);
-  try{if(view==='home'&&animeList&&animeList.length){var m=$('main');if(m&&!m.querySelector('.ytn')){var lv=m.querySelector('.lvc');if(lv)lv.insertAdjacentElement('afterend',tonightCard())}}}catch(e){}
-  return r};
+YM.onRender(function(){
+  if(view!=='home'||!animeList||!animeList.length)return;
+  var m=$('main');if(!m||m.querySelector('.ytn'))return;
+  var at=m.querySelector('.lvc')||m.querySelector('.car')||m.querySelector('.yps');
+  if(at)at.insertAdjacentElement('afterend',tonightCard())});
+})();
+(function(){
+function strip(){
+  var t=0,w=0,d=new Date();
+  try{t=log[today()]||0;for(var k=0;k<7;k++){w+=log[d.toLocaleDateString('en-CA')]||0;d.setDate(d.getDate()-1)}}catch(e){}
+  var st=0;try{st=curStreak()}catch(e){}
+  var e=document.createElement('div');e.className='yps';
+  e.innerHTML='<div><i>'+yIco('flame')+'</i><b>'+st+'</b><span>day streak</span></div><div><i>'+yIco('tv')+'</i><b>'+t+'</b><span>eps today</span></div><div><i>'+yIco('cal')+'</i><b>'+w+'</b><span>eps this week</span></div>';
+  e.onclick=function(){try{ycWeekOpen()}catch(x){}};return e}
+YM.onRender(function(){
+  if(view!=='home'||!animeList||!animeList.length)return;
+  var m=document.getElementById('main'),h=m&&m.querySelector('.hh');
+  if(h&&!m.querySelector('.yps'))h.insertAdjacentElement('afterend',strip())});
+})();
+/* ============================================================
+   3 · Chat
+   ============================================================ */
+try{var _y=window.YUKI_AV;if(_y)document.documentElement.style.setProperty('--yav','url("'+String(_y).replace(/"/g,'')+'")')}catch(e){}
+/* ============================================================
+   4 · Year recap
+   ============================================================ */
+(function(){
+var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+function months(y){var m=[0,0,0,0,0,0,0,0,0,0,0,0];try{Object.keys(log).forEach(function(k){if(k.indexOf(y+'-')===0&&log[k]>0)m[+k.slice(5,7)-1]+=log[k]})}catch(e){}return m}
+/* home bar -> rich card */
+YM.onRender(function(){
+  try{var b=document.querySelector('#main .y7yir');if(b&&!b.querySelector('.yic')){
+    var y=new Date().getFullYear();
+    b.innerHTML='<span class="yic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 17v4M17 19h4"/></svg></span><span class="ytt">Your '+y+' in anime</span><small>See &amp; share ›</small>'}}catch(x){}
+  try{var mm=document.getElementById('main'),bb=mm&&mm.querySelector('.y7yir');if(bb&&mm.lastElementChild!==bb)mm.appendChild(bb)}catch(x){}
+});
+/* popup */
+var O=window.yirOpen;
+window.yirOpen=function(){
+  var res=O.apply(this,arguments);
+  try{var d=window._yir,o=document.getElementById('xO'),g=o&&o.querySelector('.y7g');if(!d||!g)return res;
+    var host=g.parentNode,m=months(d.y),mx=Math.max.apply(null,m.concat(1)),cm=new Date().getMonth();
+    host.querySelectorAll('.y7g,.y7btns').forEach(function(n){n.remove()});
+    var w=document.createElement('div');w.className='yw';
+    w.innerHTML='<div class="yn">'+d.eps+'</div><div class="yu">episodes · about '+Math.round(d.hrs)+' hours</div>'
+    +'<div class="ym">'+m.map(function(v,i){return '<i class="'+(v?'':'z ')+(i===cm?'c':'')+'" style="height:'+Math.max(7,Math.round(v/mx*100))+'%"></i>'}).join('')+'</div>'
+    +'<div class="yl">'+MN.map(function(n){return '<span>'+n[0]+'</span>'}).join('')+'</div>'
+    +'<div class="yf"><div><small>Active days</small><b>'+d.days+'</b></div><div><small>Best streak</small><b>'+d.best+' day'+(d.best===1?'':'s')+'</b></div><div><small>Busiest month</small><b>'+d.bm+'</b></div><div><small>Shows watched</small><b>'+d.n+'</b></div>'
+    +'<div class="yw1"><small>Most watched</small><b>'+esc(d.top)+'</b></div><div class="yw1"><small>Top genres</small><b>'+esc(d.tg.join(' · ')||'–')+'</b></div></div>'
+    +'<button class="ysh" onclick="yirShare()">'+yIco('share',20)+'Share my '+d.y+'</button>';
+    host.appendChild(w);
+    var tw=document.createTreeWalker(o,NodeFilter.SHOW_TEXT),t;while(t=tw.nextNode())if(t.nodeValue.indexOf('🎁')>-1)t.nodeValue=t.nodeValue.replace(/🎁\s*/,'')}catch(e){}
+  return res};
+/* share image */
+window.yirShare=function(){
+  var d=window._yir;if(!d)return;var m=months(d.y),mx=Math.max.apply(null,m.concat(1));
+  var c=document.createElement('canvas');c.width=1080;c.height=1440;var x=c.getContext('2d');
+  var g=x.createLinearGradient(0,0,1080,1440);g.addColorStop(0,'#2a1650');g.addColorStop(.55,'#141a3a');g.addColorStop(1,'#0b1424');x.fillStyle=g;x.fillRect(0,0,1080,1440);
+  [[900,120,420,'rgba(244,114,182,.28)'],[120,1300,460,'rgba(56,189,248,.22)']].forEach(function(s){var r=x.createRadialGradient(s[0],s[1],0,s[0],s[1],s[2]);r.addColorStop(0,s[3]);r.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=r;x.fillRect(0,0,1080,1440)});
+  x.textAlign='center';x.fillStyle='#e9e4ff';x.font='700 56px sans-serif';x.fillText('My '+d.y+' in anime',540,140);
+  var tg=x.createLinearGradient(240,0,840,0);tg.addColorStop(0,'#c084fc');tg.addColorStop(.5,'#f472b6');tg.addColorStop(1,'#fbbf24');
+  x.fillStyle=tg;x.font='900 230px sans-serif';x.fillText(String(d.eps),540,400);
+  x.fillStyle='#cfc8ee';x.font='500 42px sans-serif';x.fillText('episodes · about '+Math.round(d.hrs)+' hours',540,470);
+  var bw=56,gap=18,x0=(1080-(12*bw+11*gap))/2;
+  m.forEach(function(v,i){var h=Math.max(10,v/mx*210),bx=x0+i*(bw+gap),gr=x.createLinearGradient(0,640-h,0,640);gr.addColorStop(0,'#c084fc');gr.addColorStop(1,'#38bdf8');x.globalAlpha=v?1:.25;x.fillStyle=gr;x.beginPath();x.roundRect(bx,640-h,bw,h,14);x.fill();x.globalAlpha=1;x.fillStyle='#9a93bd';x.font='500 26px sans-serif';x.fillText('JFMAMJJASOND'[i],bx+bw/2,684)});
+  [[d.days,'active days'],[d.best,'day streak'],[d.bm,'busiest month'],[d.n,'shows']].forEach(function(t,i){var cx=300+(i%2)*480,cy=830+Math.floor(i/2)*190;x.fillStyle='rgba(255,255,255,.07)';x.beginPath();x.roundRect(cx-215,cy-80,430,160,32);x.fill();x.strokeStyle='rgba(192,132,252,.35)';x.lineWidth=2;x.stroke();x.fillStyle='#fff';x.font='800 64px sans-serif';x.fillText(String(t[0]),cx,cy+8);x.fillStyle='#a8a1c9';x.font='500 30px sans-serif';x.fillText(t[1],cx,cy+54)});
+  x.fillStyle='#a8a1c9';x.font='500 32px sans-serif';x.fillText('Most watched',540,1235);x.fillStyle='#fff';x.font='700 50px sans-serif';x.fillText(d.top.length>28?d.top.slice(0,27)+'…':d.top,540,1297);
+  x.fillStyle='#7dd3fc';x.font='600 36px sans-serif';x.fillText(d.tg.join(' · '),540,1355);
+  x.fillStyle='#6f6a93';x.font='500 26px sans-serif';x.fillText("Yuki's Anime Tracker",540,1405);
+  c.toBlob(function(b){if(!b)return;var f=new File([b],'my-anime-'+d.y+'.png',{type:'image/png'});
+    var dl=function(){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;a.click();toast('📥 Saved')};
+    try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(function(e){if(!e||e.name!=='AbortError')dl()});return}}catch(e){}
+    dl()},'image/png')};
+})();
+/* ============================================================
+   5 · Emoji to SVG + long recap screen
+   ============================================================ */
+(function(){
+var P={check:'<path d="M5 12.5l4.5 4.5L19 7"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',film:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/>',star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/>',sparkle:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 17v4M17 19h4"/>',warn:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',refresh:'<path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5M4 20v-5h5"/>',flame:'<path d="M12 2c.8 3.6 5 5.6 5 10.2a5 5 0 0 1-10 0c0-2 1-3.6 2.2-4.6.1 2 .9 2.6 1.9 2.6C10.7 7.8 10.6 5 12 2z"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',clock:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>',hour:'<path d="M6 3h12M6 21h12M7 3v4l5 5-5 5v4M17 3v4l-5 5 5 5v4"/>',tv:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 2l4 4 4-4"/>',build:'<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5M15.5 11.5h.01M18 13.5h.01"/>',bell:'<path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4z"/><path d="M10 21h4"/>',belloff:'<path d="M6 17V11a6 6 0 0 1 9-5.2M18 11v6l2 2H4M10 21h4M3 3l18 18"/>',trophy:'<path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 15v4M8 21h8"/>',crown:'<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>',save:'<path d="M5 3h11l4 4v14H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>',mic:'<rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',book:'<path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',signal:'<circle cx="12" cy="12" r="2"/><path d="M7.5 7.5a6 6 0 0 0 0 9M16.5 7.5a6 6 0 0 1 0 9M4.5 4.5a10 10 0 0 0 0 15M19.5 4.5a10 10 0 0 1 0 15"/>',chart:'<path d="M5 20V11M12 20V4M19 20v-6"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',plus:'<path d="M12 5v14M5 12h14"/>',pencil:'<path d="M4 20l1-4L16 5a2.1 2.1 0 0 1 3 3L8 19z"/>',image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-9 9"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',brain:'<path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"/>',palette:'<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2.2-.5-1.2.2-2.3 1.5-2.3H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="16" cy="8" r="1"/>',gift:'<path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 21V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/>',heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',pause:'<path d="M8 5v14M16 5v14"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a7 7 0 0 1 4 6"/>',bot:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13v1M15 13v1"/>',clip:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/>',flask:'<path d="M9 3h6M10 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-10V3"/>',key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>',moon:'<path d="M21 13.5A9 9 0 1 1 10.5 3a7 7 0 0 0 10.5 10.5z"/>',snow:'<path d="M12 2v20M4 7l16 10M20 7L4 17"/>',chat:'<path d="M4 5h16v11H9l-5 4z"/>',play:'<path d="M8 5.5v13l11-6.5z"/>'};
+var FILL={star:1,heart:1,play:1},COL={star:'#fbbf24',flame:'#fb923c',check:'var(--ok,#22c55e)',x:'var(--d,#ef4444)',warn:'#fbbf24',heart:'#f472b6',bell:'#fbbf24',trophy:'#fbbf24',crown:'#fbbf24',snow:'#7dd3fc',sparkle:'#fbbf24',bolt:'#fbbf24',gift:'#f472b6',pheart:'var(--p)'};
+var M={};function add(l,k,c){l.split(' ').forEach(function(e){M[e]={k:k,c:c||k}})}
+add('✅ ✓ ✔','check');add('❌ ✕ ✖ ✗','x');add('🎬','film');add('⭐ ★','star');add('✨ ✦','sparkle');add('⚠','warn');add('🔄 🔁 ♻','refresh');add('🔥','flame');add('📅 🗓','cal');add('⏱ ⏰','clock');add('⏳','hour');add('📺','tv');add('🏢','build');add('🎮','game');add('🔔','bell');add('🔕','belloff');add('🏆 🏅','trophy');add('👑','crown');add('💾','save');add('🎤','mic');add('📚 📖','book');add('🔍 🔎','search');add('⚡','bolt');add('📡','signal');add('📊','chart');add('🎯','target');add('🧭','compass');add('🌐','globe');add('➕','plus');add('✏','pencil');add('🖼','image');add('🗑','trash');add('🧠','brain');add('🎨','palette');add('🎁 🎉 🎂','gift');add('❤ ♡','heart');add('💜','heart','pheart');add('ℹ','info');add('⏸','pause');add('👤 🧑','user');add('👥','users');add('🤖','bot');add('📋','clip');add('🧪','flask');add('🔑','key');add('🌙','moon');add('❄','snow');add('💬','chat');add('▶','play');
+var keys=Object.keys(M).sort(function(a,b){return b.length-a.length}).map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')});
+var RE=new RegExp('('+keys.join('|')+')\\uFE0F?','g'),TEST=new RegExp(RE.source);
+var SKIP='script,style,textarea,option,select,title,input,#ycWrap,#ycBtn,[id^=yc],.ycm,[contenteditable]';
+function svg(e){var m=M[e],f=FILL[m.k];return '<svg viewBox="0 0 24 24" fill="'+(f?'currentColor':'none')+'" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[m.k]+'</svg>'}
+function node(t){
+  var v=t.nodeValue;if(!v||!TEST.test(v))return;var p=t.parentNode;if(!p||(p.closest&&p.closest(SKIP)))return;
+  var fr=document.createDocumentFragment(),last=0,m;RE.lastIndex=0;
+  while((m=RE.exec(v))){if(m.index>last)fr.appendChild(document.createTextNode(v.slice(last,m.index)));
+    var s=document.createElement('span');s.className='yei';var c=COL[M[m[1]].c];if(c)s.style.color=c;s.innerHTML=svg(m[1]);fr.appendChild(s);last=m.index+m[0].length}
+  if(last<v.length)fr.appendChild(document.createTextNode(v.slice(last)));p.replaceChild(fr,t)}
+function conv(r){
+  if(!r)return;if(r.nodeType===3){node(r);return}if(r.nodeType!==1||(r.closest&&r.closest(SKIP)))return;
+  var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT),a=[],t;while(t=w.nextNode())a.push(t);a.forEach(node)}
+var q=[],busy=false;
+function flush(){busy=false;var l=q;q=[];l.forEach(conv)}
+new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterData')q.push(m.target);else m.addedNodes.forEach(function(n){q.push(n)})});
+  if(!busy){busy=true;requestAnimationFrame(flush)}}).observe(document.body,{childList:true,subtree:true,characterData:true});
+conv(document.body);
+
+/* long full-screen year recap */
+var O=window.yirOpen;
+window.yirOpen=function(){
+  var res=O.apply(this,arguments);
+  try{var d=window._yir,o=document.getElementById('xO'),w=o&&o.querySelector('.yw');if(!d||!w)return res;
+    o.classList.add('yfull');
+    var per={},y=d.y+'-';for(var dd in animeLog)if(dd.indexOf(y)===0)for(var n in animeLog[dd])per[n]=(per[n]||0)+animeLog[dd][n];
+    var names=Object.keys(per).sort(function(a,b){return per[b]-per[a]}),esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+    var h='<div class="yh">Most watched</div>'+names.slice(0,5).map(function(n){var a=animeList.find(function(x){return x.name===n});
+      return '<div class="yr"><img src="'+esc(a&&a.cover||PH)+'" alt=""><b>'+esc(n)+'</b><span>'+per[n]+' eps</span></div>'}).join('');
+    var gm={};names.forEach(function(n){var a=animeList.find(function(x){return x.name===n});if(a&&typeof gl==='function')gl(a).forEach(function(g){gm[g]=(gm[g]||0)+per[n]})});
+    var gs=Object.keys(gm).sort(function(a,b){return gm[b]-gm[a]}).slice(0,5),gx=gm[gs[0]]||1;
+    if(gs.length)h+='<div class="yh">Top genres</div>'+gs.map(function(g){return '<div class="yb"><div><span>'+esc(g)+'</span><span>'+gm[g]+' eps</span></div><i><u style="width:'+Math.round(gm[g]/gx*100)+'%"></u></i></div>'}).join('');
+    var b=w.querySelector('.ysh');if(b)b.insertAdjacentHTML('beforebegin',h)}catch(e){}
+  return res};
 })();
 </script>
 </body></html>
