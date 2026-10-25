@@ -79,6 +79,12 @@ input{width:100%;margin:10px 0 6px;padding:11px 12px;border-radius:12px;border:1
 </div>
 <div class="bar" style="margin-top:12px"><button id="pub" type="button">Publish to GitHub</button><button id="dl" type="button">Download config</button></div>
 <p id="pubst" class="note" style="margin:0 0 6px">Publishing writes yuki-config.json to your repo. The Yuki app reads it on launch and every 30 minutes. App updates need no publish at all: upload the new index.html and the app notices its higher build number by itself.</p>
+<h2>App logo and icon</h2>
+<div class="card" style="padding:14px">
+ <input id="lgf" type="file" accept="image/*" aria-label="New logo image">
+ <p id="lgs" class="note" style="margin:6px 0 0">Pick a square-ish image. In-app logo changes for everyone within about 30 minutes. The phone icon changes only after people install the new APK that gets built.</p>
+</div>
+<div class="bar" style="margin-top:12px"><button id="lgb" type="button">Upload logo</button><button id="lgr" type="button">Use original logo</button></div>
 <h2>Upload new app version</h2>
 <div class="card" style="padding:14px">
  <input id="upf" type="file" accept=".html,text/html" aria-label="New index.html">
@@ -102,6 +108,7 @@ function bad(){throw new Error('Unexpected reply')}
 function J(u,s,o){o=o||{};o.signal=s;return fetch(u,o).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})}
 function ANY(a,b){return new Promise(function(res,rej){var n=0,last;[a,b].forEach(function(p){p.then(res,function(e){last=e;if(++n===2)rej(last)})})})}
 function VIA(path,chk,s){return W?J(W+path,s).then(chk):Promise.reject(new Error('No proxy URL set'))}
+function F(u){return function(s){if(!W)throw new Error('No proxy URL set');return fetch(W+'/fetch?url='+encodeURIComponent(u),{cache:'no-store',signal:s}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(t){if(!/<item|<entry/.test(t))bad()})}}
 function R(u){return function(s){return fetch(u,{mode:'no-cors',cache:'no-store',signal:s})}}
 var G=[
 ['Anime data',[
@@ -114,6 +121,12 @@ var G=[
  ['TVmaze',function(s){return J('https://api.tvmaze.com/search/shows?q=naruto',s).then(function(j){if(!Array.isArray(j))bad()})}],
  ['Trace.moe',function(s){return J('https://api.trace.moe/me',s).then(function(j){if(!j)bad()})}],
  ['Wikipedia',function(s){return J('https://en.wikipedia.org/w/api.php?action=query&meta=siteinfo&format=json&origin=*',s).then(function(j){if(!j.query)bad()})}]
+]],
+['News sources (via proxy)',[
+ ['Anime News Network',F('https://www.animenewsnetwork.com/all/rss.xml')],
+ ['MyAnimeList news',F('https://myanimelist.net/rss/news.xml')],
+ ['Crunchyroll news',F('https://cr-news-api-service.prd.crunchyrollsvc.com/v1/en-US/rss')],
+ ['Reddit r/anime',F('https://www.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=5')]
 ]],
 ['AI services (reachable)',[
  ['Google Gemini',R('https://generativelanguage.googleapis.com/')],
@@ -223,6 +236,7 @@ function cfg(old){
  var ap={},bl=$('bld').value.trim(),mn=$('mnb').value.trim(),au=$('apu').value.trim();if(bl)ap.build=bl;if(mn)ap.min=mn;if(au)ap.url=au;if(bl||mn||au)c.app=ap;
  if($('mtOn').checked)c.maintenance={on:true,title:$('mtt').value.trim()||'Under maintenance',text:$('mtx').value.trim()||'Yuki will be back soon.'};
  c.flags={ai:$('fAi').checked,news:$('fNw').checked,quiz:$('fQz').checked};
+ if(old&&old.logo)c.logo=old.logo;
  return c}
 function oldCfg(cb){fetch(hostUrl()+'yuki-config.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():{v:0}}).catch(function(){return {v:0}}).then(cb)}
 oldCfg(function(o){
@@ -277,6 +291,38 @@ $('pub').onclick=function(){
    return fetch(u,{method:'PUT',headers:hd,body:JSON.stringify(b)})
   }).then(function(r){return r.ok?'Published v'+c.v+'. GitHub Pages can take about a minute.':r.json().then(function(j){return 'Failed: '+(j.message||r.status)})})
   .then(function(m){out.textContent=m}).catch(function(e){out.textContent='Failed: '+e.message})})};
+
+function ghPut(rp,tk,path,b64,msg){
+ var u='https://api.github.com/repos/'+rp+'/contents/'+path,hd={Authorization:'Bearer '+tk,Accept:'application/vnd.github+json'};
+ return fetch(u,{headers:hd}).then(function(r){return r.ok?r.json():{}}).then(function(x){
+  var b={message:msg,content:b64};if(x.sha)b.sha=x.sha;
+  return fetch(u,{method:'PUT',headers:hd,body:JSON.stringify(b)})}).then(function(r){if(!r.ok)return r.json().then(function(j){throw new Error(j.message||r.status)});return r})}
+function sq(file,N){return new Promise(function(ok,no){
+ var im=new Image(),url=URL.createObjectURL(file);
+ im.onload=function(){var c=document.createElement('canvas');c.width=c.height=N;var x=c.getContext('2d'),m=Math.min(im.width,im.height),sx=(im.width-m)/2,sy=(im.height-m)/2;x.drawImage(im,sx,sy,m,m,0,0,N,N);URL.revokeObjectURL(url);c.toBlob(function(b){b?b.arrayBuffer().then(ok):no(new Error('Could not read the image'))},'image/png')};
+ im.onerror=function(){no(new Error('Not an image'))};im.src=url})}
+function pubLogo(logo,msg){
+ var tk=$('ght').value.trim(),rp=$('ghr').value.trim();
+ return new Promise(function(res,rej){oldCfg(function(old){
+  var c=cfg(old);if(logo)c.logo=logo;else delete c.logo;
+  var b64=btoa(unescape(encodeURIComponent(JSON.stringify(c,null,2))));
+  ghPut(rp,tk,'yuki-config.json',b64,msg+' (config v'+c.v+')').then(res,rej)})})}
+$('lgb').onclick=function(){
+ var f=$('lgf').files[0],tk=$('ght').value.trim(),rp=$('ghr').value.trim(),o=$('lgs');
+ if(!f){o.textContent='Pick an image first.';return}
+ if(!tk||rp.indexOf('/')<1){o.textContent='Add the repo and a GitHub token above first.';return}
+ lsSet('yukiGhRepo',rp);lsSet('yukiGhToken',tk);o.textContent='Preparing image…';
+ Promise.all([sq(f,1024),sq(f,512)]).then(function(r){var big=b64enc(r[0]),small=b64enc(r[1]);o.textContent='Uploading logo.png…';
+  return ghPut(rp,tk,'logo.png',small,'Yuki in-app logo').then(function(){o.textContent='Uploading icon.png…';return ghPut(rp,tk,'icon.png',big,'Yuki app icon')})})
+ .then(function(){o.textContent='Publishing logo setting…';return pubLogo({url:'logo.png',v:String(Date.now())},'Yuki logo')})
+ .then(function(){o.textContent='Done. The in-app logo updates for everyone within about 30 minutes (once GitHub Pages refreshes). A new APK with the new phone icon is being built under Releases → Latest APK.'})
+ .catch(function(e){o.textContent='Failed: '+e.message})};
+$('lgr').onclick=function(){
+ var tk=$('ght').value.trim(),rp=$('ghr').value.trim(),o=$('lgs');
+ if(!tk||rp.indexOf('/')<1){o.textContent='Add the repo and a GitHub token above first.';return}
+ o.textContent='Restoring…';
+ pubLogo(null,'Yuki logo reset').then(function(){o.textContent='Done. Everyone goes back to the original in-app logo within about 30 minutes. The phone icon stays as last built.'}).catch(function(e){o.textContent='Failed: '+e.message})};
+function b64enc(buf){return b64(buf)}
 runAll();
 })();
 </script>
