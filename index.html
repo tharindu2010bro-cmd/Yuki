@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.3';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.4';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5018,7 +5018,10 @@ function tmo(ms){var c=new AbortController();setTimeout(function(){c.abort()},ms
 function txt(h){try{var d=new DOMParser().parseFromString('<div>'+(h||'')+'</div>','text/html');return (d.body.textContent||'').replace(/\s+/g,' ').trim()}catch(e){return String(h||'').replace(/<[^>]*>/g,' ').trim()}}
 function img(h){var m=/<img[^>]+src=["']([^"']+)["']/i.exec(h||'');return m?m[1]:''}
 function ts(v){if(!v)return 0;var s=String(v);if(/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(s))s=s.replace(' ','T')+'Z';var t=Date.parse(s);return isNaN(t)?0:t}
-function ftxt(url,ms){return fetch(url,{signal:tmo(ms||9000),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})}
+function natHttp(){try{var C=window.Capacitor,H=C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.CapacitorHttp;return H&&typeof H.get==='function'?H:null}catch(e){return null}}
+/* inside the Android app, news requests go through the native HTTP client: no CORS, no proxy needed */
+function ftxt(url,ms){var H=natHttp();if(H){var t=ms||9000;return Promise.race([H.get({url:url,headers:{'User-Agent':'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/124 Mobile Safari/537.36','Accept':'application/rss+xml, application/atom+xml, application/xml, text/xml, application/json, */*'},connectTimeout:t,readTimeout:t,responseType:'text'}).then(function(r){if(!r||r.status<200||r.status>=300)throw new Error('HTTP '+(r&&r.status));return typeof r.data==='string'?r.data:JSON.stringify(r.data)}),sleep(t+1500).then(function(){throw new Error('timeout')})])}
+return fetch(url,{signal:tmo(ms||9000),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})}
 function race(fns,gap,tag){return new Promise(function(res,rej){var done=false,n=fns.length;
 fns.forEach(function(f,k){setTimeout(function(){if(done)return;
 f().then(function(v){if(!done){done=true;res(v)}},function(e){DBG.push(tag+'#'+k+': '+(e&&e.message||e));if(--n===0&&!done)rej(new Error('all routes failed'))})},k*gap)})})}
@@ -5033,9 +5036,9 @@ return{t:g('title'),l:l?l.getAttribute('href'):'',d:'',i:(mt&&mt.getAttribute('u
 function viaJson(u){return ftxt('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u)).then(function(t){var j=JSON.parse(t);if(j.status!=='ok'||!j.items)throw new Error(j.message||'rss2json error');
 return j.items.map(function(i){return{t:i.title,l:i.link,d:txt(i.description||i.content).slice(0,180),i:i.thumbnail||(i.enclosure&&i.enclosure.link)||img(i.description||i.content),ts:ts(i.pubDate)}})})}
 var PROX=[];
-function routes(u,parse,withJson){var r=[];if(WORKER)r.push(function(){return ftxt(WORKER+'/fetch?url='+encodeURIComponent(u),14000).then(parse)});
+function routes(u,parse,withJson){var r=[];if(natHttp())r.push(function(){return ftxt(u,10000).then(parse)});if(WORKER)r.push(function(){return ftxt(WORKER+'/fetch?url='+encodeURIComponent(u),14000).then(parse)});
 PROX.forEach(function(f){r.push(function(){return ftxt(f(u),12000).then(parse)})});
-r.push(function(){return ftxt(u,6000).then(parse)});return r}
+if(!natHttp())r.push(function(){return ftxt(u,6000).then(parse)});return r}
 function tag(a,s){return a.map(function(i){i.s=s.id;i.sn=s.name;return i})}
 function feed(s){return retry(function(){return race(routes(s.url,parseXml,true),900,s.id).then(function(a){return tag(a,s)})})}
 function reddit(){var u='https://www.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=25';
