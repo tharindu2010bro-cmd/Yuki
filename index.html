@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.10';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.11';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened from a blob: URL (document.write after window.stop() leaves a blank page in Chromium). ORIGINAL NOTE: document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */var sh='<script>try{window.Capacitor=window.Capacitor||parent.Capacitor;window.CapacitorHttp=window.CapacitorHttp||parent.CapacitorHttp}catch(e){}<\/script>';window.stop();setTimeout(function(){try{var d=document,h=d.documentElement;h.style.cssText='margin:0;height:100%;background:#080910';var m=d.createElement('meta');m.name='viewport';m.content='width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover';(d.head||h.appendChild(d.createElement('head'))).appendChild(m);var b=d.body||h.appendChild(d.createElement('body'));b.style.cssText='margin:0;height:100%;background:#080910';var f=d.createElement('iframe');f.id='yOtaFrame';f.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#080910';f.srcdoc=j.html.replace('<head>','<head>'+sh);b.appendChild(f)}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -1667,7 +1667,7 @@ function vAbout(){
  let xp=0,lv=1,n=0,tot=0;try{xp=xpOf();lv=lvInfo(xp).L}catch(e){}try{n=animeList.length}catch(e){}
  const ql=window.yqLim?yqLim.max():10;
  const F=[['📊','Stats & charts','Hours, episodes, streaks and trends'],['📅','Airing schedule','Next episode times for what you watch'],['🔍','Quick find','Search your library and discover fast'],['🎮','Quiz & Yuki chat','Guess the anime, earn XP, chat with Yuki'],['🏆','Levels & badges','Rank up as you watch'],['🎨','Themes','Dark, AMOLED, Light, Glass, Manga, Neon']];
- return`<div class="abh"><div class="abl yimg" role="img" aria-label="Yuki"></div><h2 onclick="window.__yd=(window.__yd||0)+1;clearTimeout(window.__ydt);window.__ydt=setTimeout(function(){window.__yd=0},2500);if(window.__yd>=7){window.__yd=0;yDevOpen()}">Yuki's Anime Tracker</h2><p>Your personal anime watchlist · built with 💜</p><span class="abv">Version ${window.YUKI_BUILD||''}</span></div>
+ return`<div class="abh"><div class="abl yimg" role="img" aria-label="Yuki"></div><h2 onclick="window.__yd=(window.__yd||0)+1;clearTimeout(window.__ydt);window.__ydt=setTimeout(function(){window.__yd=0},2500);if(window.__yd>=7){window.__yd=0;yDevOpen()}">Yuki's Anime Tracker</h2><p>Your personal anime watchlist · built with 💜</p><span class="abv">Version ${window.YUKI_BUILD||''} · OTA test ✅</span></div>
 <div class="abs"><div><b>${n}</b><span>Anime</span></div><div><b>Lv ${lv}</b><span>Level</span></div><div><b>${xp}</b><span>XP</span></div></div>
 <div class="card about"><h3>✨ What you can do</h3><div class="abg">${F.map((f,i)=>`<div class="abf c${i%6}"><i>${f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div></div>
 <div class="card about"><h3>📡 Anime sources</h3><div class="abr"><span class="abp c0">AniList</span><span class="abp c1">Jikan · MAL</span><span class="abp c2">Kitsu</span></div><p>AniList is the main source for details, covers, airing times and the seasonal calendar. Jikan and Kitsu fill the gaps when AniList has none.</p></div>
@@ -5251,7 +5251,7 @@ function apply(c){
 /* auto update: read only the first KB of the hosted index.html to learn its build number, download the page only when it is newer */
 function peek(){
   return fetch(H+'index.html?t='+Date.now(),{cache:'no-store'}).then(function(r){
-    if(!r.ok||!r.body||!r.body.getReader)return Promise.reject();
+    if(!r.ok)return Promise.reject();if(!r.body||!r.body.getReader)return r.text().then(function(t){var m=/YUKI_BUILD='([0-9.]+)'/.exec(t);return m?m[1]:null});
     var rd=r.body.getReader(),dec=new TextDecoder(),acc='';
     function step(){return rd.read().then(function(x){
       if(x.value)acc+=dec.decode(x.value,{stream:true});
