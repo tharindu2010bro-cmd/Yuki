@@ -75,3 +75,30 @@ jobs:
           tag_name: latest
           name: Latest APK
           files: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Remove unused logo files
+        continue-on-error: true
+        run: |
+          # delete only files that nothing in the project references
+          # icon.png is never touched (the APK icon is built from it)
+          REFS="index.html bridge.js status.html tweaks.py capacitor.config.json package.json README.md"
+          DEL=""
+          for f in logo.png file_0000*; do
+            [ -f "$f" ] || continue
+            if grep -qsF -- "$f" $REFS; then
+              echo "keep $f (referenced)"
+            else
+              DEL="$DEL $f"
+            fi
+          done
+          if [ -n "$DEL" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git rm -q -- $DEL
+            git commit -q -m "chore: remove unused logo files"
+            git pull -q --rebase origin main || true
+            git push -q origin HEAD:main
+            echo "removed:$DEL"
+          else
+            echo "nothing to remove"
+          fi
