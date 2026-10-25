@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script>window.YUKI_BUILD='45.21';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='45.22';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1175,6 +1175,7 @@ nav button:active{transform:scale(.94)}
 </style><style id="yuki-fab-fix">/* one plus only: icon svg + ::after plus were both showing */
 html body .fab:has(.yi)::after,html body .fab:has(svg)::after{content:none!important;display:none!important}
 html body .fab{display:grid!important;place-items:center}
+html body .fab[style*="none"]{display:none!important}
 </style>
 <style id="yuki-slab-fix">/* sticky section label: no more text bleeding through behind it */
 html body .slab{background:color-mix(in srgb,var(--bg,#080910) 96%,transparent)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);margin:8px 0 6px!important;padding:8px 10px!important;border-radius:14px;z-index:5!important}
@@ -5184,7 +5185,7 @@ function logoCss(l){
   var u=/^https:\/\//.test(l.url)?l.url:H+String(l.url).replace(/^\/+/,'');
   u+=(u.indexOf('?')<0?'?':'&')+'v='+encodeURIComponent(l.v||'1');
   if(!st){st=document.createElement('style');st.id='yLogoCss';document.head.appendChild(st)}
-  st.textContent='.av,#ddAv{background-image:url("'+u.replace(/"/g,'')+'")!important;background-size:cover!important;background-position:center!important}'}
+  st.textContent='#main .hh:not(.ph) .av.lg,#topAv{background-image:url("'+u.replace(/"/g,'')+'")!important;background-size:cover!important;background-position:center!important}'}
 function apply(c){
   if(!c)return;
   try{if(c.logo&&c.logo.url){ls('yukiLogo_v1',JSON.stringify(c.logo));logoCss(c.logo)}else{ls('yukiLogo_v1',null);logoCss(null)}}catch(e){}
