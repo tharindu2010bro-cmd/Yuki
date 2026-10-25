@@ -1,5 +1,5 @@
 {
-  "v": 26,
+  "v": 27,
   "sources": {
     "off": [],
     "order": [
@@ -12,9 +12,9 @@
     ]
   },
   "notice": {
-    "id": "1658912436",
+    "id": "-1078327048",
     "title": "New update",
-    "text": "Fetch app",
+    "text": "🌙 Tonight's pick: Home එකේ level card එක යටින් card එකක් එනවා. ඒකේ ongoing episodes කොච්චර ඉතුරුද (පැය ගණනත්) පෙන්නනවා. 30 min / 1 hour / 2 hours+ එබුවම ගැලපෙන show එකක් random තෝරලා කොයි episodes ටික බලන්නද කියනවා. ↩️ Undo: +1 Ep, −1 Ep, Done, Rewatch, Resume එබුවම තත්පර 6ක් Undo බොත්තමක් එනවා. FAB එක වහන්නේ නැතුව පැත්තකින් තියෙනවා. කලින් දාපු 🔎 floating button එක අයින් කළා, ඔයාගේ app එකේ උඩින් දැනටමත් search icon එකක් තිබුණු නිසා.",
     "url": ""
   },
   "app": {
