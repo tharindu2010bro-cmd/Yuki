@@ -20,7 +20,7 @@
     "url": ""
   },
   "app": {
-    "build": "46.24"
+    "build": "46.18"
   },
   "flags": {
     "ai": true,
