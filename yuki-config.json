@@ -1,5 +1,5 @@
 {
-  "v": 30,
+  "v": 31,
   "sources": {
     "off": [
       "AnimeThemes"
@@ -20,7 +20,7 @@
     "url": ""
   },
   "app": {
-    "build": "46.18"
+    "build": "46.25"
   },
   "flags": {
     "ai": true,
