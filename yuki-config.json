@@ -1,9 +1,7 @@
 {
-  "v": 33,
+  "v": 34,
   "sources": {
-    "off": [
-      "AnimeThemes"
-    ],
+    "off": [],
     "order": [
       "AniList",
       "Jikan",
