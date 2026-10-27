@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.25';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.26';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
 if(n>=2||!j.html){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));return}
 localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened from a blob: URL (document.write after window.stop() leaves a blank page in Chromium). ORIGINAL NOTE: document.open() is ignored while the page is still being parsed, so a direct write MERGES the new page into this one and every top-level let/const is declared twice. Stop this parse first, then replace the document from a timer. */var sh='<script>try{window.Capacitor=window.Capacitor||parent.Capacitor;window.CapacitorHttp=window.CapacitorHttp||parent.CapacitorHttp}catch(e){}<\/script>';window.stop();setTimeout(function(){try{var d=document,h=d.documentElement;h.style.cssText='margin:0;height:100%;background:#080910';var m=d.createElement('meta');m.name='viewport';m.content='width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover';(d.head||h.appendChild(d.createElement('head'))).appendChild(m);var b=d.body||h.appendChild(d.createElement('body'));b.style.cssText='margin:0;height:100%;background:#080910';var f=d.createElement('iframe');f.id='yOtaFrame';f.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#080910';f.srcdoc=j.html.replace('<head>','<head>'+sh);b.appendChild(f)}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.25 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.26 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -1203,7 +1203,7 @@ html body .y7bell.on{color:#fff!important;background:linear-gradient(135deg,#8b5
 }
 </style>
 <style id="ys-perf">
-/* v46.25 · speed: backdrop-filter is the #1 scroll-jank source on phones; panels already have solid fills */
+/* v46.26 · speed: backdrop-filter is the #1 scroll-jank source on phones; panels already have solid fills */
 *,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 body{background-attachment:scroll!important}
 </style>
@@ -1211,7 +1211,7 @@ body{background-attachment:scroll!important}
 <script>var vNews;</script>
 
 <style id="ys-css">
-/* v46.25 · cinematic title-card splash. transform/opacity only: no blur, no backdrop-filter, no grain */
+/* v46.26 · cinematic title-card splash. transform/opacity only: no blur, no backdrop-filter, no grain */
 #ysplash{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:#eef2ff;pointer-events:auto;contain:strict}
 #ysplash .ys-p{position:absolute;left:0;right:0;height:50.5%;background:#04050c;z-index:0;transition:transform .7s cubic-bezier(.77,0,.18,1);will-change:transform}
 #ysplash .ys-pt{top:0;background:radial-gradient(90% 120% at 50% 100%,#10143a 0,#04050c 70%)}
@@ -1240,7 +1240,7 @@ body{background-attachment:scroll!important}
 #ysplash .ys-t span:nth-child(1){animation-delay:.95s}#ysplash .ys-t span:nth-child(2){animation-delay:1.05s}#ysplash .ys-t span:nth-child(3){animation-delay:1.15s}#ysplash .ys-t span:nth-child(4){animation-delay:1.25s}
 #ysplash .ys-s{margin-top:16px;font-size:.68rem;letter-spacing:.38em;padding-left:.38em;text-transform:uppercase;color:rgba(203,213,255,.7);opacity:0;animation:ysFade .9s 1.5s ease forwards}
 #ysplash .ys-bar{width:min(50vw,190px);height:2px;margin-top:40px;background:rgba(255,255,255,.12);overflow:hidden;opacity:0;animation:ysFade .5s 1.1s ease forwards}
-#ysplash .ys-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transform:scaleX(0);transform-origin:left;animation:ysLoad 2.4s 1.1s cubic-bezier(.3,.6,.3,1) forwards}
+#ysplash .ys-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transform:scaleX(0);transform-origin:left;animation:ysLoad 2.1s 1.1s cubic-bezier(.3,.6,.3,1) forwards}
 @keyframes ysBeam{0%{transform:scaleX(0);opacity:0}25%{opacity:1}60%{transform:scaleX(1);opacity:.9}100%{transform:scaleX(1);opacity:.25}}
 @keyframes ysRule{to{transform:scaleX(1)}}
 @keyframes ysFade{to{opacity:1}}
@@ -1953,7 +1953,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCoverLB()});
 document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 
 /* v15.3 · hide splash once anime details finish loading (min 1.3s, max 6s) */
-(function(){const t0=Date.now(),MIN=1700,MAX=2600,sp=document.getElementById('ysplash');if(!sp)return;
+(function(){const t0=Date.now(),MIN=3200,MAX=5500,sp=document.getElementById('ysplash');if(!sp)return;
 let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add('out');setTimeout(()=>{try{sp.remove()}catch(e){}},800)};
 try{loadAiring(false)}catch(e){yLog(e)}
 const chk=()=>{const el=Date.now()-t0;let busy=false;try{busy=airBusy||trendBusy}catch(e){}
@@ -4914,7 +4914,7 @@ setTimeout(function(){try{run(document.body)}catch(e){}},700);
 </style>
 <script>/* v44.19 · loading safety: logo + hard timeout so the splash can never hang */
 (function(){try{var i=document.getElementById('spImg');if(i&&!i.getAttribute('src')&&window.YW_IMG)i.src=window.YW_IMG}catch(e){}
-setTimeout(function(){var sp=document.getElementById('ysplash');if(sp&&!sp.classList.contains('out')){sp.classList.add('out');setTimeout(function(){try{sp.remove()}catch(e){}},900)}},4000)})();</script>
+setTimeout(function(){var sp=document.getElementById('ysplash');if(sp&&!sp.classList.contains('out')){sp.classList.add('out');setTimeout(function(){try{sp.remove()}catch(e){}},900)}},6500)})();</script>
 
 <script id="yuki-fix-net-v1">
 /* v44.20 · Jikan + Shikimori fallback: direct (6s) -> mirror domain -> public CORS proxies. Remembers a dead host for 5 min. */
