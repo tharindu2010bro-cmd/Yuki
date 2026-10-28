@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.39';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.41';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1396,8 +1396,8 @@ function rbFill(a){RB.forEach(k=>$('rb_'+k[0]).value=a.rb?.[k[0]]??'')}
 function rbSave(a){const rb={};RB.forEach(k=>{const v=parseFloat($('rb_'+k[0]).value);if(isFinite(v))rb[k[0]]=Math.max(0,Math.min(10,v))});if(Object.keys(rb).length)a.rb=rb;else delete a.rb}
 function rbView(a){const m=rbAvg(a.rb);if(m===null)return'';return RB.filter(k=>isFinite(parseFloat(a.rb[k[0]]))).map(k=>`<div class="rbr"><span>${k[1]}</span><div class="bar"><div class="fill" style="width:${a.rb[k[0]]*10}%"></div></div><b>${a.rb[k[0]]}</b></div>`).join('')+`<div class="sub">Average ${m} / 10</div>`}
 const XT={MOVIE:'🎬 Movies',OVA:'📀 OVA',ONA:'🌐 ONA',SPECIAL:'⭐ Specials',TV_SPECIAL:'⭐ Specials'};
-function xFmt(x){return XT[x.f]||(/movie|film|legend of|gekijou/i.test(x.n)?XT.MOVIE:/\bova\b|\boad\b/i.test(x.n)?XT.OVA:/special|\bsp\b/i.test(x.n)?XT.SPECIAL:'✨ Other')}
-function xList(a){const ex=a.extras||[],ids=new Set(ex.map(x=>x.id)),L=(a.related||[]).map(x=>({...x,c:ids.has(x.id)}));ex.forEach(x=>{if(!L.some(y=>y.id===x.id))L.push({...x,c:true})});return L}
+function xFmt(x){if(x&&x.t){const m={OVA:XT.OVA,ONA:XT.ONA,Special:XT.SPECIAL,Movie:XT.MOVIE}[x.t];if(m)return m}return XT[x.f]||(/movie|film|legend of|gekijou/i.test(x.n)?XT.MOVIE:/\bova\b|\boad\b/i.test(x.n)?XT.OVA:/special|\bsp\b/i.test(x.n)?XT.SPECIAL:'✨ Other')}
+function xList(a){const ex=a.extras||[],ids=new Set(ex.map(x=>x.id)),L=(a.related||[]).map(x=>({...x,c:ids.has(x.id),t:(ex.find(e=>e.id===x.id)||{}).t}));ex.forEach(x=>{if(!L.some(y=>y.id===x.id))L.push({...x,c:true})});return L}
 function xBreak(a){const g={};xList(a).forEach(x=>{const k=xFmt(x);(g[k]=g[k]||[]).push(x)});return Object.keys(g).map(k=>({k,n:g[k].length,eps:g[k].reduce((t,x)=>t+(x.e||0),0),names:g[k].map(x=>(x.c?'✓ ':'')+x.n+(x.y?' ('+x.y+')':'')+(x.e>1?' · '+x.e+' eps':''))}))}
 function seasonBars(a){return''}
 function xTy(x){const k=xFmt(x);return k.includes('Movie')?['MOVIE','t-mv']:k.includes('OVA')?['OVA','t-ova']:k.includes('ONA')?['ONA','t-ona']:k.includes('Special')?['SP','t-sp']:['EXTRA','t-ot']}
@@ -1748,7 +1748,7 @@ ${userCard()}
 function vSettings(){const grp=t=>`<div class="lb" style="margin:16px 2px 6px">${t}</div>`;return`${themeCard()}
 ${grp('🔔 General')}<div class="menu"><button onclick="toggleNotif()"><span>🔔 Episode Notifications</span><span class="sub">${notifOn?'On ✅':'Off ›'}</span></button></div><button id="yRefBtn" class="yRef${window.yRefBusy?' spin':''}" onclick="refreshAll()"><span class="yRi"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg></span><span class="yRt">${window.yRefBusy?'Refreshing…':'Refresh All Data'}</span></button>
 ${grp('💾 Your Data')}<div class="menu"><button onclick="downloadBackup().then(()=>render())"><span>💾 Save Backup (.json)</span><span class="sub">${(()=>{try{const l=bkLast();if(!l)return'Never saved';const d=Math.floor((Date.now()-l)/864e5);return d<1?'Saved today':'Saved '+d+'d ago'}catch(e){return''}})()} ›</span></button><button onclick="downloadBackup('share')"><span>📤 Share Backup</span>›</button><button onclick="window.yAutoOpen&&yAutoOpen()"><span>🛟 Auto Backups</span><span class="sub">${(()=>{try{return window.yAutoInfo?yAutoInfo():'Daily ›'}catch(e){return'Daily ›'}})()}</span></button><button onclick="$('bkFile').click()"><span>📂 Restore from File</span>›</button><button onclick="$('mgFile').click()"><span>🔀 Merge Backup (sync devices)</span>›</button><input type="file" id="mgFile" accept=".json,application/json" hidden onchange="mergeFile(this)"><input type="file" id="bkFile" accept=".json,application/json" hidden onchange="restoreFile(this)"><button onclick="openDup()"><span>🧹 Duplicate Finder</span>›</button><button onclick="fillAlt()"><span>🔤 Fill English / Romaji names</span>›</button><button onclick="shareCard()"><span>🖼️ Share Stats Card</span>›</button><button onclick="ycExportCSV()"><span>📊 Export Library (.csv)</span>›</button><button onclick="ycGoalSet()"><span>🎯 Weekly Episode Goal</span><span class="sub">${(+localStorage.getItem('yukiGoal_v1')||0)||'Off'}</span></button><button onclick="yTmdbKey()"><span>🎞️ TMDB API Key (episode thumbnails)</span><span class="sub">${(()=>{try{return localStorage.getItem('yukiTmdbKey_v1')?'On ›':'Off ›'}catch(e){return''}})()}</span></button></div>
-${grp('🧰 Tools')}<div class="menu"><button onclick="yBulk()"><span>🗂️ Bulk Edit</span>›</button><button onclick="yMal()"><span>📥 Import from MyAnimeList</span>›</button><button onclick="yShareText()"><span>📝 Share list as text</span>›</button><button onclick="yLockOpen()"><span>🔒 App Lock</span><span class="sub">${window.yLockState?yLockState():'Off'} ›</span></button></div>
+${grp('🧰 Tools')}<div class="menu"><button onclick="yExtrasOpen()"><span>✨ Watched OVA / ONA / Specials</span><span class="sub">${(()=>{try{return window.yExtrasCount?yExtrasCount():'›'}catch(e){return'›'}})()}</span></button><button onclick="yBulk()"><span>🗂️ Bulk Edit</span>›</button><button onclick="yMal()"><span>📥 Import from MyAnimeList</span>›</button><button onclick="yShareText()"><span>📝 Share list as text</span>›</button><button onclick="yLockOpen()"><span>🔒 App Lock</span><span class="sub">${window.yLockState?yLockState():'Off'} ›</span></button></div>
 ${grp('⬆️ App')}<div class="menu"><button onclick="window.yukiCheckUpdate&&yukiCheckUpdate()"><span>⬆️ Check for update</span><span class="sub">v${window.YUKI_BUILD||'?'} ›</span></button></div>
 ${grp('💬 Support')}${devCard()}`}
 function suggest(v,id){v=v.trim();clearTimeout(debAC);const c=$(id);if(v.length<2){c.classList.remove('active');return}debAC=setTimeout(async()=>{const r=await searchAniListTitles(v);if(!r.length){c.classList.remove('active');return}c.innerHTML=r.map(x=>{const n=x.title.english||x.title.romaji;return`<div class="ai" data-n="${esc(n)}" data-i="${x.id}" onclick="pick(this.dataset.n,this.dataset.i)"><img loading="lazy" decoding="async" src="${esc(x.coverImage.medium)}"><div><div class="rt">${esc(n)}</div><div class="rs">${x.format||'ANIME'} • ${x.episodes||'?'} Eps</div></div></div>`}).join('');c.classList.add('active')},300)}
@@ -4592,9 +4592,9 @@ var _r=window.refreshAll;if(typeof _r==='function')window.refreshAll=function(){
 function hd(){document.querySelectorAll('#ycQp button').forEach(function(b){if(/draw/i.test(b.textContent))b.remove()})}
 hd();new MutationObserver(hd).observe(document.body,{childList:true,subtree:true});
 /* watched types card */
-function tp(a){var F={TV:'Anime',TV_SHORT:'Anime',MOVIE:'Movie',OVA:'OVA',ONA:'ONA',SPECIAL:'Special',ONE_SHOT:'Special'};if(F[a.format])return F[a.format];if(a.category==='movies')return'Movie';var n=(a.name||'')+' '+(a.alt||'');if(/\b(OVA|OAD)\b/i.test(n))return'OVA';if(/\bONA\b/i.test(n))return'ONA';if(/special|\bSP\b/i.test(n))return'Special';return'Anime'}
+window.yTp=tp;function tp(a){var F={TV:'Anime',TV_SHORT:'Anime',MOVIE:'Movie',OVA:'OVA',ONA:'ONA',SPECIAL:'Special',ONE_SHOT:'Special'};if(F[a.format])return F[a.format];if(a.category==='movies')return'Movie';var n=(a.name||'')+' '+(a.alt||'');if(/\b(OVA|OAD)\b/i.test(n))return'OVA';if(/\bONA\b/i.test(n))return'ONA';if(/special|\bSP\b/i.test(n))return'Special';return'Anime'}
 var _o=window.stTi;if(typeof _o==='function')window.stTi=function(){var h=_o.apply(this,arguments);try{
-var T={Anime:0,OVA:0,ONA:0,Movie:0,Special:0},S=0;animeList.forEach(function(a){T[tp(a)]++;S+=(a.seasonNames||[]).length;(a.extras||[]).forEach(function(x){var f=xFmt(x);T[f.indexOf('Movie')>-1?'Movie':f.indexOf('OVA')>-1?'OVA':f.indexOf('ONA')>-1?'ONA':'Special']++})});
+var T={Anime:0,OVA:0,ONA:0,Movie:0,Special:0},S=0;animeList.forEach(function(a){T[tp(a)]++;S+=(a.seasonNames||[]).length;(a.extras||[]).forEach(function(x){T[window.yXB?yXB(x):'Special']++})});
 var E={Anime:'📺',OVA:'💿',ONA:'🌐',Movie:'🎬',Special:'⭐'},M=Math.max.apply(null,Object.keys(T).map(function(k){return T[k]}))||1;
 var rows=Object.keys(T).map(function(k){return'<div class="b"><div class="t"><span>'+E[k]+' '+k+'</span><b>'+T[k]+'</b></div><div class="bar"><i style="width:'+(T[k]/M*100)+'%"></i></div></div>'}).join('');
 h+='<div class="card ytyp"><div class="lb">🎞️ What you have watched</div>'+rows+'<div class="b"><div class="t"><span>🗂️ Seasons tracked</span><b>'+S+'</b></div></div></div>'}catch(e){}return h};
@@ -5717,28 +5717,46 @@ function yEpSet(n){const i=detailIndex,a=animeList[i];if(!a)return;let w=Number(
  else{while(w>=n&&g++<60){subEpisode(i);w=Number(animeList[i].watched)||0}}
  xEps()}
 window.yEpResetThumbs=function(){try{Object.keys(DS).forEach(k=>(DS[k].S||[]).forEach(s=>{s.v=0}));saveS()}catch(e){}};window.xEps=xEps;window.yEpSet=yEpSet;window.yEpFill=fill;window.yEpGet=get;window.yEpSeasons=getSeasons;
-/* v46.39 · 🔍 Check image: asks trace.moe which anime + episode a thumbnail really is from */
+/* v46.41 · extras: re-type tag + Stats sync; v46.40 · ✨ Watched extras page; v46.39 · 🔍 icon in thumbnail corner; v46.38 · season labels fix; v46.37 · trace.moe check */
 (function(){try{var st=document.createElement('style');st.textContent='.ytci{position:absolute;top:3px;right:3px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.72rem;line-height:1;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;cursor:pointer}.ytci.on{opacity:.6;pointer-events:none}.ytco{display:block;margin-top:3px;font-size:.68rem}.ytco:empty{display:none}';document.head.appendChild(st)}catch(e){}})();
 window.yThumbCheck=async function(si,n,btn){
  const S=window.__yEpS||[],s=S[si],a=window.__yEpA||{};if(!s)return;
  if(btn.classList.contains('on'))return;const out=btn.closest('.xr').querySelector('.ytco'),th=s.th||{},pl=s.pool||[],real=!!th[n],u=th[n]||(pl.length?pl[(n-1)%pl.length]:''),tag=real?'':' (stand-in image, not a real episode still)';
- if(!u){out.textContent=' No episode image to check';return}
- btn.classList.add('on');out.textContent=' ⏳ Checking...';
+ if(!u){out.textContent='No episode image to check';return}
+ btn.classList.add('on');out.textContent='⏳ Checking...';
  try{
   const c=new AbortController(),tm=setTimeout(()=>c.abort(),25000);let r;
   try{r=await fetch('https://api.trace.moe/search?anilistInfo&cutBorders&url='+encodeURIComponent(u),{signal:c.signal})}finally{clearTimeout(tm)}
-  if(r.status===429){out.textContent=' ⚠️ trace.moe limit reached, try later';return}
+  if(r.status===429){out.textContent='⚠️ trace.moe limit reached, try later';return}
   if(!r.ok)throw new Error('HTTP '+r.status);
   const j=await r.json(),x=j&&j.result&&j.result[0];
-  if(!x||x.similarity<.8){out.textContent=' ❓ No confident match'+tag;return}
+  if(!x||x.similarity<.8){out.textContent='❓ No confident match'+tag;return}
   const al=x.anilist||{},ti=al.title||{},name=ti.english||ti.romaji||ti.native||'?',sim=Math.round(x.similarity*100),ep=x.episode;
   const nm=v=>String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,''),tn=[ti.english,ti.romaji].concat(al.synonyms||[]).map(nm).filter(Boolean),mine=[s.name,s.alt,a.name,a.alt].map(nm).filter(Boolean);
   const same=(s.mal&&al.idMal&&+s.mal===+al.idMal)||tn.some(t=>mine.some(m=>m.length>=8&&t.length>=8&&(t.indexOf(m.slice(0,12))>-1||m.indexOf(t.slice(0,12))>-1)));
   const epOk=ep!=null&&(+ep===n||+ep===n+(s.off||0));
-  out.textContent=same?(epOk?' ✅ Correct episode (ep '+ep+', '+sim+'%)':' ⚠️ Right anime, but trace.moe says ep '+ep+' ('+sim+'%)')+tag:' ❌ Looks like '+name+(ep!=null?' ep '+ep:'')+' ('+sim+'%)'+tag;
- }catch(e){out.textContent=' ⚠️ Check failed ('+(e&&e.message||'network')+')'}
+  out.textContent=same?(epOk?'✅ Correct episode (ep '+ep+', '+sim+'%)':'⚠️ Right anime, but trace.moe says ep '+ep+' ('+sim+'%)')+tag:'❌ Looks like '+name+(ep!=null?' ep '+ep:'')+' ('+sim+'%)'+tag;
+ }catch(e){out.textContent='⚠️ Check failed ('+(e&&e.message||'network')+')'}
  finally{btn.classList.remove('on');const mm=out.textContent.trim().match(/^(✅|⚠️|❌|❓)/);btn.textContent=mm?mm[1]:'🔍'}
 };
+window.yXB=function(x){const f=xFmt(x);return f.indexOf('Movie')>-1?'Movie':f.indexOf('OVA')>-1?'OVA':f.indexOf('ONA')>-1?'ONA':'Special'};
+window.yExtrasList=function(){const o=[];(animeList||[]).forEach((a,i)=>{const b=window.yTp?yTp(a):'Anime';if(b!=='Anime')o.push({lib:1,b:b,a:a,i:i,x:{n:a.name}});(a.extras||[]).forEach(x=>o.push({b:yXB(x),x:x,a:a,i:i}))});return o};
+window.yExtrasCount=function(){const n=yExtrasList().length;return n?n+' ›':'›'};
+window.yExtrasGo=function(i){try{document.getElementById('xO').remove()}catch(e){}openDetailsModal(i)};
+window.yExtrasRetype=function(i,id,ev){if(ev)ev.stopPropagation();const a=animeList[i],x=a&&(a.extras||[]).find(e=>e.id===id);if(!x)return;const O=['OVA','ONA','Special','Movie'];x.t=O[(O.indexOf(yXB(x))+1)%O.length];saveStorage();const q=document.querySelector('#xO .xb'),st=q?q.scrollTop:0;yExtrasOpen();const q2=document.querySelector('#xO .xb');if(q2)q2.scrollTop=st};
+window.yExtrasOpen=function(){
+ const L=yExtrasList(),ORD=['OVA','ONA','Special','Movie'],TG={OVA:['OVA','t-ova','📀 OVA'],ONA:['ONA','t-ona','🌐 ONA'],Special:['SP','t-sp','⭐ Specials'],Movie:['MOVIE','t-mv','🎬 Movies']},g={};let h='';
+ L.forEach(r=>{(g[r.b]=g[r.b]||[]).push(r)});
+ if(!L.length)h='<div class="loader" style="padding:10px 0">Nothing here yet.<br><span class="sub">Open an anime, tap “Count it” on an OVA / ONA / Special and it will show up here.</span></div>';
+ else{
+  h='<div class="sub" style="margin-bottom:8px">'+L.length+' total · same numbers as Stats. Tap a tag to change its type.</div>';
+  ORD.filter(k=>g[k]).forEach(k=>{
+   const rows=g[k].sort((p,q)=>(p.x.y||9999)-(q.x.y||9999)||String(p.x.n).localeCompare(String(q.x.n)));
+   h+='<div class="tl" style="margin-bottom:10px"><div class="tlh">'+TG[k][2]+' · '+rows.length+'</div>'+rows.map(r=>{
+    const x=r.x,t=TG[r.b],ok=r.lib?(r.a.watched>0):true,meta=r.lib?(r.a.watched>0?'In your library · Watched':'In your library · Not watched yet'):[r.a.name,x.y||'',x.e?x.e+' ep'+(x.e>1?'s':''):''].filter(Boolean).join(' · ');
+    const tag=r.lib?'<span class="tlg">'+t[0]+'</span>':'<span class="tlg" style="cursor:pointer" onclick="yExtrasRetype('+r.i+','+JSON.stringify(x.id)+',event)">'+t[0]+'</span>';
+    return '<div class="tlr '+t[1]+' tlx'+(ok?' ok':'')+'" style="cursor:pointer" onclick="yExtrasGo('+r.i+')">'+tag+'<div class="tlb"><div class="tln">'+esc(x.n)+'</div><div class="tlm">'+esc(meta)+'</div></div><i class="tlk">'+(ok?'✓':'')+'</i></div>'}).join('')+'</div>'})}
+ openX('✨ Watched extras',h)};
 
 const _r=window.render;
 if(typeof _r==='function')window.render=function(){const r=_r.apply(this,arguments);try{fill()}catch(e){}return r};
