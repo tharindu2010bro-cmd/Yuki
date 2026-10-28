@@ -1,5 +1,5 @@
 {
-  "v": 35,
+  "v": 36,
   "sources": {
     "off": [],
     "order": [
@@ -12,13 +12,13 @@
     ]
   },
   "notice": {
-    "id": "258442150",
-    "title": "New update",
-    "text": "-episode tracking",
+    "id": "1390116666",
+    "title": "New update 46.39",
+    "text": "-boug fixing",
     "url": ""
   },
   "app": {
-    "build": "46.34"
+    "build": "46.39"
   },
   "flags": {
     "ai": true,
