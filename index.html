@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.42';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.43';/* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5700,6 +5700,7 @@ async function xEps(){
  xLoad('📺 Episodes');let S=[];try{S=await getSeasons(a)}catch(x){}
  const tot=S.reduce((m,s)=>Math.max(m,s.off+s.count),0)||Number(a.total)||0;
  if(!tot)return openX('📺 Episodes','<div class="loader">No episode info found for this anime.</div>');
+ for(const s of S){const t=s.th||{};if(!s._pt&&!(s.pool&&s.pool.length)&&!Object.keys(t).some(n=>window.yGood(t[n]))){s._pt=1;try{s.pool=(await stillPool(s,a)).slice(0,40);saveS()}catch(e){}}}
  const fd=d=>{if(!d)return '';const t=new Date(d+'T00:00:00');return isNaN(t)?d:t.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})};
  const now=Date.now(),w0=Number(a.watched)||0,multi=S.length>1;let h='';window.__yEpS=S;window.__yEpA=a;
  const SN=[],SE=[];S.forEach((x,i)=>{const nm=String(x.name),m=nm.match(/(?:season\s*|\bs)(\d+)\b/i)||nm.match(/\b(\d+)(?:st|nd|rd|th)\s+season/i),p=nm.match(/(?:part|cour)\s*(\d+)/i);let k;if(m)k=+m[1];else if(p&&+p[1]>1&&i>0)k=SN[i-1];else k=i?SN[i-1]+1:1;SN[i]=k;SE[i]=0;for(let j=0;j<i;j++)if(SN[j]===k)SE[i]+=S[j].count});
@@ -5708,7 +5709,7 @@ async function xEps(){
   if(multi)h+='<div class="ys-sh">'+lab0(s,si)+' <span>'+esc(s.name)+(s.from?' · '+esc(fd(s.from)):'')+' · '+s.count+' eps</span></div>';
   for(let n=1;n<=s.count;n++){const ab=n+s.off,w=ab<=w0,ep=s.e[n]||{},up=ep.a&&new Date(ep.a+'T00:00:00').getTime()>now;
    const lab=(multi?'S'+SN[si]+' E'+(n+SE[si]):'Ep '+n),sub=(multi?'Ep '+ab+' overall':'')+(ep.a?(multi?' · ':'')+(up?'Airs ':'')+fd(ep.a):'');
-   const pl=(s.pool||[]).filter(window.yGood),tn=window.yGood(th[n]),pu=tn||(pl.length?pl[(n-1)%pl.length]:''),im='<div class="ys-tw'+(tn?'':(pu?' st':' ph'))+'"><img src="'+esc(pu||a.cover||PH)+'" alt="" loading="lazy" referrerpolicy="no-referrer"><span>'+(multi?'E'+(n+SE[si]):'Ep '+n)+'</span><i class="ytci" role="button" aria-label="Check image" onclick="event.stopPropagation();yThumbCheck('+si+','+n+',this)">🔍</i></div>';
+   const pl=(s.pool||[]).filter(window.yGood),tn=window.yGood(th[n]),pu=tn||(pl.length?pl[(n-1)%pl.length]:''),im='<div class="ys-tw'+(tn?'':(pu?' st':' ph'))+'"><img src="'+esc(pu||a.cover||PH)+'" alt="" loading="lazy" referrerpolicy="no-referrer"><span>'+(multi?'E'+(n+SE[si]):'Ep '+n)+'</span>'+(pu?'<i class="ytci" role="button" aria-label="Check image" onclick="event.stopPropagation();yThumbCheck('+si+','+n+',this)">🔍</i>':'')+'</div>';
    h+='<div class="xr ys-th" onclick="yEpSet('+ab+')" style="cursor:pointer;'+(w?'opacity:.7;':'')+(up?'opacity:.55;':'')+'">'+im+'<div class="ri"><div class="rt">'+(w?'✓ ':'')+lab+(ep.t?' · '+esc(ep.t):'')+'</div>'+(sub?'<div class="rs">'+esc(sub)+'</div>':'')+'<div class="ytco"></div></div></div>'}});
  if(!S.some(s=>Object.values(s.e).some(x=>x.t)))h='<div class="loader" style="padding:6px 0 10px">Names not found on any source. Tap an episode to set progress.</div>'+h;
  openX('📺 Episodes',h)}
@@ -5717,7 +5718,7 @@ function yEpSet(n){const i=detailIndex,a=animeList[i];if(!a)return;let w=Number(
  else{while(w>=n&&g++<60){subEpisode(i);w=Number(animeList[i].watched)||0}}
  xEps()}
 window.yEpResetThumbs=function(){try{Object.keys(DS).forEach(k=>(DS[k].S||[]).forEach(s=>{s.v=0}));saveS()}catch(e){}};window.xEps=xEps;window.yEpSet=yEpSet;window.yEpFill=fill;window.yEpGet=get;window.yEpSeasons=getSeasons;
-/* v46.42 · hide region-blocked stills, fix empty pill; v46.41 · extras: re-type tag + Stats sync; v46.40 · ✨ Watched extras page; v46.39 · 🔍 icon in thumbnail corner; v46.38 · season labels fix; v46.37 · trace.moe check */
+/* v46.43 · fetch stand-in stills when real ones are blocked; v46.42 · hide region-blocked stills, fix empty pill; v46.41 · extras: re-type tag + Stats sync; v46.40 · ✨ Watched extras page; v46.39 · 🔍 icon in thumbnail corner; v46.38 · season labels fix; v46.37 · trace.moe check */
 (function(){try{var st=document.createElement('style');st.textContent='.ytci{position:absolute;top:3px;right:3px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.72rem;line-height:1;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;cursor:pointer}.ytci.on{opacity:.6;pointer-events:none}.ytco{display:block;margin-top:3px;font-size:.68rem}.ytco:empty{display:none}';document.head.appendChild(st)}catch(e){}})();
 /* stills hosted by streaming sites are region-locked and show a "Not Available in Your Country" picture */
 window.yGood=function(u){return u&&!/crunchyroll|funimation|wakanim|hidive|vrv\.co/i.test(u)?u:''};
