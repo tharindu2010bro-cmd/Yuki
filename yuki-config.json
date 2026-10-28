@@ -1,5 +1,5 @@
 {
-  "v": 36,
+  "v": 37,
   "sources": {
     "off": [],
     "order": [
@@ -12,13 +12,13 @@
     ]
   },
   "notice": {
-    "id": "1390116666",
-    "title": "New update 46.39",
-    "text": "-boug fixing",
+    "id": "-758230976",
+    "title": "New update 46.41",
+    "text": "-bug fixing",
     "url": ""
   },
   "app": {
-    "build": "46.39"
+    "build": "46.41"
   },
   "flags": {
     "ai": true,
