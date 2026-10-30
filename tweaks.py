@@ -55,6 +55,18 @@ if(t&&t!==window&&(t.src||t.href)){if((t.src||t.href)===location.href)return;sho
 show('ERR '+e.message+' @'+String(e.filename||'').split('/').pop()+':'+e.lineno+':'+e.colno)},true);
 window.addEventListener('unhandledrejection',function(e){show('REJ '+((e.reason&&e.reason.message)||e.reason))})})();</script>"""
 head(DIAG)
+WD = r"""<script>(function(){
+setTimeout(function(){try{
+var f=document.getElementById('yOtaFrame'),d=f?f.contentDocument:document,
+m=d&&d.getElementById('main');
+if(m&&m.children.length)return;
+if(sessionStorage.getItem('yWd'))return;
+sessionStorage.setItem('yWd','1');
+localStorage.removeItem('yukiOta_v1');
+localStorage.removeItem('yukiOtaTry');
+location.reload();
+}catch(e){}},7000)})();</script>"""
+head(WD)
 
 open(P, 'w', encoding='utf-8').write(s)
 print('tweaks done')
