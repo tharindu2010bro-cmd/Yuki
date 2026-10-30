@@ -45,7 +45,7 @@ jobs:
         run: python3 tweaks.py
       - name: Load app from GitHub Pages
         run: |
-          python3 - <<'EOF'
+          python3 - <<'PYEOF'
           import json, os
           p = 'capacitor.config.json'
           c = json.load(open(p)) if os.path.exists(p) else {"appId": "com.yuki.tracker", "appName": "Yuki", "webDir": "www"}
@@ -53,8 +53,14 @@ jobs:
           s['url'] = 'https://tharindu2010bro-cmd.github.io/Yuki/'
           s['cleartext'] = False
           s['allowNavigation'] = ['tharindu2010bro-cmd.github.io']
+          # dark launch colour so there is no grey/black flash before the page paints
+          c['backgroundColor'] = '#080910'
+          c.setdefault('android', {})['backgroundColor'] = '#080910'
+          sp = c.setdefault('plugins', {}).setdefault('SplashScreen', {})
+          sp['backgroundColor'] = '#080910'
+          sp['showSpinner'] = False
           json.dump(c, open(p, 'w'), indent=2)
-          EOF
+          PYEOF
 
       - run: npx cap add android
 
@@ -76,6 +82,38 @@ jobs:
         run: |
           M=android/app/src/main/AndroidManifest.xml
           sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n    <uses-permission android:name="android.permission.VIBRATE"/>\n    <application#' $M
+
+      - name: Dark launch theme (no grey flash)
+        continue-on-error: true
+        run: |
+          python3 - <<'PYEOF'
+          import re, os
+          p = 'android/app/src/main/res/values/styles.xml'
+          if not os.path.exists(p):
+              print('styles.xml not found, skipping'); raise SystemExit
+          s = open(p, encoding='utf-8').read()
+          BG = '#080910'
+          def span(s, name):
+              m = re.search(r'<style\s+name="%s"[^>]*>' % re.escape(name), s)
+              if not m: return None
+              e = s.find('</style>', m.end())
+              return (m.end(), e) if e > 0 else None
+          def add(s, name, key, val):
+              sp = span(s, name)
+              if not sp: return s
+              a, e = sp
+              if 'name="%s"' % key in s[a:e]:
+                  return s[:a] + re.sub(r'(<item\s+name="%s">)[^<]*(</item>)' % re.escape(key), r'\g<1>%s\g<2>' % val, s[a:e]) + s[e:]
+              return s[:a] + '\n        <item name="%s">%s</item>' % (key, val) + s[a:]
+          s = add(s, 'AppTheme.NoActionBar', 'android:windowBackground', BG)
+          s = add(s, 'AppTheme.NoActionBarLaunch', 'android:windowBackground', BG)
+          m = re.search(r'<style\s+name="AppTheme.NoActionBarLaunch"[^>]*>', s)
+          if m and 'Theme.SplashScreen' in m.group(0):
+              s = add(s, 'AppTheme.NoActionBarLaunch', 'windowSplashScreenBackground', BG)
+          s = s.replace('<item name="android:background">@drawable/splash</item>', '<item name="android:background">%s</item>' % BG)
+          open(p, 'w', encoding='utf-8').write(s)
+          print('patched styles.xml')
+          PYEOF
 
       - name: Build APK
         working-directory: android
