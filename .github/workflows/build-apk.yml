@@ -43,17 +43,13 @@ jobs:
 
       - name: Apply tweaks
         run: python3 tweaks.py
-      - name: Load app from GitHub Pages
+      - name: Dark launch colours (app loads the bundled page, not GitHub Pages)
         run: |
           python3 - <<'PYEOF'
           import json, os
           p = 'capacitor.config.json'
           c = json.load(open(p)) if os.path.exists(p) else {"appId": "com.yuki.tracker", "appName": "Yuki", "webDir": "www"}
-          s = c.setdefault('server', {})
-          s['url'] = 'https://tharindu2010bro-cmd.github.io/Yuki/'
-          s['cleartext'] = False
-          s['allowNavigation'] = ['tharindu2010bro-cmd.github.io']
-          # dark launch colour so there is no grey/black flash before the page paints
+          c.pop('server', None)   # no server.url: the page inside the APK (www/index.html, patched by tweaks.py) is used
           c['backgroundColor'] = '#080910'
           c.setdefault('android', {})['backgroundColor'] = '#080910'
           sp = c.setdefault('plugins', {}).setdefault('SplashScreen', {})
