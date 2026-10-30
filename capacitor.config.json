@@ -1,5 +1,15 @@
 {
   "appId": "com.yuki.app",
   "appName": "Yuki",
-  "webDir": "www"
+  "webDir": "www",
+  "backgroundColor": "#080910",
+  "android": {
+    "backgroundColor": "#080910"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "backgroundColor": "#080910",
+      "showSpinner": false
+    }
+  }
 }
