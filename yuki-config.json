@@ -1,12 +1,12 @@
 {
-  "v": 41,
+  "v": 42,
   "sources": {
     "off": [],
     "order": [
       "AniList",
       "Jikan",
-      "Shikimori",
       "Kitsu",
+      "Shikimori",
       "AnimeThemes",
       "TVmaze"
     ]
@@ -18,7 +18,7 @@
     "url": ""
   },
   "app": {
-    "build": "46.50"
+    "build": "46.52"
   },
   "flags": {
     "ai": true,
