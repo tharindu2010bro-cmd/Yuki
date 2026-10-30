@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yuki's Anime Tracker · Download APK</title>
+<meta name="theme-color" content="#080910">
+<style>
+:root{--bg:#080910;--card:#12141f;--line:#262a3d;--t:#eceaf7;--s:#9a98b3;--p:#c084fc;--a:#38bdf8;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;color-scheme:dark}
+@media(prefers-color-scheme:light){:root{--bg:#f6f4fc;--card:#fff;--line:#ddd8ee;--t:#1b1630;--s:#625c7e;--p:#7c3aed;--a:#0369a1;--ok:#047857;--warn:#b45309;--bad:#b91c1c;color-scheme:light}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
+main{max-width:520px;margin:0 auto}
+h1{font-size:1.6rem;line-height:1.2;margin:8px 0 6px;letter-spacing:-.01em}
+.lead{color:var(--s);margin:0 0 22px;max-width:44ch}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+h2{font-size:1.05rem;margin:0 0 4px}
+p{margin:0 0 12px}
+.s{color:var(--s);font-size:.88rem}
+.btn{font:inherit;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:14px;border:1px solid var(--line);background:transparent;color:var(--t);text-decoration:none;cursor:pointer;width:100%;margin-bottom:10px;text-align:center}
+.btn.main{background:var(--p);border-color:var(--p);color:#12091f}
+.btn:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.file{font-size:.82rem;color:var(--s);margin:-4px 0 12px;word-break:break-all}
+.st{min-height:1.4em;font-size:.92rem;margin:0 0 12px}
+.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.ok{color:var(--ok)}
+ol{margin:0 0 4px;padding-left:20px}
+li{margin-bottom:6px}
+.note{border-left:3px solid var(--warn);padding:2px 0 2px 12px;margin:12px 0 0;font-size:.9rem}
+.hide{display:none!important}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 0 12px}
+.bar>i{display:block;height:100%;width:0;background:var(--p);transition:width .2s}
+button.btn:disabled{opacity:.6}
+</style>
+</head>
+<body>
+<main>
+<h1>Yuki's Anime Tracker</h1>
+<p class="lead">Download the newest Android app (APK) right here.</p>
+
+<section>
+<h2>Latest APK</h2>
+<p class="st" id="st" role="status">Looking for the newest APK…</p>
+<div id="list"></div>
+<button class="btn hide" id="retry" type="button">🔄 Try again</button>
+</section>
+
+<section>
+<h2>Install it</h2>
+<ol>
+<li>Open the downloaded <b>.apk</b> file from your notifications or the Downloads app.</li>
+<li>If Android asks, allow <b>Install unknown apps</b> for Chrome (or the app you downloaded with).</li>
+<li>Tap <b>Install</b>. If Play Protect warns you, choose <b>Install anyway</b>.</li>
+</ol>
+<p class="note">If Android says <b>App not installed</b>, the new APK was signed with a different key than the one on your phone. In the old app use Settings → Save Backup (.json), uninstall it, install the new APK, then import the backup.</p>
+</section>
+</main>
+
+<script>
+(function(){
+var OWNER='tharindu2010bro-cmd',REPO='Yuki',TAG='latest';
+var $=function(i){return document.getElementById(i)};
+function say(t,c){var e=$('st');e.textContent=t;e.className='st'+(c?' '+c:'')}
+function mb(n){return (n/1048576).toFixed(1)}
+function saveBlob(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},8000)}
+function direct(asset){var a=document.createElement('a');a.href=asset.browser_download_url;a.download=asset.name;a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},2000)}
+
+/* download inside this page with a progress bar; if the browser blocks that, start a plain direct download of the same file */
+function grab(asset,btn,bar){
+ btn.disabled=true;bar.parentNode.classList.remove('hide');bar.style.width='0';say('Starting download…');
+ fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/releases/assets/'+asset.id,{headers:{Accept:'application/octet-stream'}})
+ .then(function(r){
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  var total=+r.headers.get('content-length')||asset.size||0;
+  if(!r.body||!r.body.getReader)return r.blob();
+  var rd=r.body.getReader(),parts=[],got=0;
+  function step(){return rd.read().then(function(x){
+   if(x.done)return new Blob(parts,{type:'application/vnd.android.package-archive'});
+   parts.push(x.value);got+=x.value.length;
+   if(total)bar.style.width=Math.min(100,got/total*100)+'%';
+   say('Downloading '+mb(got)+' / '+mb(total||got)+' MB');
+   return step()})}
+  return step()})
+ .then(function(blob){
+  if(blob.size<1000000)throw new Error('incomplete file');
+  bar.style.width='100%';saveBlob(blob,asset.name);say('Done. Open “'+asset.name+'” from your notifications or Downloads.','ok')})
+ .catch(function(){say('Switching to a direct download…','warn');direct(asset);setTimeout(function(){say('Download started. Check your notifications or Downloads.','ok')},1200)})
+ .finally(function(){btn.disabled=false})}
+
+function load(){
+ $('retry').classList.add('hide');$('list').textContent='';say('Looking for the newest APK…');
+ fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/releases/tags/'+TAG,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'})
+ .then(function(r){if(r.status===403||r.status===429)throw new Error('limit');if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+ .then(function(j){
+  var apks=(j.assets||[]).filter(function(a){return /\.apk$/i.test(a.name)}).sort(function(a,b){return new Date(b.updated_at)-new Date(a.updated_at)});
+  if(!apks.length){say('No APK is attached to the latest release yet. Try again later.','warn');$('retry').classList.remove('hide');return}
+  var d=new Date(apks[0].updated_at),when=isNaN(d)?'':d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+  say('Updated '+when+(apks.length>1?' · '+apks.length+' APK files found':''),'ok');
+  var box=$('list'),wrap=document.createElement('div'),bar=document.createElement('i');wrap.className='bar hide';wrap.appendChild(bar);
+  apks.forEach(function(a,i){
+   var b=document.createElement('button');b.type='button';b.className='btn'+(i===0?' main':'');b.textContent='⬇️ Download APK ('+mb(a.size)+' MB)';
+   b.addEventListener('click',function(){grab(a,b,bar)});box.appendChild(b);
+   var f=document.createElement('p');f.className='file';f.textContent=a.name;box.appendChild(f)});
+  box.appendChild(wrap)})
+ .catch(function(e){say(e&&e.message==='limit'?'GitHub is limiting requests from your network right now. Wait a few minutes and try again.':'Could not load the APK list. Check your connection and try again.','warn');$('retry').classList.remove('hide')})}
+$('retry').addEventListener('click',load);
+load();
+})();
+</script>
+</body>
+</html>
