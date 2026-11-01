@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.60';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.66';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -2014,7 +2014,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCoverLB()});
 document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 
 /* v15.3 · hide splash once anime details finish loading (min 1.3s, max 6s) */
-(function(){const t0=Date.now(),MIN=1500,MAX=4000,sp=document.getElementById('ysplash');if(!sp)return;
+(function(){const t0=Date.now(),MIN=900,MAX=4000,sp=document.getElementById('ysplash');if(!sp)return;
 let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add('out');setTimeout(()=>{try{sp.remove()}catch(e){}},800)};
 try{loadAiring(false)}catch(e){yLog(e)}
 const chk=()=>{const el=Date.now()-t0;let busy=false;try{busy=airBusy||trendBusy}catch(e){}
@@ -5836,7 +5836,126 @@ if(typeof _r==='function')window.render=function(){const r=_r.apply(this,argumen
 try{setTimeout(fill,1500)}catch(e){}
 })();
 </script>
-</body></html>
+<script>/* v46.61 backup reminder: a weekly nudge to keep a copy of your data outside the app */
+(function(){var K='yukiLastBackup',SN='yukiBackupSnooze',DAY=864e5;
+function num(k){try{return +localStorage.getItem(k)||0}catch(e){return 0}}
+function put(k,v){try{localStorage.setItem(k,String(v))}catch(e){}}
+try{var od=window.downloadBackup;if(typeof od==='function'&&!od.__y){var nd=function(){var r=od.apply(this,arguments);put(K,Date.now());try{var b=document.getElementById('yBkBar');if(b)b.remove()}catch(e){}return r};nd.__y=1;window.downloadBackup=nd;try{downloadBackup=nd}catch(e){}}}catch(e){}
+window.yBackupNudge=function(force){try{
+ if(document.getElementById('yBkBar'))return;
+ if(!force){if(!(window.animeList&&animeList.length))return;var last=num(K),now=Date.now();
+  if(!last){put(K,now);return}
+  if(now-last<7*DAY||now<num(SN))return}
+ var last2=num(K),days=last2?Math.floor((Date.now()-last2)/DAY):0;
+ var d=document.createElement('div');d.id='yBkBar';
+ d.style.cssText='position:fixed;left:10px;right:10px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:99990;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:16px;background:rgba(20,22,48,.96);color:#eef1ff;font:600 13px/1.3 sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.4);border:1px solid rgba(139,92,246,.5)';
+ d.innerHTML='<span style="flex:1">💾 Last backup: '+(days>0?days+' days ago':'a while ago')+'. Keep a copy outside the app.</span>';
+ function btn(t,fn,p){var b=document.createElement('button');b.textContent=t;b.style.cssText='border:0;border-radius:12px;padding:8px 12px;font:700 12px sans-serif;color:'+(p?'#fff':'#c7ccf5')+';background:'+(p?'linear-gradient(135deg,#f472b6,#a78bfa)':'rgba(255,255,255,.1)');b.onclick=fn;return b}
+ d.appendChild(btn('Later',function(){put(SN,Date.now()+3*DAY);d.remove()}));
+ d.appendChild(btn('Back up',function(){try{if(typeof downloadBackup==='function')downloadBackup();else put(K,Date.now())}catch(e){}put(K,Date.now());d.remove()},1));
+ document.body.appendChild(d);setTimeout(function(){try{d.remove()}catch(e){}},15000)}catch(e){}};
+setTimeout(function(){window.yBackupNudge(false)},7000)})();
+</script><script>/* v46.65 subtitle translator: .srt/.vtt -> natural spoken Sinhala (AI, glossary + context), saved as a new .srt */
+(function(){
+var LANGS=[['si','සිංහල'],['ta','தமிழ்'],['hi','हिन्दी'],['en','English']],NAMES={si:'Sinhala',ta:'Tamil',hi:'Hindi',en:'English'};
+var STY=[['nat','Natural','everyday spoken language, the way friends talk'],['short','Short','very concise and quick to read, still natural'],['pol','Polite','polite and respectful, but still natural speech']];
+var cancel=false,S={f:null,cues:null,tl:'si',sty:'nat',q:'best'};
+function K(k){try{return (localStorage.getItem(k)||'').trim()}catch(e){return ''}}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function parse(txt){txt=String(txt).replace(/^\uFEFF/,'').replace(/\r/g,'');var cues=[];
+ txt.split(/\n{2,}/).forEach(function(b){var L=b.split('\n').filter(function(x){return x!==''}),k=-1;for(var i=0;i<L.length;i++)if(L[i].indexOf('-->')>-1){k=i;break}
+  if(k<0)return;var t=L[k].replace(/(\d+):(\d\d):(\d\d)\.(\d+)/g,'$1:$2:$3,$4').replace(/(^|\s)(\d\d):(\d\d)\.(\d+)/g,'$100:$2:$3,$4').replace(/\s+(align|position|line|size):\S+/g,'');
+  var tx=L.slice(k+1).join('\n').replace(/<[^>]+>/g,'').replace(/\{\\[^}]*\}/g,'').trim();cues.push({t:t,x:tx})});return cues}
+function build(cues){return cues.map(function(c,i){return (i+1)+'\n'+c.t+'\n'+(c.y||c.x)+'\n'}).join('\n')}
+async function gt(q,tl){var u='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+tl+'&dt=t&q='+encodeURIComponent(q),d;
+ try{var r=await fetch(u);if(!r.ok)throw 0;d=await r.json()}catch(e){var H=window.CapacitorHttp;if(!H)throw e;var r2=await H.get({url:u});d=typeof r2.data==='string'?JSON.parse(r2.data):r2.data}
+ return (d[0]||[]).map(function(p){return p[0]||''}).join('')}
+async function tr(texts,tl){var q=texts.map(function(t){return t.replace(/\n/g,' ')}).join('\n'),out;
+ for(var a=0;a<3;a++){try{out=(await gt(q,tl)).split('\n');break}catch(e){await wait(800*(a+1))}}
+ if(out&&out.length===texts.length)return out;
+ var res=[];for(var i=0;i<texts.length;i++){var v='';for(var a2=0;a2<3&&!v;a2++){try{v=await gt(texts[i].replace(/\n/g,' '),tl)}catch(e){await wait(600)}}res.push(v||texts[i])}return res}
+function xp(url,h,b){return new Promise(function(res,rej){var x=new XMLHttpRequest();x.open('POST',url);x.setRequestHeader('Content-Type','application/json');for(var k in h)x.setRequestHeader(k,h[k]);x.timeout=90000;x.onload=function(){var j={};try{j=JSON.parse(x.responseText)}catch(e){}if(x.status>=200&&x.status<300)res(j);else rej(new Error((j.error&&j.error.message)||('HTTP '+x.status)))};x.onerror=function(){rej(new Error('network'))};x.ontimeout=function(){rej(new Error('timeout'))};x.send(JSON.stringify(b))})}
+function inter(d){var t=(d.output_text||'').trim();if(t)return t;var o=[];(d.steps||[]).forEach(function(s){if(s.type==='model_output'&&s.content)s.content.forEach(function(p){if(p.type==='text'&&p.text)o.push(p.text)})});(d.outputs||[]).forEach(function(p){if(p.type==='text'&&p.text)o.push(p.text)});return o.join('').trim()}
+var PROV=[
+ ['Gemini',function(){return K('yukiGeminiKey_v1')},async function(p,key){
+  if(/^AQ\./i.test(key)){var le;for(var m of ['gemini-2.5-flash','gemini-3-flash-preview','gemini-2.5-flash-lite']){try{var t=inter(await xp('https://generativelanguage.googleapis.com/v1beta/interactions',{'x-goog-api-key':key},{model:m,input:p,store:false}));if(t)return t}catch(e){le=e}}throw le||new Error('empty')}
+  var d=await xp('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(key),{},{contents:[{role:'user',parts:[{text:p}]}],generationConfig:{temperature:.3,responseMimeType:'application/json'}});
+  return ((d.candidates||[{}])[0].content||{parts:[]}).parts.map(function(x){return x.text||''}).join('')}],
+ ['Groq',function(){return K('yukiGroqKey_v1')},async function(p,key){var le;for(var m of ['moonshotai/kimi-k2-instruct-0905','llama-3.3-70b-versatile','openai/gpt-oss-120b']){try{var b={model:m,messages:[{role:'user',content:p}],temperature:.3,max_completion_tokens:4096};if(/gpt-oss/.test(m))b.reasoning_effort='low';var d=await xp('https://api.groq.com/openai/v1/chat/completions',{'Authorization':'Bearer '+key},b);var t=((d.choices||[{}])[0].message||{}).content;if(t)return t}catch(e){le=e}}throw le||new Error('empty')}],
+ ['OpenRouter',function(){return K('yukiOpenRouterKey_v1')},async function(p,key){var le;for(var m of ['google/gemma-3-27b-it:free','meta-llama/llama-3.3-70b-instruct:free']){try{var d=await xp('https://openrouter.ai/api/v1/chat/completions',{'Authorization':'Bearer '+key},{model:m,messages:[{role:'user',content:p}],temperature:.3,max_tokens:4096});var t=((d.choices||[{}])[0].message||{}).content;if(t)return t}catch(e){le=e}}throw le||new Error('empty')}]];
+function hasKey(){return PROV.some(function(p){return p[1]()})}
+async function ask(p,note){for(var i=0;i<PROV.length;i++){var k=PROV[i][1]();if(!k)continue;for(var a=0;a<2;a++){try{var t=await PROV[i][2](p,k);if(t){note(PROV[i][0]);return t}}catch(e){if(/429|quota|rate|busy|high demand|timeout/i.test(e.message))await wait(1800)}}}return null}
+function mkPrompt(T,o,strict){var L=NAMES[o.tl]||o.tl,sty=(STY.filter(function(x){return x[0]===o.sty})[0]||STY[0])[2],si=o.tl==='si';
+ var gl=Object.keys(o.gl||{});
+ return 'You are an award-winning anime subtitle translator and a native '+L+' speaker. Translate the English subtitle lines into '+L+': '+sty+(si?'. Use casual spoken Sri Lankan Sinhala as young people really speak (ඔයා, මම, spoken verb endings like -නවා/-වා/-ද, everyday words), never stiff literary Sinhala (avoid forms like වේ, ය, යැයි, කරන්නෙමි). Common English loanwords (phone, school, bus) may be written in Sinhala script. Never output English words in Latin letters except names listed in the glossary, honorifics (-san, -kun, -chan, -sama, senpai) and sound-effect tags.':'.')+
+ '\nQuality rules: 1) Translate meaning, tone and emotion, not words: jokes, sarcasm, teasing, anger, whispers, shouting, insults must feel the same. 2) Idioms and slang become the natural equivalent a '+L+' speaker would say. 3) Subtitle lines are often fragments of one sentence: translate each line so it reads well on its own AND flows into the neighbouring lines. 4) Keep every line short (aim for 42 characters per line, use at most two lines separated by \\n when longer). 5) Same speaker or term must keep the same wording every time. 6) Keep [sound effects], ♪ music and numbers. 7) Never explain, never merge or split lines, never skip a line.'+
+ (strict?'\nIMPORTANT: your previous answer left many lines untranslated. Translate EVERY line fully into '+L+'.':'')+
+ (o.title?'\nAnime: '+o.title+'.':'')+
+ (gl.length?'\nGlossary (use exactly this spelling for these names/terms):\n'+gl.map(function(k){return k+' => '+o.gl[k]}).join('\n'):'')+
+ (o.ctx&&o.ctx.length?'\nEarlier lines (already translated, only for continuity, do NOT output):\n'+o.ctx.map(function(c){return c[0]+' => '+c[1]}).join('\n'):'')+
+ (o.next&&o.next.length?'\nNext lines (context only, do NOT translate or output):\n'+o.next.join('\n'):'')+
+ '\n\nInput JSON array of '+T.length+' strings:\n'+JSON.stringify(T)+'\n\nOutput: ONLY a JSON array of exactly '+T.length+' translated strings, same order, nothing else.'}
+function readArr(t,n){try{var a=t.indexOf('['),b=t.lastIndexOf(']');var j=JSON.parse(t.slice(a,b+1));if(Array.isArray(j)&&j.length===n&&j.every(function(x){return typeof x==='string'}))return j}catch(e){}return null}
+function readObj(t){try{var a=t.indexOf('{'),b=t.lastIndexOf('}');var j=JSON.parse(t.slice(a,b+1));return j&&typeof j==='object'&&!Array.isArray(j)?j:null}catch(e){return null}}
+function weak(src,out,tl){if(tl==='en')return false;var same=0;src.forEach(function(s,i){if(out[i].trim().toLowerCase()===s.trim().toLowerCase()&&/[a-z]{4}/i.test(s))same++});return same>src.length*.5}
+async function glossary(cues,o,note){var src=cues.map(function(c){return c.x}),st=Math.max(1,Math.ceil(src.length/160)),pick=src.filter(function(_,i){return i%st===0}).join(' | ').slice(0,7000);
+ var t=await ask('These are lines from anime subtitles'+(o.title?' (anime: '+o.title+')':'')+'. List the proper nouns (character names, places, organisations, techniques, special terms) that appear, each with the best natural '+(NAMES[o.tl]||o.tl)+' rendering ('+(o.tl==='si'?'Sinhala script':'native script')+'). Output ONLY a JSON object {"English name":"rendering"} with at most 40 entries.\n\n'+pick,note);
+ var j=t&&readObj(t);return j||{}}
+async function aiBatch(T,o,note){if(!hasKey())return null;
+ for(var a=0;a<2;a++){var t=await ask(mkPrompt(T,o,a>0),note),r=t&&readArr(t,T.length);if(r&&!weak(T,r,o.tl))return r}
+ if(T.length>6){var h=Math.ceil(T.length/2),o2=Object.assign({},o,{next:T.slice(h,h+3)}),x=await aiBatch(T.slice(0,h),o2,note);if(!x)return null;
+  var o3=Object.assign({},o,{ctx:(o.ctx||[]).concat(T.slice(0,h).map(function(t,k){return [t,x[k]]})).slice(-4)}),y=await aiBatch(T.slice(h),o3,note);return y?x.concat(y):null}
+ return null}
+async function polish(src,draft,o,note){var L=NAMES[o.tl]||o.tl,gl=Object.keys(o.gl||{});
+ var p='You are the senior editor of '+L+' anime subtitles. Below are English source lines with a draft translation. Improve every draft line: fix mistranslations and missed meaning, remove anything that sounds translated or stiff, make it sound exactly like natural spoken '+L+' that a native speaker would say in that situation, keep the tone and emotion, keep it short enough for subtitles (about 42 characters per line, at most two lines separated by \\n). If a draft line is already good, keep it unchanged. Keep names exactly as in the glossary. Do not merge, split or skip lines.'+(o.title?'\nAnime: '+o.title+'.':'')+(gl.length?'\nGlossary:\n'+gl.map(function(k){return k+' => '+o.gl[k]}).join('\n'):'')+(o.ctx&&o.ctx.length?'\nEarlier lines (context only):\n'+o.ctx.map(function(c){return c[0]+' => '+c[1]}).join('\n'):'')+'\n\nInput JSON array of '+src.length+' objects:\n'+JSON.stringify(src.map(function(x,i){return {en:x,draft:draft[i]}}))+'\n\nOutput: ONLY a JSON array of exactly '+src.length+' improved '+L+' strings, same order, nothing else.';
+ var t=await ask(p,note),r=t&&readArr(t,src.length);return r&&!weak(src,r,o.tl)?r:null}
+async function run(cues,o,prog,note){var B=20,ctx=[];prog(0,cues.length,null,'Reading names…');
+ o.gl=hasKey()?await glossary(cues,o,note):{};
+ for(var i=0;i<cues.length&&!cancel;i+=B){var part=cues.slice(i,i+B),src=part.map(function(c){return c.x});
+  var oo=Object.assign({},o,{ctx:ctx,next:cues.slice(i+B,i+B+3).map(function(c){return c.x})}),out=await aiBatch(src,oo,note);
+  if(!out){note('Google');out=await tr(src,o.tl)}else if(o.q==='best'){prog(i,cues.length,null,'Polishing');var pl=await polish(src,out,oo,note);if(pl)out=pl}
+  part.forEach(function(c,j){c.y=(out[j]||c.x).trim()});ctx=part.slice(-4).map(function(c){return [c.x,c.y]});
+  prog(Math.min(i+B,cues.length),cues.length,part.slice(-3),'Translating')}}
+window.__ySub={parse:parse,build:build,tr:tr,run:function(c,t,ti){var u={};return run(c,{tl:t,title:ti,sty:'nat',q:'best'},function(){},function(n){u[n]=1}).then(function(){return Object.keys(u)})}};
+async function save(name,text){var P=(window.Capacitor&&Capacitor.Plugins)||{},FS=P.Filesystem;
+ if(FS){try{var r=await FS.writeFile({path:'Yuki/'+name,data:text,directory:'DOCUMENTS',encoding:'utf8',recursive:true});return {msg:'Saved in Documents/Yuki/'+name,uri:r&&r.uri}}catch(e){}}
+ var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500);return {msg:'Saved: '+name}}
+var CSS='#ysb{position:fixed;inset:0;z-index:99995;background:rgba(4,5,16,.72);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;font-family:system-ui,sans-serif;animation:ysbF .25s}@keyframes ysbF{from{opacity:0}}@keyframes ysbU{from{transform:translateY(40px);opacity:0}}'+
+'#ysb .c{width:100%;max-width:460px;max-height:92%;overflow:auto;background:linear-gradient(180deg,#171a3d,#0e1028);color:#eef1ff;border:1px solid rgba(139,92,246,.45);border-bottom:0;border-radius:26px 26px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 50px rgba(124,92,246,.25);animation:ysbU .3s cubic-bezier(.2,.8,.2,1)}'+
+'#ysb h3{margin:0;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}#ysb .ysx{margin-left:auto;border:0;background:rgba(255,255,255,.1);color:#cbd5ff;width:30px;height:30px;border-radius:50%;font-size:14px}#ysb .s{font-size:12px;opacity:.65;margin:4px 0 14px}'+
+'#ysb .dz{display:block;border:1.5px dashed rgba(167,139,250,.55);border-radius:18px;padding:18px 12px;text-align:center;background:rgba(124,92,246,.08);cursor:pointer;margin-bottom:14px}#ysb .dz b{display:block;font-size:14px}#ysb .dz i{font-style:normal;font-size:12px;opacity:.7}#ysb .dz.ok{border-style:solid;border-color:#38bdf8;background:rgba(56,189,248,.08)}'+
+'#ysb .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin:2px 0 7px}#ysb .ch{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}#ysb .ch button{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#d6dbff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600}#ysb .ch button.on{background:linear-gradient(135deg,#f472b6,#a78bfa);border-color:transparent;color:#fff;box-shadow:0 4px 16px rgba(167,139,250,.4)}'+
+'#ysb input.t{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:14px;margin-bottom:14px;outline:0}'+
+'#ysb .go{width:100%;border:0;border-radius:16px;padding:14px;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(135deg,#38bdf8,#a78bfa 55%,#f472b6);box-shadow:0 8px 26px rgba(167,139,250,.45)}#ysb .go:disabled{opacity:.45;box-shadow:none}#ysb .g2{background:rgba(255,255,255,.1);box-shadow:none;margin-top:8px;font-weight:700}'+
+'#ysb .pg{margin:6px 0 4px;display:flex;align-items:baseline;gap:8px}#ysb .pg b{font-size:34px;font-weight:800;background:linear-gradient(90deg,#38bdf8,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}#ysb .pg span{font-size:12px;opacity:.7}'+
+'#ysb .bar{height:7px;border-radius:7px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:12px}#ysb .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transition:width .35s}'+
+'#ysb .pv{background:rgba(255,255,255,.05);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.45}#ysb .pv small{display:block;opacity:.5;font-size:11px}#ysb .ok2{color:#86efac;font-size:13px;margin:6px 0 10px;line-height:1.5}#ysb .kb{font-size:12px;margin:-6px 0 12px;opacity:.9}';
+function open(){if(document.getElementById('ysb'))return;try{closeDropdownMenu()}catch(e){}
+ if(!document.getElementById('ysbCss')){var st=document.createElement('style');st.id='ysbCss';st.textContent=CSS;document.head.appendChild(st)}
+ cancel=false;S.f=null;S.cues=null;var d=document.createElement('div');d.id='ysb';
+ d.innerHTML='<div class="c"><h3>🌐 Subtitle translator<button class="ysx" id="ysbX" aria-label="Close">✕</button></h3><div class="s">Drop in an .srt or .vtt file. AI translates it into natural spoken language and saves a new .srt.</div><div class="kb" id="ysbK"></div><div id="ysbA"><label class="dz" id="ysbD"><b id="ysbN">📄 Choose a subtitle file</b><i id="ysbI">.srt or .vtt</i><input id="ysbF" type="file" accept=".srt,.vtt,text/plain" style="display:none"></label><div class="l">Anime name (optional)</div><input class="t" id="ysbT" placeholder="e.g. Spy x Family" autocomplete="off"><div class="l">Language</div><div class="ch" id="ysbL"></div><div class="l">Style</div><div class="ch" id="ysbS"></div><div class="l">Quality</div><div class="ch" id="ysbQ"></div><button class="go" id="ysbG" disabled>Translate</button><button class="go g2" id="ysbTest" disabled>Test first 10 lines</button></div><div id="ysbR" style="display:none"><div class="pg"><b id="ysbP">0%</b><span id="ysbM"></span></div><div class="bar"><i id="ysbB"></i></div><div id="ysbV"></div><button class="go g2" id="ysbC">Cancel</button></div></div>';
+ document.body.appendChild(d);var $=function(i){return document.getElementById(i)};
+ function chips(id,arr,key){var el=$(id);el.innerHTML='';arr.forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(S[key]===x[0])b.className='on';b.onclick=function(){S[key]=x[0];chips(id,arr,key)};el.appendChild(b)})}
+ chips('ysbL',LANGS,'tl');chips('ysbS',STY.map(function(x){return [x[0],x[1]]}),'sty');chips('ysbQ',[['fast','Fast'],['best','Best · 2 passes']],'q');var kn=PROV.filter(function(p){return p[1]()}).map(function(p){return p[0]});$('ysbK').innerHTML=kn.length?'🟢 AI ready: '+kn.join(' · '):'🟡 No AI key found. Google Translate will be used (lower quality)';
+ $('ysbX').onclick=function(){cancel=true;d.remove()};d.onclick=function(e){if(e.target===d){cancel=true;d.remove()}};
+ $('ysbF').onchange=async function(){var f=this.files[0];if(!f)return;try{var cues=parse(await f.text());if(!cues.length){$('ysbN').textContent='⚠️ No subtitle lines found';$('ysbI').textContent='Please check that it is an .srt or .vtt file';return}
+  S.f=f;S.cues=cues;$('ysbD').className='dz ok';$('ysbN').textContent='✅ '+f.name;$('ysbI').textContent=cues.length+' lines · tap to change';$('ysbG').disabled=false;$('ysbTest').disabled=false}catch(e){$('ysbN').textContent='Error: '+(e&&e.message||e)}};
+ $('ysbG').onclick=function(){start(false)};$('ysbTest').onclick=function(){start(true)};async function start(test){if(!S.cues)return;cancel=false;$('ysbA').style.display='none';$('ysbR').style.display='block';$('ysbC').textContent='Cancel';
+  var used={},t0=Date.now(),o={tl:S.tl,sty:S.sty,q:S.q,title:($('ysbT').value||'').trim()},V=$('ysbV'),cues=test?S.cues.slice(0,10).map(function(c){return {t:c.t,x:c.x}}):S.cues;
+  $('ysbC').onclick=function(){cancel=true;d.remove()};
+  try{await run(cues,o,function(a,b,pairs,msg){var p=Math.round(a/b*100);$('ysbP').textContent=p+'%';$('ysbB').style.width=p+'%';$('ysbM').textContent=msg+' · '+a+'/'+b+(Object.keys(used).length?' · '+Object.keys(used).join(' + '):'');
+    if(pairs){V.innerHTML='';pairs.forEach(function(c){var e=document.createElement('div');e.className='pv';var sm=document.createElement('small');sm.textContent=c.x;e.appendChild(sm);e.appendChild(document.createTextNode(c.y));V.appendChild(e)})}},function(n){used[n]=1});
+   if(cancel)return;var name=S.f.name.replace(/\.(srt|vtt)$/i,'')+'.'+S.tl+'.srt',r=test?{msg:'Test only, nothing was saved'}:await save(name,build(cues)),keys=Object.keys(used),secs=Math.round((Date.now()-t0)/1000);
+   $('ysbP').textContent='100%';$('ysbB').style.width='100%';$('ysbM').textContent='Done · '+secs+'s';
+   var note=(keys.length===1&&keys[0]==='Google')?'<div class="ok2" style="color:#fcd34d">No AI key was found, so Google Translate was used. For more natural results, add a Gemini or Groq key in the Yuki chat settings.</div>':'';
+   V.insertAdjacentHTML('beforeend','<div class="ok2">✅ '+r.msg+'<br>'+cues.length+' lines · '+keys.join(' + ')+'</div>'+note);
+   var c=$('ysbC');c.textContent=test?'Back':'Close';c.className='go';c.onclick=function(){if(test){$('ysbR').style.display='none';$('ysbA').style.display='block'}else d.remove()};
+   var SH=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Share;if(SH&&r.uri){var sb=document.createElement('button');sb.className='go g2';sb.textContent='Share file';sb.onclick=function(){try{SH.share({title:name,url:r.uri})}catch(e){}};c.parentNode.insertBefore(sb,c)}
+  }catch(e){$('ysbM').textContent='Error: '+(e&&e.message||e);$('ysbC').textContent='Close'}}}
+window.ySubOpen=open;
+try{var m=document.getElementById('dropdownMenu');if(m&&!m.querySelector('[data-ysub]')){var bt=document.createElement('button');bt.setAttribute('data-ysub','1');bt.innerHTML='<span class="ddi">🌐</span>Subtitle translator';bt.onclick=open;var g=document.createElement('div');g.className='ddg';g.textContent='Tools';m.appendChild(g);m.appendChild(bt)}}catch(e){}
+})();
+</script></body></html>
 
 
 
