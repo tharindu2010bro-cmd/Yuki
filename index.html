@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.69';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.70';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5854,7 +5854,7 @@ window.yBackupNudge=function(force){try{
  d.appendChild(btn('Back up',function(){try{if(typeof downloadBackup==='function')downloadBackup();else put(K,Date.now())}catch(e){}put(K,Date.now());d.remove()},1));
  document.body.appendChild(d);setTimeout(function(){try{d.remove()}catch(e){}},15000)}catch(e){}};
 setTimeout(function(){window.yBackupNudge(false)},7000)})();
-</script><script>/* v46.69 subtitle translator: Gemini-first, current Gemini models, key migration guidance + fallback diagnostics */
+</script><script>/* v46.70 subtitle translator: skip blocking glossary preflight; start AI translation immediately */
 (function(){
 var LANGS=[['si','සිංහල'],['ta','தமிழ்'],['hi','हिन्दी'],['en','English']],NAMES={si:'Sinhala',ta:'Tamil',hi:'Hindi',en:'English'};
 var STY=[['nat','Natural','everyday spoken language, the way friends talk'],['short','Short','very concise and quick to read, still natural'],['pol','Polite','polite and respectful, but still natural speech']];
@@ -5881,7 +5881,7 @@ async function tr(texts,tl){var q=texts.map(function(t){return t.replace(/\n/g,'
  for(var a=0;a<3;a++){try{out=(await gt(q,tl)).split('\n');break}catch(e){await wait(800*(a+1))}}
  if(out&&out.length===texts.length)return out;
  var res=[];for(var i=0;i<texts.length;i++){var v='';for(var a2=0;a2<3&&!v;a2++){try{v=await gt(texts[i].replace(/\n/g,' '),tl)}catch(e){await wait(600)}}res.push(v||texts[i])}return res}
-function xp(url,h,b){return new Promise(function(res,rej){var x=new XMLHttpRequest();x.open('POST',url);x.setRequestHeader('Content-Type','application/json');for(var k in h)x.setRequestHeader(k,h[k]);x.timeout=90000;x.onload=function(){var j={};try{j=JSON.parse(x.responseText)}catch(e){}if(x.status>=200&&x.status<300)res(j);else rej(new Error((j.error&&j.error.message)||('HTTP '+x.status)))};x.onerror=function(){rej(new Error('network'))};x.ontimeout=function(){rej(new Error('timeout'))};x.send(JSON.stringify(b))})}
+function xp(url,h,b){return new Promise(function(res,rej){var x=new XMLHttpRequest();x.open('POST',url);x.setRequestHeader('Content-Type','application/json');for(var k in h)x.setRequestHeader(k,h[k]);x.timeout=45000;x.onload=function(){var j={};try{j=JSON.parse(x.responseText)}catch(e){}if(x.status>=200&&x.status<300)res(j);else rej(new Error((j.error&&j.error.message)||('HTTP '+x.status)))};x.onerror=function(){rej(new Error('network'))};x.ontimeout=function(){rej(new Error('timeout'))};x.send(JSON.stringify(b))})}
 function inter(d){var t=(d.output_text||'').trim();if(t)return t;var o=[];(d.steps||[]).forEach(function(s){if(s.type==='model_output'&&s.content)s.content.forEach(function(p){if(p.type==='text'&&p.text)o.push(p.text)})});(d.outputs||[]).forEach(function(p){if(p.type==='text'&&p.text)o.push(p.text)});return o.join('').trim()}
 // Reuse the same API keys configured in Yuki Chat. Subtitle translation can use
 // Gemini, Groq, or OpenRouter; it no longer silently ignores the latter two.
@@ -5951,8 +5951,8 @@ async function aiBatch(T,o,note){if(!hasKey())return null;
 async function polish(src,draft,o,note){var L=NAMES[o.tl]||o.tl,gl=Object.keys(o.gl||{});
  var p='You are the senior editor of '+L+' anime subtitles. Below are English source lines with a draft translation. Improve every draft line: fix mistranslations and missed meaning, remove anything that sounds translated or stiff, make it sound exactly like natural spoken '+L+' that a native speaker would say in that situation, keep the tone and emotion, keep it short enough for subtitles (about 42 characters per line, at most two lines separated by \\n). If a draft line is already good, keep it unchanged. Keep names exactly as in the glossary. Do not merge, split or skip lines.'+(o.title?'\nAnime: '+o.title+'.':'')+(gl.length?'\nGlossary:\n'+gl.map(function(k){return k+' => '+o.gl[k]}).join('\n'):'')+(o.ctx&&o.ctx.length?'\nEarlier lines (context only):\n'+o.ctx.map(function(c){return c[0]+' => '+c[1]}).join('\n'):'')+'\n\nInput JSON array of '+src.length+' objects:\n'+JSON.stringify(src.map(function(x,i){return {en:x,draft:draft[i]}}))+'\n\nOutput: ONLY a JSON array of exactly '+src.length+' improved '+L+' strings, same order, nothing else.';
  var t=await ask(p,note),r=t&&readArr(t,src.length);if(!r)return null;r=await repairWeakLines(src,r,o,note);return !weak(src,r,o.tl)&&!src.some(function(x,i){return poorLine(x,r[i],o.tl)})?r:null}
-async function run(cues,o,prog,note){var B=16,ctx=[];prog(0,cues.length,null,'Reading names…');
- if(!o.gl)o.gl=hasKey()?await glossary(cues,o,note):{};
+async function run(cues,o,prog,note){var B=16,ctx=[];prog(0,cues.length,null,'Sending first batch to AI…');
+ if(!o.gl)o.gl={};
  for(var i=0;i<cues.length&&!cancel;i+=B){var part=cues.slice(i,i+B),src=part.map(function(c){return c.x});
   var oo=Object.assign({},o,{ctx:ctx.slice(-8),next:cues.slice(i+B,i+B+6).map(function(c){return c.x})}),out=await aiBatch(src,oo,note);
   if(!out){note('Google');out=await tr(src,o.tl)}else if(o.q==='best'){prog(i,cues.length,null,'Polishing');var pl=await polish(src,out,oo,note);if(pl)out=pl}
@@ -6014,7 +6014,7 @@ function open(){if(document.getElementById('ysb'))return;try{closeDropdownMenu()
    total=items.reduce(function(a,b){return a+b.cues.length},0),done=0,outs=[],all=[];
   items.forEach(function(it){all.push.apply(all,it.cues)});
   $('ysbC').onclick=function(){cancel=true;d.remove()};
-  try{$('ysbM').textContent='Reading names…';o.gl=hasKey()?await glossary(all,o,note):{};
+  try{o.gl={};$('ysbM').textContent=hasKey()?'Starting Gemini translation…':'Starting Google Translate…';
    for(var fi=0;fi<items.length&&!cancel;fi++){var it=items[fi],base=done,lbl=items.length>1?'File '+(fi+1)+'/'+items.length+' · ':'';
     await run(it.cues,o,function(a,b,pairs,msg){var g=base+a,p=Math.round(g/total*100);$('ysbP').textContent=p+'%';$('ysbB').style.width=p+'%';$('ysbM').textContent=lbl+msg+' · '+g+'/'+total+(Object.keys(used).length?' · '+Object.keys(used).join(' + '):'');
      if(pairs){V.innerHTML='';pairs.forEach(function(c){var e=document.createElement('div');e.className='pv';var sm=document.createElement('small');sm.textContent=c.x;e.appendChild(sm);e.appendChild(document.createTextNode(c.y));V.appendChild(e)})}},note);
