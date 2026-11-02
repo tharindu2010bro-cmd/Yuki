@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.76';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.77';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -9,7 +9,7 @@ localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened 
 o2.innerHTML=im+'<div style="font-weight:200;font-size:clamp(2.2rem,11vw,3rem);line-height:1;letter-spacing:.34em;padding-left:.34em;text-shadow:0 0 28px rgba(129,140,248,.65)">YUKI</div><div style="margin-top:16px;font-size:.68rem;letter-spacing:.38em;padding-left:.38em;text-transform:uppercase;color:rgba(203,213,255,.7)">Anime Tracker</div><div style="width:min(50vw,190px);height:2px;margin-top:40px;background:rgba(255,255,255,.12);overflow:hidden"><i style="display:block;height:100%;width:100%;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transform-origin:left;animation:yOL 1.6s cubic-bezier(.3,.6,.3,1) forwards"></i></div><style>@keyframes yOL{0%{transform:scaleX(0)}100%{transform:scaleX(.9)}}</style>';b.appendChild(o2);
 try{requestAnimationFrame(function(){setTimeout(function(){try{var C=window.Capacitor,P=C&&C.Plugins&&C.Plugins.SplashScreen;if(P&&typeof P.hide==='function')P.hide({fadeOutDuration:150})}catch(e){}},0)})}catch(e){}
 var tt=0,iv=setInterval(function(){tt+=60;var ok=false;try{ok=!!(f.contentDocument&&f.contentDocument.getElementById('ysplash'))}catch(e){}if(ok||tt>6000){clearInterval(iv);setTimeout(function(){o2.style.opacity='0';setTimeout(function(){try{o2.remove()}catch(e){}},260)},ok?150:0)}},60)}catch(e){}}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.26 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.77 · Save Backup: timeouts + visible progress; v46.26 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -1611,6 +1611,8 @@ function bkMark(){try{localStorage.setItem(BK_KEY,String(Date.now()));localStora
 function bkSnooze(){try{localStorage.setItem(BK_SNZ,String(Date.now()+3*864e5))}catch(e){yLog(e)}render()}
 function hBackup(){if(!animeList||!animeList.length)return'';let sn=0,first=0;try{sn=+localStorage.getItem(BK_SNZ)||0;first=+localStorage.getItem('yukiFirstSeen_v1')||0;if(!first){first=Date.now();localStorage.setItem('yukiFirstSeen_v1',String(first))}}catch(e){yLog(e)}const last=bkLast(),now=Date.now();if(sn>now)return'';const age=last?(now-last)/864e5:(now-first)/864e5;if(age<BK_DAYS)return'';const msg=last?'Your last backup was <b>'+Math.floor(age)+' days ago</b>.':'You have <b>never backed up</b> your list.';return`<div class="card" style="background:var(--sp);border-color:var(--b)"><div class="lb">💾 Back up your list</div><div class="sub" style="margin:4px 0 10px">${msg} Your data lives only in this browser — clearing it deletes everything.</div><div class="g2"><button class="aload" onclick="downloadBackup().then(()=>render())">💾 Backup now</button><button class="aload" style="background:var(--inner);color:var(--s)" onclick="bkSnooze()">Remind me later</button></div></div>`}
 async function downloadBackup(mode){
+try{toast('💾 Saving backup…')}catch(_){}
+const T=(p,ms)=>Promise.race([Promise.resolve(p),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
 const name='yuki-backup-'+today()+'.json';
 const data=JSON.stringify({v:2,animeList,wish,log,animeLog,epDet,prof});
 const f=new File([data],name,{type:'application/json'});
@@ -1622,11 +1624,11 @@ if(FS){
  const errs=[];window._yBkData=data;
  const done=(msg,uri)=>{ok('💾 '+msg);window._yBkUri=uri||'';openX('💾 Backup saved','<div class="loader" style="padding:4px 0 12px;text-align:left">'+msg+'<br>'+animeList.length+' titles</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="yBkShareUri()">📤 Share / Save as…</button><button class="btn" style="flex:1" onclick="yBkCopy()">📋 Copy</button></div>')};
  if(mode!=='share'){
-  try{if(FS.requestPermissions)await FS.requestPermissions()}catch(e){}
+  try{if(FS.requestPermissions)await T(FS.requestPermissions(),4000)}catch(e){errs.push('perm: '+(e&&e.message||e))}
   for(const [dir,pre] of [['DOCUMENTS','Yuki/'],['EXTERNAL_STORAGE','Documents/Yuki/']]){
-   try{const w=await FS.writeFile({path:pre+name,data:data,directory:dir,encoding:'utf8',recursive:true});let good=true;try{const st=await FS.stat({path:pre+name,directory:dir});good=!(st&&st.size===0)}catch(e){}
+   try{const w=await T(FS.writeFile({path:pre+name,data:data,directory:dir,encoding:'utf8',recursive:true}),8000);let good=true;try{const st=await T(FS.stat({path:pre+name,directory:dir}),3000);good=!(st&&st.size===0)}catch(e){}
     if(good){done('Saved in Documents/Yuki/'+name,w&&w.uri);return}}catch(e){errs.push(dir+': '+(e&&e.message||e))}}}
- try{const w=await FS.writeFile({path:name,data:data,directory:'CACHE',encoding:'utf8'});window._yBkUri=w.uri;
+ try{const w=await T(FS.writeFile({path:name,data:data,directory:'CACHE',encoding:'utf8'}),8000);window._yBkUri=w.uri;
   if(SH&&SH.share){await SH.share({title:name,text:'Yuki backup',url:w.uri,dialogTitle:'Save backup'});ok('💾 Backup ready - choose where to save');return}errs.push('Share plugin missing')}catch(e){if(/cancel|dismiss/i.test(String(e&&e.message||e)))return;errs.push('cache/share: '+(e&&e.message||e))}
  window._yBkErr=errs.join(' | ');try{yLog(window._yBkErr)}catch(_){}}
 /* 2 · web share with file */
