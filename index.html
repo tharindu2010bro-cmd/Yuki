@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.79';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.81';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -9,7 +9,7 @@ localStorage.setItem('yukiOtaTry',String(n+1));/* v46.9: the new page is opened 
 o2.innerHTML=im+'<div style="font-weight:200;font-size:clamp(2.2rem,11vw,3rem);line-height:1;letter-spacing:.34em;padding-left:.34em;text-shadow:0 0 28px rgba(129,140,248,.65)">YUKI</div><div style="margin-top:16px;font-size:.68rem;letter-spacing:.38em;padding-left:.38em;text-transform:uppercase;color:rgba(203,213,255,.7)">Anime Tracker</div><div style="width:min(50vw,190px);height:2px;margin-top:40px;background:rgba(255,255,255,.12);overflow:hidden"><i style="display:block;height:100%;width:100%;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transform-origin:left;animation:yOL 1.6s cubic-bezier(.3,.6,.3,1) forwards"></i></div><style>@keyframes yOL{0%{transform:scaleX(0)}100%{transform:scaleX(.9)}}</style>';b.appendChild(o2);
 try{requestAnimationFrame(function(){setTimeout(function(){try{var C=window.Capacitor,P=C&&C.Plugins&&C.Plugins.SplashScreen;if(P&&typeof P.hide==='function')P.hide({fadeOutDuration:150})}catch(e){}},0)})}catch(e){}
 var tt=0,iv=setInterval(function(){tt+=60;var ok=false;try{ok=!!(f.contentDocument&&f.contentDocument.getElementById('ysplash'))}catch(e){}if(ok||tt>6000){clearInterval(iv);setTimeout(function(){o2.style.opacity='0';setTimeout(function(){try{o2.remove()}catch(e){}},260)},ok?150:0)}},60)}catch(e){}}catch(e){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(j.build));location.reload()}},0)}catch(e){}})();</script>
-<script>/* v46.79 · file backup fixes (top-frame Capacitor, direct native call, diagnostics, paste-restore, timeouts); v46.26 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
+<script>/* v46.81 · native notifications: top-frame Capacitor, timeouts, visible scheduler status, real native test; v46.80 · backup dialog shows every step + verifies file size, honest share result; v46.79 · file backup fixes (top-frame Capacitor, direct native call, diagnostics, paste-restore, timeouts); v46.26 · cinematic title-card splash + speed pass; v46.16 · new splash screen; v46.15 · compact chat header; v46.14 · Tools (bulk edit, MAL import, share text, app lock); v46.13 · Auto Backup; v46.12 · test build; v46.11 · OTA test build; v46.10 · OTA swap via iframe srcdoc (no navigation, works in Capacitor WebView) */
 /* v46.3 safety net: if a downloaded (OTA) page ever breaks on load, drop it once and fall back to the built-in page */
 (function(){try{
 function bad(){try{if(sessionStorage.getItem('yRec'))return;var o=localStorage.getItem('yukiOta_v1');if(!o)return;sessionStorage.setItem('yRec','1');var b=JSON.parse(o).build;localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');localStorage.setItem('yukiOtaFail',String(b));var q=localStorage.getItem('yukiOtaOrig');try{window.top.location.reload()}catch(_e){location.reload()}}catch(e){}}
@@ -1621,19 +1621,21 @@ const P=(CAP&&CAP.Plugins)||{},FS=P.Filesystem,SH=P.Share;
 const native=!!(CAP&&(CAP.isNativePlatform?CAP.isNativePlatform():FS));
 const diag=(()=>{try{const g=(f)=>{try{return String(f())}catch(e){return 'err'}};return ['iframe='+(window.top!==window),'cap='+!!CAP,'platform='+g(()=>CAP.getPlatform()),'fsPlugin='+g(()=>CAP.isPluginAvailable('Filesystem')),'sharePlugin='+g(()=>CAP.isPluginAvailable('Share')),'bridge='+g(()=>typeof window.androidBridge)+'/'+g(()=>typeof window.top.androidBridge),'nativePromise='+g(()=>typeof CAP.nativePromise),'build='+window.YUKI_BUILD].join(' · ')}catch(e){return 'diag failed'}})();
 const ok=m=>{bkMark();toast(m)};
+window._yBkLog=[];const L=m=>{try{window._yBkLog.push(String(m))}catch(e){}};
+const LH=()=>window._yBkLog.map(x=>x.replace(/[<>&]/g,'')).join('<br>');
 /* 1 · native: verified write to a visible folder, then share sheet; every failure reason is kept and shown */
 if(FS){
  const errs=[];let dead=false;window._yBkData=data;
- const done=(msg,uri)=>{ok('💾 '+msg);window._yBkUri=uri||'';openX('💾 Backup saved','<div class="loader" style="padding:4px 0 12px;text-align:left">'+msg+'<br>'+animeList.length+' titles</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="yBkShareUri()">📤 Share / Save as…</button><button class="btn" style="flex:1" onclick="yBkCopy()">📋 Copy</button></div>')};
+ const done=(msg,uri,ttl)=>{ok('💾 '+msg);window._yBkUri=uri||'';openX(ttl||'💾 Backup file','<div class="loader" style="padding:4px 0 8px;text-align:left">'+msg+'<br>'+animeList.length+' titles · '+Math.round(data.length/1024)+' KB'+(uri?'<br><small style="word-break:break-all;opacity:.8">'+String(uri).replace(/[<>&]/g,'')+'</small>':'')+'</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="yBkShareUri()">📤 Share file</button><button class="btn" style="flex:1" onclick="yBkTxt()">📝 Share text</button><button class="btn" style="flex:1" onclick="yBkCopy()">📋 Copy</button></div><div class="sub" style="margin-top:10px;font-size:.66rem;word-break:break-all;opacity:.7">'+LH()+'<br>'+diag+'</div>')};
  if(mode!=='share'){
-  try{if(FS.requestPermissions)await T(FS.requestPermissions(),6000)}catch(e){errs.push('perm: '+(e&&e.message||e));if(/timeout/.test(String(e&&e.message||e)))dead=true}
+  try{if(FS.requestPermissions){await T(FS.requestPermissions(),6000);L('permission: ok')}}catch(e){errs.push('perm: '+(e&&e.message||e));L('permission: '+(e&&e.message||e));if(/timeout/.test(String(e&&e.message||e)))dead=true}
   for(const [dir,pre] of [['DOCUMENTS','Yuki/'],['EXTERNAL_STORAGE','Documents/Yuki/']]){
    if(dead)break;
-   try{const w=await T(FS.writeFile({path:pre+name,data:data,directory:dir,encoding:'utf8',recursive:true}),8000);let good=true;try{const st=await T(FS.stat({path:pre+name,directory:dir}),3000);good=!(st&&st.size===0)}catch(e){}
-    if(good){done('Saved in Documents/Yuki/'+name,w&&w.uri);return}}catch(e){errs.push(dir+': '+(e&&e.message||e))}}}
+   try{const w=await T(FS.writeFile({path:pre+name,data:data,directory:dir,encoding:'utf8',recursive:true}),8000);L(dir+': write ok');let good=false;try{const st=await T(FS.stat({path:pre+name,directory:dir}),3000);L(dir+': size '+(st&&st.size)+' bytes');good=!!(st&&st.size>0)}catch(e){L(dir+': cannot verify ('+(e&&e.message||e)+')')}
+    if(good){done('Saved: '+pre+name,w&&w.uri,'💾 Backup saved');return}}catch(e){errs.push(dir+': '+(e&&e.message||e));L(dir+': '+(e&&e.message||e))}}}
  try{if(dead)throw new Error('file bridge not responding');const w=await T(FS.writeFile({path:name,data:data,directory:'CACHE',encoding:'utf8'}),8000);window._yBkUri=w.uri;
-  if(SH&&SH.share){await SH.share({title:name,text:'Yuki backup',url:w.uri,dialogTitle:'Save backup'});ok('💾 Backup ready - choose where to save');return}errs.push('Share plugin missing')}catch(e){if(/cancel|dismiss/i.test(String(e&&e.message||e)))return;errs.push('cache/share: '+(e&&e.message||e))}
- if(CAP&&CAP.nativePromise){try{const w=await T(CAP.nativePromise('Filesystem','writeFile',{path:name,data:data,directory:'CACHE',encoding:'utf8'}),5000);await CAP.nativePromise('Share','share',{title:name,url:w.uri,dialogTitle:'Save backup'});ok('💾 Backup ready - choose where to save');return}catch(e){if(/cancel|dismiss/i.test(String(e&&e.message||e)))return;errs.push('direct: '+(e&&e.message||e))}}
+  L('cache: write ok');if(SH&&SH.share){await SH.share({title:name,text:'Yuki backup',url:w.uri,dialogTitle:'Save backup'});L('share sheet: requested');done('Share sheet requested. If no sheet appeared, tap Share file again, or use Copy.',w.uri,'💾 Backup file ready');return}errs.push('Share plugin missing');L('Share plugin missing')}catch(e){L('cache/share: '+(e&&e.message||e));if(/cancel|dismiss/i.test(String(e&&e.message||e)))return;errs.push('cache/share: '+(e&&e.message||e))}
+ if(CAP&&CAP.nativePromise){try{const w=await T(CAP.nativePromise('Filesystem','writeFile',{path:name,data:data,directory:'CACHE',encoding:'utf8'}),5000);await CAP.nativePromise('Share','share',{title:name,url:w.uri,dialogTitle:'Save backup'});L('direct share: requested');done('Share sheet requested. If no sheet appeared, tap Share file again, or use Copy.',w.uri,'💾 Backup file ready');return}catch(e){L('direct: '+(e&&e.message||e));if(/cancel|dismiss/i.test(String(e&&e.message||e)))return;errs.push('direct: '+(e&&e.message||e))}}
  window._yBkErr=errs.join(' | ');try{yLog(window._yBkErr)}catch(_){}}
 /* 2 · web share with file */
 try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});ok('💾 Backup shared');return}}catch(e){if(e&&e.name==='AbortError')return}
@@ -1645,11 +1647,11 @@ try{if(window.showSaveFilePicker){
 if(!native){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();ok('💾 Backup downloaded');setTimeout(()=>URL.revokeObjectURL(u),4000);return}
 /* 5 · last resort inside the app: show the JSON so it can be copied / shared as text */
 window._yBkData=data;
-openX('💾 Backup could not be written to storage','<div class="loader" style="padding:4px 0 10px;text-align:left">Storage was blocked'+(window._yBkErr?' ('+String(window._yBkErr).replace(/[<>&]/g,'')+')':'')+'<br><small style="opacity:.7">'+diag+'</small>, so copy this backup (or share it as text) and paste it into a note / Drive file. Restore: Settings → Restore from pasted text.</div><textarea id="yBkTa" readonly class="yti" style="height:36vh;width:100%;font-size:.7rem"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="flex:1" onclick="yBkCopy()">📋 Copy</button><button class="btn" style="flex:1" onclick="yBkTxt()">📤 Share</button></div>');
+openX('💾 Backup could not be written to storage','<div class="loader" style="padding:4px 0 10px;text-align:left">Storage was blocked'+(window._yBkErr?' ('+String(window._yBkErr).replace(/[<>&]/g,'')+')':'')+'<br><small style="opacity:.7">'+diag+'<br>'+LH()+'</small>, so copy this backup (or share it as text) and paste it into a note / Drive file. Restore: Settings → Restore from pasted text.</div><textarea id="yBkTa" readonly class="yti" style="height:36vh;width:100%;font-size:.7rem"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="flex:1" onclick="yBkCopy()">📋 Copy</button><button class="btn" style="flex:1" onclick="yBkTxt()">📤 Share</button></div>');
 setTimeout(()=>{const t=document.getElementById('yBkTa');if(t)t.value=data},50)}
-window.yBkShareUri=async function(){const P=(window.Capacitor&&Capacitor.Plugins)||{},SH=P.Share,FS=P.Filesystem;try{let u=window._yBkUri;if(FS){const w=await FS.writeFile({path:'yuki-backup-'+today()+'.json',data:window._yBkData,directory:'CACHE',encoding:'utf8'});u=w.uri}if(SH&&SH.share)await SH.share({title:'Yuki backup',url:u,dialogTitle:'Save backup'});else yBkCopy()}catch(e){if(!/cancel|dismiss/i.test(String(e&&e.message||e)))toast('⚠️ '+(e&&e.message||e))}};
+window.yBkShareUri=async function(){const CC=(()=>{try{if(window.top!==window&&window.top.Capacitor)return window.top.Capacitor}catch(e){}return window.Capacitor})();const P=(CC&&CC.Plugins)||{},SH=P.Share,FS=P.Filesystem;try{let u=window._yBkUri;if(FS){const w=await FS.writeFile({path:'yuki-backup-'+today()+'.json',data:window._yBkData,directory:'CACHE',encoding:'utf8'});u=w.uri}if(SH&&SH.share)await SH.share({title:'Yuki backup',url:u,dialogTitle:'Save backup'});else yBkCopy()}catch(e){if(!/cancel|dismiss/i.test(String(e&&e.message||e)))yal('⚠️ Share failed: '+(e&&e.message||e))}};
 window.yBkCopy=async function(){const d=window._yBkData||'';try{await navigator.clipboard.writeText(d)}catch(e){const t=document.getElementById('yBkTa');if(t){t.select();try{document.execCommand('copy')}catch(_){}}}bkMark();toast('📋 Backup copied')};
-window.yBkTxt=async function(){const d=window._yBkData||'',SH=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Share;try{if(SH&&SH.share)await SH.share({title:'Yuki backup',text:d});else if(navigator.share)await navigator.share({title:'Yuki backup',text:d});else return yBkCopy();bkMark()}catch(e){}};
+window.yBkTxt=async function(){const d=window._yBkData||'',CC=(()=>{try{if(window.top!==window&&window.top.Capacitor)return window.top.Capacitor}catch(e){}return window.Capacitor})(),SH=CC&&CC.Plugins&&CC.Plugins.Share;try{if(SH&&SH.share)await SH.share({title:'Yuki backup',text:d});else if(navigator.share)await navigator.share({title:'Yuki backup',text:d});else return yBkCopy();bkMark()}catch(e){if(!/cancel|dismiss/i.test(String(e&&e.message||e)))yal('⚠️ Share text failed: '+(e&&e.message||e)+'\nTry Copy instead.')}};
 
 window.yTmdbKey=function(){var cur='';try{cur=localStorage.getItem('yukiTmdbKey_v1')||''}catch(e){}
  openX('🎞️ TMDB API Key','<div class="loader" style="padding:4px 0 10px;text-align:left">Free key: themoviedb.org → Settings → API → request key. Paste the <b>API Key</b> (or the long <b>Read Access Token</b>). It gives real episode thumbnails.</div><input id="yTmK" class="yti" style="width:100%" placeholder="TMDB key / token" value="'+cur.replace(/"/g,'')+'"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="flex:1" onclick="yTmSave()">💾 Save</button><button class="btn" style="flex:1" onclick="yTmTest()">✅ Test</button><button class="btn" style="flex:1" onclick="yTmClear()">🗑️</button></div>')};
@@ -1974,24 +1976,34 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}
 /* v6 · scheduled episode reminders (native when the builder supports it) + service worker */
 (function(){
 const SK='yukiSched_v1';
-const LN=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications||null;
+const capTop=()=>{try{if(window.top&&window.top!==window&&window.top.Capacitor)return window.top.Capacitor}catch(e){}return window.Capacitor||null};
+const LN=()=>{const c=capTop();return c&&c.Plugins&&c.Plugins.LocalNotifications||null};
+const TO=(p,ms)=>Promise.race([Promise.resolve(p),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout after '+Math.round(ms/1000)+'s')),ms))]);
+const slog=m=>{try{localStorage.setItem('yukiSchedLog_v1',new Date().toLocaleString()+' · '+m)}catch(e){}};
+window.yNativeNotif={cap:capTop,ln:LN,to:TO,slog:slog};
 const CL=()=>window.cordova&&cordova.plugins&&cordova.plugins.notification&&cordova.plugins.notification.local||null;
 const hid=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return(h%2147483000)+1};
 const ld=()=>{try{return JSON.parse(localStorage.getItem(SK))||[]}catch{return[]}},sv=a=>{try{localStorage.setItem(SK,JSON.stringify(a))}catch(e){yLog(e)}};
 async function cancelAll(){const ids=ld(),ln=LN(),cl=CL();try{if(ln&&ids.length)await ln.cancel({notifications:ids.map(id=>({id}))});else if(cl&&ids.length)cl.cancel(ids)}catch(e){yLog(e)}sv([])}
 async function sched(){
- if(!notifOn||!Array.isArray(airing))return;
- const ln=LN(),cl=CL();if(!ln&&!cl)return;
+ if(!notifOn)return;
+ if(!Array.isArray(airing)){slog('waiting for airing data');return}
+ const ln=LN(),cl=CL();if(!ln&&!cl){slog('no native notification plugin found');return}
  const now=Date.now(),H=7*864e5;
  const items=airing.filter(x=>x&&x.n&&x.n.airingAt*1000>now&&x.n.airingAt*1000-now<H).slice(0,60).map(x=>({id:hid(x.name+'#'+x.n.episode),at:x.n.airingAt*1000,title:'🔔 '+x.name,body:'Episode '+x.n.episode+' just aired!'}));
  try{
   const old=ld();
-  if(ln){let p=await ln.checkPermissions();if(p.display!=='granted')p=await ln.requestPermissions();if(p.display!=='granted')return;
-   if(old.length)await ln.cancel({notifications:old.map(id=>({id}))});
-   if(items.length)await ln.schedule({notifications:items.map(i=>({id:i.id,title:i.title,body:i.body,schedule:{at:new Date(i.at),allowWhileIdle:true}}))})}
-  else{if(old.length)cl.cancel(old);items.forEach(i=>cl.schedule({id:i.id,title:i.title,text:i.body,trigger:{at:new Date(i.at)},foreground:true}))}
+  if(ln){
+   let p=await TO(ln.checkPermissions(),6000);
+   if(p.display!=='granted')p=await TO(ln.requestPermissions(),30000);
+   if(p.display!=='granted'){slog('permission: '+p.display);try{toast('🔕 Allow notifications for this app in Android Settings')}catch(e){}return}
+   if(old.length)await TO(ln.cancel({notifications:old.map(id=>({id}))}),6000);
+   if(items.length)await TO(ln.schedule({notifications:items.map(i=>({id:i.id,title:i.title,body:i.body,schedule:{at:new Date(i.at),allowWhileIdle:true}}))}),8000);
+   let pend='?';try{const g=await TO(ln.getPending(),4000);pend=(g.notifications||[]).length}catch(e){}
+   slog('scheduled '+items.length+' · pending '+pend)}
+  else{if(old.length)cl.cancel(old);items.forEach(i=>cl.schedule({id:i.id,title:i.title,text:i.body,trigger:{at:new Date(i.at)},foreground:true}));slog('scheduled '+items.length+' (cordova)')}
   sv(items.map(i=>i.id));
- }catch(e){yLog(e)}
+ }catch(e){slog('error: '+(e&&e.message||e));yLog(e)}
 }
 const _la=loadAiring;loadAiring=async function(force){const r=await _la(force);try{sched()}catch(e){yLog(e)}return r};
 const _tn=toggleNotif;toggleNotif=async function(){await _tn();try{notifOn?sched():cancelAll()}catch(e){yLog(e)}};
@@ -2000,13 +2012,23 @@ try{if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigat
 })();
 
 /* v7 · alerts: test + diagnostics, re-check when the app comes back */
-function testNotif(){
+async function testNotif(){
  try{banner([{name:'Test anime',n:{episode:1}}])}catch(e){yLog(e)}
  try{yNotify('🧪 Test alert',{body:'If you can see this, notifications work!'})}catch(e){yLog(e)}
- const names=['Android','AndroidInterface','AndroidBridge','JSBridge','NativeBridge','Native','Bridge','WebAppInterface','JSInterface','HtmlToApk','AppInterface','Capacitor','cordova','flutter_inappwebview','ReactNativeWebView'];
- const br=names.filter(k=>{try{return window[k]}catch{return 0}}).map(k=>{const m=[];try{for(const p in window[k]){if(m.length<8)m.push(p)}}catch(e){yLog(e)}return k+(m.length?'('+m.join(', ')+')':'')});
- const info='In-app alert: ✅ shown above\nNotification API: '+(typeof Notification!=='undefined'?Notification.permission:'not supported in this app')+'\nNative bridge: '+(br.length?br.join(' · '):'none found')+'\nNotifications setting: '+(notifOn?'ON':'OFF');
- setTimeout(()=>yal(info),700);
+ const U=window.yNativeNotif,ln=U&&U.ln(),R=[];
+ if(ln){
+  try{
+   let p=await U.to(ln.checkPermissions(),6000);R.push('Permission: '+p.display);
+   if(p.display!=='granted'){p=await U.to(ln.requestPermissions(),30000);R.push('After asking: '+p.display)}
+   if(p.display==='granted'){
+    try{if(ln.checkExactNotificationSetting){const x=await U.to(ln.checkExactNotificationSetting(),4000);R.push('Exact alarms: '+x.exact_alarm)}}catch(e){R.push('Exact alarm check: '+(e&&e.message||e))}
+    await U.to(ln.schedule({notifications:[{id:999001,title:'🧪 Native test',body:'Scheduled by the app. Notifications work!',schedule:{at:new Date(Date.now()+5000),allowWhileIdle:true}}]}),8000);
+    R.push('Native test scheduled for 5 seconds from now. Leave the app or lock the screen to see it.')}
+  }catch(e){R.push('Error: '+(e&&e.message||e))}
+ }else R.push('Native plugin LocalNotifications: not found');
+ let lg='never';try{lg=localStorage.getItem('yukiSchedLog_v1')||'never'}catch(e){}
+ R.push('Last scheduler run: '+lg);
+ setTimeout(()=>yal(R.join('\n')),700);
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;try{if(airing&&checkReleased(airing))setTimeout(()=>loadAiring(true),90000);else loadAiring(false)}catch(e){yLog(e)}});
 
@@ -4455,7 +4477,7 @@ function aiRows(){
  return h;
 }
 function notifRows(){
- const ln=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications,cl=window.cordova&&cordova.plugins&&cordova.plugins.notification&&cordova.plugins.notification.local;
+ const ln=(window.yNativeNotif&&yNativeNotif.ln())||(window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications),cl=window.cordova&&cordova.plugins&&cordova.plugins.notification&&cordova.plugins.notification.local;
  let sched=0;try{sched=(JSON.parse(localStorage.getItem('yukiSched_v1'))||[]).length}catch(e){}
  const perm=typeof Notification!=='undefined'?Notification.permission:'not supported';
  const now=Date.now();
@@ -4468,7 +4490,7 @@ function notifRows(){
  +row('n5','Scheduled reminders',sched?'ok':'none',sched+' scheduled')
  +row('n6','Airing data',Array.isArray(airing)?'ok':(airErr?'err':'none'),Array.isArray(airing)?airing.length+' loaded ('+(window.yAirSrc||'cache')+')'+(airAt?' · '+Math.round((now-airAt)/60000)+' min ago':''):(airErr?'Failed to load':'Not loaded'))
  +row('n7','Ongoing shows in list',ongoing?'ok':'none',ongoing+' shows')
- +row('n8','Next airing',nextAir?'ok':'none',nextAir?nextAir.name+' · Ep '+nextAir.n.episode+' · '+new Date(nextAir.n.airingAt*1000).toLocaleString():'None found');
+ +row('n8','Next airing',nextAir?'ok':'none',nextAir?nextAir.name+' · Ep '+nextAir.n.episode+' · '+new Date(nextAir.n.airingAt*1000).toLocaleString():'None found')+(()=>{let lg='';try{lg=localStorage.getItem('yukiSchedLog_v1')||''}catch(e){}return row('n9','Last scheduler run',lg?(/error|permission|no native/.test(lg)?'err':'ok'):'none',lg||'never')})();
 }
 function storeInfo(){let n=0,b=0;try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);n++;b+=k.length+(localStorage.getItem(k)||'').length}}catch(e){}return row('s1','Local storage',n?'ok':'none',n+' keys · '+(b/1024).toFixed(1)+' KB')+row('s2','Online',navigator.onLine===false?'err':'ok',navigator.onLine===false?'Offline':'Online')+row('s5','AniList guard',window.yAqState&&window.yAqState()==='active'?'ok':'err',window.yAqState?window.yAqState():'n/a')+row('s4','Last search source',window.yLastSrc?'ok':'none',window.yLastSrc||'none yet')+row('s3','Last AniList error',window.yAqErr?'err':'ok',window.yAqErr||'none');}
 const btn='class="dvb"';
