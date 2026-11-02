@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='46.81';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='46.84';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1250,6 +1250,35 @@ body{background-attachment:scroll!important}
 #xO .ys-tw span{background:rgba(0,0,0,.78)!important;color:#fff!important}
 #xO .ytci{background:rgba(0,0,0,.78)!important}
 </style>
+<style id="yuki-v46-82-css">/* v46.82 · smoothness + AI Lab / Yuki Space look */
+html{-webkit-tap-highlight-color:transparent}button,nav button,.card,.row,.tile,.ib{touch-action:manipulation}
+button,.card,.row,.tile,.ib,nav button b{transition:transform .14s ease,opacity .2s ease,background-color .2s ease,box-shadow .2s ease,border-color .2s ease!important}
+button:active:not(:disabled),.row:active,.tile:active,.ib:active{transform:scale(.97)}
+#ysplash{transition:opacity .45s ease!important}#ysplash.out{opacity:0!important}
+#main{animation:y82in .38s cubic-bezier(.2,.8,.2,1) both}@keyframes y82in{from{opacity:0;transform:translateY(8px)}}
+.card,.row{content-visibility:auto;contain-intrinsic-size:auto 90px}
+#ysb{animation:y82f .22s ease both}#ysb .c{animation:y82u .34s cubic-bezier(.2,.8,.2,1) both}@keyframes y82f{from{opacity:0}}@keyframes y82u{from{transform:translateY(34px);opacity:.4}}
+#ysb .ch{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:4px;margin:0 0 14px;border-radius:16px;background:var(--inner,rgba(255,255,255,.06));scrollbar-width:none}#ysb .ch::-webkit-scrollbar{display:none}
+#ysb .ch button{flex:none;border:0;background:transparent;padding:8px 13px;white-space:nowrap}#ysb .ch button.on{box-shadow:0 3px 12px var(--pg,rgba(167,139,250,.4))}
+#ysb[data-k=ai] .c{background:radial-gradient(120% 60% at 100% 0,color-mix(in srgb,var(--a,#38bdf8) 16%,transparent),transparent 60%),var(--sheet,#0e1028)}
+#ysb[data-k=ai] h3{letter-spacing:.02em}#ysb[data-k=ai] .pv{border-left:3px solid var(--a,#38bdf8)}
+#ysb[data-k=space] .c{background:radial-gradient(1.2px 1.2px at 12% 18%,#fff9,transparent),radial-gradient(1px 1px at 78% 12%,#fff8,transparent),radial-gradient(1.4px 1.4px at 55% 38%,#fff7,transparent),radial-gradient(1px 1px at 90% 55%,#fff6,transparent),radial-gradient(1.2px 1.2px at 25% 70%,#fff7,transparent),radial-gradient(120% 55% at 0 0,color-mix(in srgb,var(--p,#a78bfa) 22%,transparent),transparent 60%),var(--sheet,#0b0d24)}
+#ysb[data-k=space] h3{background:linear-gradient(90deg,var(--p,#c084fc),var(--a,#38bdf8));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ysg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.ysk{border-radius:14px;padding:10px 4px;text-align:center;background:var(--inner,rgba(255,255,255,.06))}.ysk b{display:block;font-size:17px}.ysk span{font-size:10px;opacity:.65}
+@media(prefers-reduced-motion:reduce){#main,#ysb,#ysb .c{animation:none!important}}
+</style>
+<style id="yuki-v46-84-css">/* v46.84 · AI Lab + Yuki Space as normal app pages (same header, nav and card style as News) */
+#ysb.ypg{position:static!important;inset:auto!important;display:block!important;background:none!important;padding:0!important;z-index:auto!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;overflow:visible!important}
+#ysb.ypg .c{position:static!important;width:auto!important;max-width:none!important;height:auto!important;max-height:none!important;margin:0!important;padding:0 0 12px!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;overflow:visible!important;animation:none!important}
+#ysb.ypg .c>.s:first-of-type{margin:0 0 14px;padding:16px 18px;border-radius:22px;font-size:13px;line-height:1.55;background:linear-gradient(135deg,color-mix(in srgb,var(--a,#38bdf8) 16%,transparent),color-mix(in srgb,var(--p,#a78bfa) 14%,transparent));border:1px solid var(--b,rgba(255,255,255,.08))}
+#ysb[data-k=space].ypg .c>.s:first-of-type{background:radial-gradient(1.2px 1.2px at 12% 25%,#fff9,transparent),radial-gradient(1px 1px at 78% 20%,#fff8,transparent),radial-gradient(1.3px 1.3px at 55% 70%,#fff7,transparent),radial-gradient(1px 1px at 90% 60%,#fff6,transparent),linear-gradient(135deg,color-mix(in srgb,var(--p,#a78bfa) 22%,transparent),color-mix(in srgb,var(--a,#38bdf8) 14%,transparent))}
+#ysb.ypg .ch{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;margin:0 0 14px!important;padding:2px 0 6px!important;background:none!important;border-radius:0!important;scrollbar-width:none}
+#ysb.ypg .ch::-webkit-scrollbar{display:none}
+#ysb.ypg .ch button{flex:none;border-radius:999px;padding:10px 18px;border:1px solid var(--b,rgba(255,255,255,.1));background:var(--card,#fff);color:var(--t,inherit);font-weight:700;box-shadow:none}
+#ysb.ypg .ch button.on{background:linear-gradient(135deg,var(--a,#8b5cf6),var(--p,#ec4899));color:#fff;border-color:transparent;box-shadow:0 6px 18px color-mix(in srgb,var(--p,#ec4899) 35%,transparent)}
+#ysb.ypg .pv{border-radius:22px;background:var(--card,#fff);border:1px solid var(--b,rgba(255,255,255,.1));padding:16px;margin-bottom:12px}
+#ysb.ypg .ysg{margin-bottom:12px}
+</style>
 </head><body>
 <script>var vNews;</script>
 
@@ -1317,6 +1346,8 @@ i.src=(window.YW_AV||c||window.YW_IMG)})()</script>
    <button class="ychr" onclick="closeDropdownMenu();yChrOpen('')"><span class="ddi">🧑‍🎤</span>Character Search</button>
    <div class="ddg">Yuki</div>
    <button onclick="ycOpen();closeDropdownMenu()"><span class="ddi">💬</span>Chat with Yuki</button>
+    <button data-yai="1" onclick="window.yAiLab&&yAiLab()"><span class="ddi">✨</span>AI Lab</button>
+    <button data-yspace="1" onclick="window.ySpace&&ySpace()"><span class="ddi">🌌</span>Yuki Space</button>
    <div class="ddg">App</div>
    <button data-v="settings" onclick="go('settings');closeDropdownMenu()"><span class="ddi">⚙️</span>Settings</button>
    <button data-v="about" onclick="go('about');closeDropdownMenu()"><span class="ddi">ℹ️</span>About</button>
@@ -1502,7 +1533,7 @@ function stAch(){const R=achList(),M=achTiers(R),A=R.map(a=>({tr:M[a[1]],i:a[0],
 function go(v){view=v;window.scrollTo(0,0);render()}
 function refreshAll(){toast('🔄 Refreshing...');try{animeList=JSON.parse(localStorage.getItem(KEY))||animeList}catch(e){yLog(e)}try{log=JSON.parse(localStorage.getItem(LK))||log}catch(e){yLog(e)}try{animeLog=JSON.parse(localStorage.getItem(ALK))||animeLog}catch(e){yLog(e)}try{wish=JSON.parse(localStorage.getItem('yukiWishlist_v1'))||wish}catch(e){yLog(e)}trend=null;recs=null;trendBusy=false;recsBusy=false;if(dq||filtersActive())dSearch(dq,1);airing=null;airAt=0;airErr=false;loadAiring(true);render();closeDropdownMenu()}
 function lib(c){libF=c;go('library')}
-function render(){const T={home:'Dashboard',library:'My Library',stats:'Statistics',discover:'Discover',profile:'Profile',calendar:'Seasonal Calendar',news:'Anime News',about:'About',settings:'Settings'};$('vt').innerText=T[view];document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view||(b.dataset.v==='profile'&&['calendar','news','about','settings'].includes(view))));$('fabAddBtn').style.display=['home','library'].includes(view)?'flex':'none';const nv=document.querySelector('nav');if(nv)nv.style.display='flex';if(!animeList)return;{const vc=view!==_lv,y=window.scrollY;_lv=view;$('main').classList.toggle('enter',vc);$('main').innerHTML=({home:vHome,library:vLib,stats:vStats,discover:vDisc,profile:vProf,calendar:vCal,news:vNews,about:vAbout,settings:vSettings})[view]();if(!vc)window.scrollTo(0,y);if(view==='home')carRestore()}if(view==='discover')loadTrend();if(['discover','calendar','home'].includes(view))loadAiring();if(view==='home'){loadSeq();loadCar()}if(view==='calendar')loadSeason()}
+function render(){const T={home:'Dashboard',library:'My Library',stats:'Statistics',discover:'Discover',profile:'Profile',calendar:'Seasonal Calendar',news:'Anime News',about:'About',settings:'Settings',ailab:'AI Lab',space:'Yuki Space'};$('vt').innerText=T[view];document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view||(b.dataset.v==='profile'&&['calendar','news','about','settings','ailab','space'].includes(view))));$('fabAddBtn').style.display=['home','library'].includes(view)?'flex':'none';const nv=document.querySelector('nav');if(nv)nv.style.display='flex';if(!animeList)return;{const vc=view!==_lv,y=window.scrollY;_lv=view;$('main').classList.toggle('enter',vc);$('main').innerHTML=({home:vHome,library:vLib,stats:vStats,discover:vDisc,profile:vProf,calendar:vCal,news:vNews,about:vAbout,settings:vSettings,ailab:window.vAiLab,space:window.vSpace})[view]();if(window.yMount&&yMount[view])yMount[view]();if(!vc)window.scrollTo(0,y);if(view==='home')carRestore()}if(view==='discover')loadTrend();if(['discover','calendar','home'].includes(view))loadAiring();if(view==='home'){loadSeq();loadCar()}if(view==='calendar')loadSeason()}
 const durOf=a=>a&&a.dur>0?a.dur:24;
 function hoursAll(){return animeList.reduce((x,a)=>x+(a.watched||0)*durOf(a)/60+xh(a),0)}
 function epsHours(m){let h=0;for(const n in m)h+=m[n]*durOf(animeList.find(y=>y.name===n))/60;return h}
@@ -2049,7 +2080,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCoverLB()});
 document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 
 /* v15.3 · hide splash once anime details finish loading (min 1.3s, max 6s) */
-(function(){const t0=Date.now(),MIN=900,MAX=4000,sp=document.getElementById('ysplash');if(!sp)return;
+(function(){const t0=Date.now(),MIN=550,MAX=3200,sp=document.getElementById('ysplash');if(!sp)return;
 let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add('out');setTimeout(()=>{try{sp.remove()}catch(e){}},800)};
 try{loadAiring(false)}catch(e){yLog(e)}
 const chk=()=>{const el=Date.now()-t0;let busy=false;try{busy=airBusy||trendBusy}catch(e){}
@@ -6084,7 +6115,7 @@ function out(h){var e=$('yaiO');if(e)e.innerHTML=h}
 function wait(m){out('<div class="s" style="margin:10px 0">⏳ '+m+'</div>')}
 function err(e){out('<div class="ok2" style="color:#fbbf24">⚠️ '+esc(e&&e.message||e)+'</div>')}
 function card(h){return '<div class="pv">'+h+'</div>'}
-function addBtn(n){return '<button class="go g2" style="padding:9px;font-size:13px" data-n="'+esc(n)+'" onclick="document.getElementById(\'ysb\').remove();openAddModal(this.dataset.n)">➕ Add to my list</button>'}
+function addBtn(n){return '<button class="go g2" style="padding:9px;font-size:13px" data-n="'+esc(n)+'" onclick="openAddModal(this.dataset.n)">➕ Add to my list</button>'}
 function pick(){var v=($('yaiN').value||'').trim(),a=animeList.filter(function(x){return x.name===v})[0];return {n:v,w:a?(+a.watched||0):0}}
 var TA='width:100%;box-sizing:border-box;padding:12px 14px;border-radius:14px;border:1px solid var(--b);background:var(--inner);color:var(--t);font:inherit;font-size:14px;margin-bottom:14px;outline:0;resize:none';
 function nameBox(){return '<div class="l">Anime</div><input class="t" id="yaiN" list="yaiL" placeholder="Pick from your list or type a name" autocomplete="off"><datalist id="yaiL">'+animeList.map(function(a){return '<option value="'+esc(a.name)+'">'}).join('')+'</datalist>'}
@@ -6095,7 +6126,9 @@ var V={
  check:function(){return fb('yaiS1','Original subtitle (English)')+fb('yaiS2','Translated subtitle (Sinhala etc.)')+'<button class="go" id="yaiG">Check quality</button>'},
  cmp:function(){return fb('yaiC1','Japanese subtitle (optional)')+fb('yaiC2','English subtitle (optional)')+fb('yaiC3','Sinhala subtitle (optional)')+'<button class="go" id="yaiG">Compare side by side</button>'},
  mark:function(){return nameBox()+'<div class="l">Episode · time (mm:ss)</div><div style="display:flex;gap:8px"><input class="t" id="yaiE" type="number" min="1" inputmode="numeric" placeholder="Ep"><input class="t" id="yaiM" placeholder="12:34"></div><div class="l">Note</div><textarea id="yaiQ" rows="2" style="'+TA+'" placeholder="Why this scene?"></textarea>'+fb('yaiP','Screenshot (optional)')+'<button class="go" id="yaiG">Save scene</button>'},
+ pick:function(){return '<div class="s" style="margin:0 0 12px">Can’t decide? Picks something from your ongoing shows or unwatched movies.</div><button class="go" id="yaiG">🎲 Pick for me</button>'},
  comp:function(){return nameBox()+'<div class="l">Episode you just finished</div><input class="t" id="yaiE" type="number" min="1" inputmode="numeric" placeholder="e.g. 5"><div class="l">Language</div><div class="ch" id="yaiLg"></div><button class="go" id="yaiG">Start discussion</button>'}};
+function doPick(){var P=animeList.filter(function(a){return (a.category==='ongoing'&&(+a.watched||0)<(+a.total||9999))||(a.category==='movies'&&!(+a.watched>0))});if(!P.length)return out('<div class="s">Nothing to pick: your ongoing list is up to date.</div>');var a=P[Math.floor(Math.random()*P.length)];out(card('<div style="display:flex;gap:10px">'+(a.cover?'<img src="'+esc(a.cover)+'" style="width:56px;height:80px;object-fit:cover;border-radius:8px;flex:none">':'')+'<div><b>'+esc(a.name)+'</b><div class="s" style="margin:4px 0">'+(a.category==='movies'?'Movie':'Ep '+((+a.watched||0)+1)+(a.total?' of '+a.total:''))+((a.genres||[]).length?' · '+esc(a.genres.slice(0,3).join(', ')):'')+'</div><div class="s" style="margin:0">Tap Pick again for another.</div></div></div>'))}
 function rules(n,ep){return 'STRICT SPOILER RULE: the viewer has only seen "'+n+'" up to episode '+ep+'. Never mention, hint at or predict anything after that point. Only state plot details you are confident about; if you do not know the show well, say so instead of inventing. Reply in '+(lang==='si'?'natural spoken Sinhala (Sinhala script)':'English')+'. '}
 async function doScene(file){wait('Searching frames…');try{var fd=new FormData();fd.append('image',file);var r=await fetch('https://api.trace.moe/search?anilistInfo&cutBorders',{method:'POST',body:fd}),j=await r.json(),h=(j.result||[])[0];if(!h)throw new Error(j.error||'No match found');
  var an=h.anilist||{},t=an.title||{},nm=t.english||t.romaji||h.filename,sim=Math.round(h.similarity*100),mm=Math.floor(h.from/60),ss=String(Math.floor(h.from%60)).padStart(2,'0');
@@ -6162,14 +6195,13 @@ function show(t){tab=t;var o=$('yaiO');o.onpointerdown=o.onpointermove=o.onpoint
  var g=$('yaiG'),f=$('yaiF'),n=$('yaiN'),lg=$('yaiLg');
  if(n)n.onchange=function(){var p=pick();if(p.w&&$('yaiE'))$('yaiE').value=p.w};
  if(f)f.onchange=function(){if(this.files[0])doScene(this.files[0])};
- if(g)g.onclick=function(){({memory:doMem,map:doMap,comp:doComp,check:doCheck,cmp:doCmp,mark:doMark})[tab]()};
+ if(g)g.onclick=function(){({memory:doMem,map:doMap,comp:doComp,check:doCheck,cmp:doCmp,mark:doMark,pick:doPick})[tab]()};
  if(lg)(function r(){lg.innerHTML='';[['en','English'],['si','සිංහල']].forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(lang===x[0])b.className='on';b.onclick=function(){lang=x[0];r()};lg.appendChild(b)})})()}
-function open(){if($('ysb'))return;try{closeDropdownMenu()}catch(e){}
- if(!$('ysbCss')){var st=document.createElement('style');st.id='ysbCss';st.textContent=window.__yAI&&window.__yAI.css?window.__yAI.css():'';document.head.appendChild(st)}
- var d=document.createElement('div');d.id='ysb';d.innerHTML='<div class="c"><h3>✨ AI Lab<button class="ysx" id="yaiX" aria-label="Close">✕</button></h3><div class="s">Scene finder, memory search, relationship map and a spoiler-free episode companion.</div><div class="ch" id="yaiH"></div><div id="yaiB"></div><div id="yaiO"></div></div>';document.body.appendChild(d);
- $('yaiX').onclick=function(){d.remove()};d.onclick=function(e){if(e.target===d)d.remove()};
- var T=[['scene','📸 Scene'],['memory','🔎 Memory'],['map','🕸️ Map'],['comp','💬 Chat'],['check','✅ Check'],['cmp','🔀 Compare'],['mark','🔖 Bookmarks']];
- (function r(){var c=$('yaiH');c.innerHTML='';T.forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(tab===x[0])b.className='on';b.onclick=function(){show(x[0]);r()};c.appendChild(b)})})();show(tab)}
+function open(){try{closeDropdownMenu()}catch(e){}go('ailab')}
+var T=[['scene','📸 Scene'],['memory','🔎 Memory'],['map','🕸️ Map'],['comp','💬 Chat'],['check','✅ Check'],['cmp','🔀 Compare'],['mark','🔖 Bookmarks'],['pick','🎲 Pick']];
+function mount(){if(!$('ysbCss')){var st=document.createElement('style');st.id='ysbCss';st.textContent=window.__yAI&&window.__yAI.css?window.__yAI.css():'';document.head.appendChild(st)}(function r(){var c=$('yaiH');if(!c)return;c.innerHTML='';T.forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(tab===x[0])b.className='on';b.onclick=function(){show(x[0]);r()};c.appendChild(b)})})();show(tab)}
+window.vAiLab=function(){return '<div id="ysb" class="ypg" data-k="ai"><div class="c"><div class="s">Scene finder, memory search, relationship map, spoiler-free episode companion and a random picker.</div><div class="ch" id="yaiH"></div><div id="yaiB"></div><div id="yaiO"></div></div></div>'};
+(window.yMount=window.yMount||{}).ailab=mount;
 window.yAiLab=open;
 try{var m=document.getElementById('dropdownMenu');if(m&&!m.querySelector('[data-yai]')){var bt=document.createElement('button');bt.setAttribute('data-yai','1');bt.innerHTML='<span class="ddi">✨</span>AI Lab';bt.onclick=open;m.appendChild(bt)}}catch(e){}
 })();
@@ -6181,7 +6213,7 @@ function card(h){return '<div class="pv">'+h+'</div>'}
 function out(h){var e=$('ysO');if(e)e.innerHTML=h}
 function hash(s){var h=2166136261;s=String(s);for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967295}
 function jo(t){try{var a=t.indexOf('['),b=t.lastIndexOf(']');return JSON.parse(t.slice(a,b+1))}catch(e){return null}}
-function addBtn(n){return '<button class="go g2" style="padding:8px;font-size:12px" data-n="'+esc(n)+'" onclick="document.getElementById(\'ysb\').remove();openAddModal(this.dataset.n)">➕ Add to my list</button>'}
+function addBtn(n){return '<button class="go g2" style="padding:8px;font-size:12px" data-n="'+esc(n)+'" onclick="openAddModal(this.dataset.n)">➕ Add to my list</button>'}
 var CC={completed:'#fbbf24',ongoing:'#38bdf8',dropped:'#64748b',movies:'#f472b6'};
 function star(){var L=animeList;if(!L.length)return out('<div class="s">Add some anime first ✨</div>');
  var G={},gs=[];L.forEach(function(a){var g=(a.genres&&a.genres[0])||'Other';if(!(g in G)){G[g]=gs.length;gs.push(g)}});
@@ -6189,7 +6221,7 @@ function star(){var L=animeList;if(!L.length)return out('<div class="s">Add some
  gs.forEach(function(g){var m=P.filter(function(p){return p.g===g}).sort(function(a,b){return a.ang-b.ang});for(var k=1;k<m.length;k++)lines+='<line x1="'+m[k-1].x+'" y1="'+m[k-1].y+'" x2="'+m[k].x+'" y2="'+m[k].y+'" stroke="#a78bfa" stroke-opacity=".28" stroke-width=".8"/>'});
  var lab=gs.map(function(g,gi){var a=(gi+.5)/gs.length*6.283;return '<text x="'+(170+Math.cos(a)*158)+'" y="'+(170+Math.sin(a)*158)+'" font-size="7" fill="#cbd5ff" opacity=".5" text-anchor="middle">'+esc(g)+'</text>'}).join('');
  out('<svg viewBox="0 0 340 340" style="width:100%;border-radius:18px;background:radial-gradient(circle at 50% 50%,#2a1b5e,#05060f 75%)"><style>.tw{animation:yst 2.6s ease-in-out infinite alternate}@keyframes yst{from{opacity:.5}to{opacity:1}}</style>'+lines+lab+P.map(function(p){return '<g data-i="'+p.i+'"><circle cx="'+p.x+'" cy="'+p.y+'" r="'+p.r+'" fill="'+p.c+'" class="tw" style="animation-delay:'+(hash(p.i+'d')*2.5).toFixed(2)+'s"/><circle cx="'+p.x+'" cy="'+p.y+'" r="10" fill="transparent"/></g>'}).join('')+'</svg><div class="s" style="margin-top:6px">Gold = completed · cyan = ongoing · grey = dropped · pink = movies. Bigger star = higher score. Same-genre stars are joined. Tap a star.</div><div id="ysI"></div>');
- $('ysO').onclick=function(ev){var g=ev.target.closest&&ev.target.closest('g[data-i]');if(!g)return;var a=L[+g.dataset.i];$('ysI').innerHTML=card('<div style="display:flex;gap:10px"><img src="'+esc(a.cover||'')+'" style="width:52px;height:74px;object-fit:cover;border-radius:8px;flex:none"><div><b>'+esc(a.name)+'</b><small>'+esc(a.category||'')+' · '+(a.watched||0)+'/'+(a.total||'?')+' eps</small><button class="go g2" style="padding:7px;font-size:12px" onclick="document.getElementById(\'ysb\').remove();openDetailsModal('+g.dataset.i+')">Open</button></div></div>')}}
+ $('ysO').onclick=function(ev){var g=ev.target.closest&&ev.target.closest('g[data-i]');if(!g)return;var a=L[+g.dataset.i];$('ysI').innerHTML=card('<div style="display:flex;gap:10px"><img src="'+esc(a.cover||'')+'" style="width:52px;height:74px;object-fit:cover;border-radius:8px;flex:none"><div><b>'+esc(a.name)+'</b><small>'+esc(a.category||'')+' · '+(a.watched||0)+'/'+(a.total||'?')+' eps</small><button class="go g2" style="padding:7px;font-size:12px" onclick="openDetailsModal('+g.dataset.i+')">Open</button></div></div>')}}
 var RN=['Locked','Common','Rare','Epic','Legendary'],RC=['#64748b','#94a3b8','#38bdf8','#c084fc','#fbbf24'];
 function rar(a){var w=+a.watched||0,t=+a.total||0,done=a.category==='completed'||(t&&w>=t),sc=+(a.rating||a.score||0);if(!w)return 0;if(done&&sc>=8.5)return 4;if(done)return 3;if((t&&w/t>=.5)||w>=12)return 2;return 1}
 function cards(){var L=animeList.map(function(a){return {a:a,r:rar(a)}}).sort(function(x,y){return y.r-x.r}),n=[0,0,0,0,0];L.forEach(function(x){n[x.r]++});
@@ -6207,13 +6239,16 @@ async function doPred(){var A=window.__yAI,R=$('ysR'),w=function(h){R.innerHTML=
   if(!a||!a.length)throw new Error('The AI did not answer, try again');a=a.slice(0,6);
   var D=await Promise.all(a.map(function(x){return fetchAniListData(x.title).catch(function(){return null})}));
   w(a.map(function(x,i){var d=D[i],nm=d?d.title:x.title;if(own.indexOf(String(nm).toLowerCase())>-1)return '';return card('<div style="display:flex;gap:10px">'+(d&&d.cover?'<img src="'+esc(d.cover)+'" style="width:56px;height:80px;object-fit:cover;border-radius:8px;flex:none">':'')+'<div style="flex:1"><b>'+esc(nm)+'</b><div style="height:5px;border-radius:5px;background:var(--bar);margin:5px 0"><i style="display:block;height:100%;width:'+(+x.match||70)+'%;border-radius:5px;background:linear-gradient(90deg,var(--a),var(--p))"></i></div><small>'+(+x.match||70)+'% match</small>'+esc(x.why)+'<div style="margin-top:6px">'+addBtn(nm)+'</div></div></div>')}).join('')+'<div class="s">AI predictions can be wrong.</div>')}catch(e){w('<div class="ok2" style="color:#fbbf24">⚠️ '+esc(e.message)+'</div>')}}
-function show(t){tab=t;var o=$('ysO');o.onclick=null;({star:star,cards:cards,brief:brief,pred:pred})[t]()}
-function open(){if($('ysb'))return;try{closeDropdownMenu()}catch(e){}
- if(!$('ysbCss')){var st=document.createElement('style');st.id='ysbCss';st.textContent=window.__yAI&&window.__yAI.css?window.__yAI.css():'';document.head.appendChild(st)}
- var d=document.createElement('div');d.id='ysb';d.innerHTML='<div class="c"><h3>🌌 Yuki Space<button class="ysx" id="ysX" aria-label="Close">✕</button></h3><div class="s">Your anime galaxy, card collection, daily briefing and next-anime predictions.</div><div class="ch" id="ysH"></div><div id="ysO"></div></div>';document.body.appendChild(d);
- $('ysX').onclick=function(){d.remove()};d.onclick=function(e){if(e.target===d)d.remove()};
- var T=[['star','🌌 Galaxy'],['cards','🃏 Cards'],['brief','🗞️ Briefing'],['pred','🔮 Predict']];
- (function r(){var c=$('ysH');c.innerHTML='';T.forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(tab===x[0])b.className='on';b.onclick=function(){show(x[0]);r()};c.appendChild(b)})})();show(tab)}
+function ins(){var L=animeList||[],n=function(x){return +x||0},ep=0,hr=0,sc=[],g={},st={};L.forEach(function(a){var w=n(a.watched);ep+=w;hr+=w*(n(a.dur)||24)/60;if(n(a.score)>0)sc.push(n(a.score));(a.genres||[]).forEach(function(k){g[k]=(g[k]||0)+1});if(a.studio)st[a.studio]=(st[a.studio]||0)+1});
+ var top=function(o,k){return Object.keys(o).sort(function(x,y){return o[y]-o[x]}).slice(0,k).map(function(x){return [x,o[x]]})},G=top(g,6),S=top(st,3),mx=G.length?G[0][1]:1,done=L.filter(function(a){return a.category==='completed'}).length;
+ var st4=[['Titles',L.length],['Episodes',ep],['Hours',Math.round(hr)],['Avg score',sc.length?(sc.reduce(function(a,b){return a+b},0)/sc.length).toFixed(1):'-']].map(function(x){return '<div class="ysk"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('');
+ $('ysO').innerHTML='<div class="ysg">'+st4+'</div>'+card('<b>Top genres</b>'+G.map(function(x){return '<div style="margin:7px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><span>'+esc(x[0])+'</span><span>'+x[1]+'</span></div><div style="height:6px;border-radius:6px;background:var(--bar)"><i style="display:block;height:100%;width:'+Math.round(x[1]/mx*100)+'%;border-radius:6px;background:linear-gradient(90deg,var(--a),var(--p))"></i></div></div>'}).join('')||'<div class="s">Add genres to see this.</div>')+card('<b>Favourite studios</b><div class="s" style="margin:6px 0 0">'+(S.map(function(x){return esc(x[0])+' · '+x[1]}).join('<br>')||'Not enough data yet')+'</div>')+card('<b>Completion</b><div class="s" style="margin:6px 0 0">'+done+' of '+L.length+' titles completed</div>')}
+function show(t){tab=t;var o=$('ysO');o.onclick=null;({star:star,cards:cards,brief:brief,pred:pred,ins:ins})[t]()}
+function open(){try{closeDropdownMenu()}catch(e){}go('space')}
+var T=[['star','🌌 Galaxy'],['cards','🃏 Cards'],['brief','🗞️ Briefing'],['pred','🔮 Predict'],['ins','📈 Insights']];
+function mount(){if(!$('ysbCss')){var st=document.createElement('style');st.id='ysbCss';st.textContent=window.__yAI&&window.__yAI.css?window.__yAI.css():'';document.head.appendChild(st)}(function r(){var c=$('ysH');if(!c)return;c.innerHTML='';T.forEach(function(x){var b=document.createElement('button');b.textContent=x[1];if(tab===x[0])b.className='on';b.onclick=function(){show(x[0]);r()};c.appendChild(b)})})();show(tab)}
+window.vSpace=function(){return '<div id="ysb" class="ypg" data-k="space"><div class="c"><div class="s">Your anime galaxy, card collection, daily briefing, next-anime predictions and insights.</div><div class="ch" id="ysH"></div><div id="ysO"></div></div></div>'};
+(window.yMount=window.yMount||{}).space=mount;
 window.ySpace=open;
 try{var m=document.getElementById('dropdownMenu');if(m&&!m.querySelector('[data-yspace]')){var bt=document.createElement('button');bt.setAttribute('data-yspace','1');bt.innerHTML='<span class="ddi">🌌</span>Yuki Space';bt.onclick=open;m.appendChild(bt)}}catch(e){}
 })();
