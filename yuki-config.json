@@ -1,24 +1,24 @@
 {
-  "v": 46,
+  "v": 47,
   "sources": {
     "off": [],
     "order": [
       "AniList",
-      "Jikan",
       "Kitsu",
+      "Jikan",
       "Shikimori",
       "AnimeThemes",
       "TVmaze"
     ]
   },
   "notice": {
-    "id": "1779779785",
-    "title": "New update 46.67",
-    "text": "-bug fixing and sub translate tool",
+    "id": "-1636986000",
+    "title": "New update 46.89",
+    "text": "-bug fixing and ai features",
     "url": ""
   },
   "app": {
-    "build": "46.67"
+    "build": "46.89"
   },
   "flags": {
     "ai": true,
