@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- CODE MAP (v47.01): 54 style blocks. Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
+<!-- CODE MAP (v47.10): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.01';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.10';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -6507,6 +6507,38 @@ wrap('vDisc',function(h){if(typeof h!=='string')return h;
  return h.replace('<div id="dRes">','<div style="text-align:right;margin:-2px 0 8px"><button class="btn" style="padding:6px 12px;font-size:.78rem" onclick="$(\'dGenreSel\').value=\'\';$(\'dYearInp\').value=\'\';$(\'dFormatSel\').value=\'\';dFilterChange()">✕ Reset filters</button></div><div id="dRes">')});
 })();
 </script>
+<style id="yuki-app-layout-fix">
+/* App-layout fix v2: floating pill nav kept, but opaque; content fades out above it; FAB/back-to-top sit on the nav's top edge */
+:root{--nav-gap:calc(10px + env(safe-area-inset-bottom,0px));--nav-h:64px;--nav-top:calc(var(--nav-gap) + var(--nav-h))}
+#main{padding-bottom:calc(var(--nav-top) + 40px)!important}
+#app{padding-bottom:calc(var(--nav-top) + 40px)!important}
+.hh,.pcard,.ht4,.lvc,.car,.cw-slide,.card{margin-top:0;margin-bottom:14px}
+.sec{margin:22px 4px 10px}
+.ht4{gap:8px}
+.ht4>div{min-width:0}
+.ht4 span{letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block}
+.cdots{margin:12px 0 22px}
+/* nav: opaque pill. --bg is always opaque, so nothing shows through */
+html body nav{position:fixed!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+ bottom:var(--nav-gap)!important;width:calc(100% - 28px)!important;max-width:460px!important;height:var(--nav-h)!important;min-height:0!important;
+ padding:6px!important;border-radius:22px!important;border:1px solid var(--b)!important;
+ background:linear-gradient(var(--nav),var(--nav)),var(--bg)!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ box-shadow:0 8px 24px rgba(0,0,0,.22)!important;z-index:950}
+html body nav button{height:100%;justify-content:center;gap:2px!important;padding:0!important;font-size:.7rem}
+html body nav button b{width:54px;padding:3px 0!important;text-align:center;line-height:1.2}
+/* fade page content out behind/under the nav so the strip below it is clean */
+html::after{content:"";position:fixed;left:0;right:0;bottom:0;height:calc(var(--nav-top) + 6px);z-index:940;pointer-events:none;
+ background:linear-gradient(to bottom,transparent,var(--bg) 62%)}
+/* floating buttons: same size, one row, just above the nav */
+html body .fab,html body #yTop{width:46px!important;height:46px!important;bottom:calc(var(--nav-top) + 12px)!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;z-index:960!important;box-shadow:0 6px 16px rgba(0,0,0,.24)!important}
+html body .fab{right:max(16px,calc(50% - 224px))!important;background:linear-gradient(135deg,var(--p),#9333ea)!important;color:#fff!important;border:0!important}
+html body #yTop{left:max(16px,calc(50% - 224px))!important;background:var(--bg)!important;border:1px solid var(--b)}
+[data-theme=glass] .fab::after,[data-theme=neon] .fab::after{font-size:2rem;color:#fff;text-shadow:none}
+html body #ycBtn{width:46px!important;height:46px!important;bottom:calc(var(--nav-top) + 70px)!important;z-index:960!important}
+</style>
+
 </body></html>
 
 
