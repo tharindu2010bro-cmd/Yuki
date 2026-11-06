@@ -1,28 +1,29 @@
 {
-  "v": 47,
+  "v": 48,
   "sources": {
     "off": [],
     "order": [
       "AniList",
-      "Kitsu",
       "Jikan",
       "Shikimori",
+      "Kitsu",
       "AnimeThemes",
       "TVmaze"
     ]
-  },
-  "notice": {
-    "id": "-1636986000",
-    "title": "New update 46.89",
-    "text": "-bug fixing and ai features",
-    "url": ""
-  },
-  "app": {
-    "build": "46.89"
   },
   "flags": {
     "ai": true,
     "news": true,
     "quiz": true
+  },
+  "proxy": "https://yukiant.brotharu292.workers.dev",
+  "notice": {
+    "id": "452436829",
+    "title": "New update",
+    "text": "-bug fixing and ai features",
+    "url": ""
+  },
+  "app": {
+    "build": "47.16"
   }
 }
