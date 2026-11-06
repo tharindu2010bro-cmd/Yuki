@@ -32,6 +32,12 @@ jobs:
           path: ~/.android/debug.keystore
           key: yuki-debug-keystore-v1
 
+      - name: Stable signing key (optional - add secret DEBUG_KEYSTORE_B64 so updates never fail with "App not installed")
+        env:
+          KS: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KS" ]; then mkdir -p ~/.android && echo "$KS" | base64 -d > ~/.android/debug.keystore && echo "using stored keystore"; fi
+
       - run: npm install
 
       - name: Splash screen plugin (keeps the branded launch splash until the page paints)
@@ -87,7 +93,16 @@ jobs:
       - name: Add permissions
         run: |
           M=android/app/src/main/AndroidManifest.xml
-          sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n    <uses-permission android:name="android.permission.VIBRATE"/>\n    <application#' $M
+          sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n    <uses-permission android:name="android.permission.VIBRATE"/>\n    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>\n    <application#' $M
+
+      - name: Home-screen widget (native code + resources)
+        run: python3 widget.py
+
+      - name: Version code (each build is newer, so installing over the old app works)
+        run: |
+          G=android/app/build.gradle
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" $G
+          grep -n "versionCode\|versionName" $G
 
       - name: Dark launch theme (no grey flash)
         continue-on-error: true
