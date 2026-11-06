@@ -18,31 +18,60 @@ def w(path, text):
 # ---------- resources ----------
 w(os.path.join(RES, 'drawable', 'yuki_widget_bg.xml'), '''<?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#E6101224"/>
-    <corners android:radius="22dp"/>
-    <stroke android:width="1dp" android:color="#338B5CF6"/>
+    <gradient android:angle="135" android:startColor="#F21B1740" android:endColor="#F20A0B1C"/>
+    <corners android:radius="26dp"/>
+    <stroke android:width="1dp" android:color="#408B5CF6"/>
+</shape>
+''')
+w(os.path.join(RES, 'drawable', 'yuki_widget_bar.xml'), '''<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="270" android:startColor="#A78BFA" android:endColor="#F472B6"/>
+    <corners android:radius="3dp"/>
+</shape>
+''')
+w(os.path.join(RES, 'drawable', 'yuki_widget_row.xml'), '''<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#1FFFFFFF"/>
+    <corners android:radius="14dp"/>
 </shape>
 ''')
 
 rows = ''
 for i in (1, 2, 3):
     rows += f'''
-    <LinearLayout android:id="@+id/yw_row{i}" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:layout_marginTop="6dp" android:visibility="gone">
-        <TextView android:id="@+id/yw_t{i}" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-            android:textColor="#F4F7FF" android:textSize="14sp" android:singleLine="true" android:ellipsize="end"/>
-        <TextView android:id="@+id/yw_d{i}" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_marginStart="8dp" android:textColor="#C4B5FD" android:textSize="12sp" android:singleLine="true"/>
+    <LinearLayout android:id="@+id/yw_row{i}" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="6dp"
+        android:paddingStart="10dp" android:paddingEnd="12dp" android:paddingTop="6dp" android:paddingBottom="6dp"
+        android:background="@drawable/yuki_widget_row" android:visibility="gone">
+        <View android:layout_width="4dp" android:layout_height="match_parent" android:background="@drawable/yuki_widget_bar"/>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:orientation="vertical" android:layout_marginStart="10dp">
+            <TextView android:id="@+id/yw_t{i}" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textColor="#F4F7FF" android:textSize="14sp" android:textStyle="bold" android:singleLine="true" android:ellipsize="end"/>
+            <TextView android:id="@+id/yw_s{i}" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textColor="#A7ADC8" android:textSize="12sp" android:singleLine="true"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:orientation="vertical" android:gravity="end" android:layout_marginStart="8dp">
+            <TextView android:id="@+id/yw_day{i}" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="#F9A8D4" android:textSize="11sp" android:textStyle="bold" android:singleLine="true"/>
+            <TextView android:id="@+id/yw_time{i}" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="#DDD6FE" android:textSize="13sp" android:textStyle="bold" android:singleLine="true"/>
+        </LinearLayout>
     </LinearLayout>'''
 
 w(os.path.join(RES, 'layout', 'yuki_widget.xml'), f'''<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/yw_root"
     android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical"
     android:padding="14dp" android:background="@drawable/yuki_widget_bg">
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Yuki · Airing soon"
-        android:textColor="#A78BFA" android:textSize="12sp" android:textStyle="bold"/>{rows}
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="AIRING SOON" android:textColor="#C4B5FD" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Yuki" android:textColor="#F472B6" android:textSize="12sp" android:textStyle="bold"/>
+    </LinearLayout>{rows}
     <TextView android:id="@+id/yw_empty" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" android:text="Open Yuki once to load your shows" android:textColor="#9AA0B8" android:textSize="13sp"/>
+        android:layout_marginTop="10dp" android:text="Open Yuki once to load your shows" android:textColor="#9AA0B8" android:textSize="13sp"/>
 </LinearLayout>
 ''')
 
@@ -87,21 +116,26 @@ public class YukiWidgetProvider extends AppWidgetProvider {{
         for (int id : ids) m.updateAppWidget(id, build(c));
     }}
 
-    static String when(long at) {{
+    static String day(long at) {{
         Calendar a = Calendar.getInstance(), b = Calendar.getInstance();
         b.setTimeInMillis(at);
-        String t = new SimpleDateFormat("h:mm a", Locale.getDefault()).format(new Date(at));
-        if (a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)) return "Today " + t;
+        if (a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)) return "TODAY";
         a.add(Calendar.DAY_OF_YEAR, 1);
-        if (a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)) return "Tomorrow " + t;
-        return new SimpleDateFormat("EEE h:mm a", Locale.getDefault()).format(new Date(at));
+        if (a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)) return "TOMORROW";
+        return new SimpleDateFormat("EEE", Locale.getDefault()).format(new Date(at)).toUpperCase(Locale.getDefault());
+    }}
+
+    static String time(long at) {{
+        return new SimpleDateFormat("h:mm a", Locale.getDefault()).format(new Date(at));
     }}
 
     static RemoteViews build(Context c) {{
         RemoteViews v = new RemoteViews(c.getPackageName(), R.layout.yuki_widget);
         int[] rows = {{R.id.yw_row1, R.id.yw_row2, R.id.yw_row3}};
         int[] ts = {{R.id.yw_t1, R.id.yw_t2, R.id.yw_t3}};
-        int[] ds = {{R.id.yw_d1, R.id.yw_d2, R.id.yw_d3}};
+        int[] ss = {{R.id.yw_s1, R.id.yw_s2, R.id.yw_s3}};
+        int[] dy = {{R.id.yw_day1, R.id.yw_day2, R.id.yw_day3}};
+        int[] tm = {{R.id.yw_time1, R.id.yw_time2, R.id.yw_time3}};
         List<long[]> idx = new ArrayList<>();
         List<String> names = new ArrayList<>();
         try {{
@@ -116,7 +150,6 @@ public class YukiWidgetProvider extends AppWidgetProvider {{
                     names.add(o.optString("t", "?"));
                 }}
             }}
-            // sort by time (simple selection since list is tiny)
             for (int i = 0; i < idx.size(); i++) for (int j = i + 1; j < idx.size(); j++) if (idx.get(j)[0] < idx.get(i)[0]) {{
                 Collections.swap(idx, i, j); Collections.swap(names, i, j);
             }}
@@ -125,8 +158,10 @@ public class YukiWidgetProvider extends AppWidgetProvider {{
             if (i < idx.size()) {{
                 long[] it = idx.get(i);
                 v.setViewVisibility(rows[i], android.view.View.VISIBLE);
-                v.setTextViewText(ts[i], names.get(i) + (it[1] > 0 ? "  ·  Ep " + it[1] : ""));
-                v.setTextViewText(ds[i], when(it[0]));
+                v.setTextViewText(ts[i], names.get(i));
+                v.setTextViewText(ss[i], it[1] > 0 ? "Episode " + it[1] : "New episode");
+                v.setTextViewText(dy[i], day(it[0]));
+                v.setTextViewText(tm[i], time(it[0]));
             }} else v.setViewVisibility(rows[i], android.view.View.GONE);
         }}
         v.setViewVisibility(R.id.yw_empty, idx.isEmpty() ? android.view.View.VISIBLE : android.view.View.GONE);
