@@ -194,12 +194,64 @@ public class YukiWidgetPlugin extends Plugin {{
 }}
 ''')
 
+w(os.path.join(JAVA, 'YukiFilePlugin.java'), f'''package {PKG};
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import androidx.activity.result.ActivityResult;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
+/** Opens Android's own "Save as" screen so the backup lands in a folder the user picks (Downloads, Documents, Drive...). */
+@CapacitorPlugin(name = "YukiFile")
+public class YukiFilePlugin extends Plugin {{
+    @PluginMethod
+    public void save(PluginCall call) {{
+        String name = call.getString("name", "yuki-backup.json");
+        Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("application/json");
+        i.putExtra(Intent.EXTRA_TITLE, name);
+        startActivityForResult(call, i, "saveResult");
+    }}
+
+    @ActivityCallback
+    private void saveResult(PluginCall call, ActivityResult result) {{
+        if (call == null) return;
+        if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || result.getData().getData() == null) {{
+            call.reject("cancelled");
+            return;
+        }}
+        Uri uri = result.getData().getData();
+        try (OutputStream os = getContext().getContentResolver().openOutputStream(uri, "wt")) {{
+            os.write(call.getString("data", "").getBytes(StandardCharsets.UTF_8));
+            os.flush();
+            JSObject r = new JSObject();
+            r.put("uri", uri.toString());
+            call.resolve(r);
+        }} catch (Exception e) {{
+            call.reject("write failed: " + e.getMessage());
+        }}
+    }}
+}}
+''')
+
 # ---------- MainActivity: register the plugin ----------
 mains = glob.glob(os.path.join(JAVA, 'MainActivity.java')) or glob.glob(os.path.join(APP, 'java', '**', 'MainActivity.java'), recursive=True)
 if not mains:
     raise SystemExit('MainActivity.java not found')
 p = mains[0]
 s = open(p, encoding='utf-8').read()
+if 'YukiFilePlugin' not in s and 'YukiWidgetPlugin' in s:
+    s = s.replace('registerPlugin(YukiWidgetPlugin.class);', 'registerPlugin(YukiWidgetPlugin.class);\n        registerPlugin(YukiFilePlugin.class);')
+    open(p, 'w', encoding='utf-8').write(s)
 if 'YukiWidgetPlugin' not in s:
     if 'import android.os.Bundle;' not in s:
         s = re.sub(r'(package [^;]+;)', lambda m: m.group(1) + '\nimport android.os.Bundle;', s, count=1)
@@ -207,6 +259,7 @@ if 'YukiWidgetPlugin' not in s:
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(YukiWidgetPlugin.class);
+        registerPlugin(YukiFilePlugin.class);
         super.onCreate(savedInstanceState);
     }
 """
