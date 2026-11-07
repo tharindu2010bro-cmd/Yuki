@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.28';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.29';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1686,6 +1686,10 @@ const diag=(()=>{try{const g=(f)=>{try{return String(f())}catch(e){return 'err'}
 const ok=m=>{bkMark();toast(m)};
 window._yBkLog=[];const L=m=>{try{window._yBkLog.push(String(m))}catch(e){}};
 const LH=()=>window._yBkLog.map(x=>x.replace(/[<>&]/g,'')).join('<br>');
+/* 0 · v47.29: Android "Save as" screen (needs the APK built with widget.py): you pick the folder, the file really lands there */
+if(P.YukiFile&&P.YukiFile.save&&mode!=='share'){
+ try{await P.YukiFile.save({name:name,data:data});ok('💾 Backup saved');openX('💾 Backup saved','<div class="loader" style="padding:4px 0 8px;text-align:left">Saved as <b>'+name+'</b><br>'+animeList.length+' titles · '+Math.round(data.length/1024)+' KB<br><small style="opacity:.8">In the folder you picked. To restore: Settings → Restore from File.</small></div>');return}
+ catch(e){const em=String(e&&e.message||e);if(/cancel/i.test(em)){toast('Backup cancelled');return}L('save-as: '+em)}}
 /* 1 · native: verified write to a visible folder, then share sheet; every failure reason is kept and shown */
 if(FS){
  const errs=[];let dead=false;window._yBkData=data;
