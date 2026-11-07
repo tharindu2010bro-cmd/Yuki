@@ -43,7 +43,7 @@ for i in (1, 2, 3):
         android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="6dp"
         android:paddingStart="10dp" android:paddingEnd="12dp" android:paddingTop="6dp" android:paddingBottom="6dp"
         android:background="@drawable/yuki_widget_row" android:visibility="gone">
-        <View android:layout_width="4dp" android:layout_height="match_parent" android:background="@drawable/yuki_widget_bar"/>
+        <FrameLayout android:layout_width="4dp" android:layout_height="match_parent" android:background="@drawable/yuki_widget_bar"/>
         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
             android:orientation="vertical" android:layout_marginStart="10dp">
             <TextView android:id="@+id/yw_t{i}" android:layout_width="match_parent" android:layout_height="wrap_content"
