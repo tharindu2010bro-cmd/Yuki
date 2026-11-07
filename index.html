@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.25';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.26';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -4543,7 +4543,7 @@ const pxTest=f=>async()=>{const t=await (await jget(f(ANN),10000)).text();if(!/<
 const HOST=()=>{try{return(localStorage.getItem('yukiHost')||'https://tharindu2010bro-cmd.github.io/Yuki/').replace(/\/?$/,'/')}catch(e){return'https://tharindu2010bro-cmd.github.io/Yuki/'}};
 const GRP=[['host','🏠 Hosting (GitHub Pages)'],['anime','📡 Anime APIs'],['news','📰 News sources'],['ai','🤖 AI endpoints'],['other','🌐 Other services'],['mine','🧩 Your proxy (Cloudflare)']];
 function apiGroups(){return GRP.map(g=>{const L=APIS.filter(a=>a.grp===g[0]);return `<details class="dvdet" ${g[0]==='host'||g[0]==='anime'||g[0]==='news'||g[0]==='mine'?'open':''}><summary>${g[1]} <span id="dvGc_${g[0]}" class="dvhint">0/${L.length}</span></summary><div class="dvbox">${L.map(a=>row(a.id,a.name,'none','not checked',true)).join('')}</div></details>`}).join('')}
-async function ping(a){set(a.id,a.name,'chk','checking…');const t=Date.now();try{const nt=await a.go();set(a.id,a.name,'ok','Working'+(typeof nt==='string'&&nt?' · '+nt:'')+' · '+(Date.now()-t)+' ms')}catch(e){set(a.id,a.name,'err',(e&&e.name==='AbortError'?'Timed out':(e&&e.message)||'Failed')+' · '+(Date.now()-t)+' ms')}}
+async function ping(a){set(a.id,a.name,'chk','checking…');const t=Date.now();try{const nt=await a.go();set(a.id,a.name,'ok','Working'+(typeof nt==='string'&&nt?' · '+nt:'')+' · '+(Date.now()-t)+' ms')}catch(e){if(e&&e.message==='HTTP 429'){set(a.id,a.name,'ok','Busy · rate-limited (service is up) · '+(Date.now()-t)+' ms');return}set(a.id,a.name,'err',(e&&e.name==='AbortError'?'Timed out':(e&&e.message)||'Failed')+' · '+(Date.now()-t)+' ms')}}
 function aiRows(){
  let h='';const d=window.ycDbg?window.ycDbg():null;
  if(!d)return row('dvAi','AI chat','none','not available');
@@ -4596,7 +4596,7 @@ window.yDevQL=function(d){const L=window.yqLim;if(!L)return;L.set(L.max()+d);con
 window.yDevQReset=function(){const L=window.yqLim;if(!L)return;L.reset();const e=$$('dvQ');if(e)e.innerHTML=quizBox();try{toast('♻️ Quiz count reset')}catch(x){}};
 window.yDevOpen=function(){openX('🛠️ Developer options',body());yDevCheck()};
 window.yDevCheck=async function(){
- const p=APIS.map((a,i)=>new Promise(r=>setTimeout(r,i*90)).then(()=>ping(a)));
+ let jd=0;const p=APIS.map((a,i)=>new Promise(r=>setTimeout(r,i*90+(/Jikan/.test(a.name)?(jd++)*1700:0))).then(()=>ping(a)));
  try{if(window.ycCheckAll){const c=window.ycCheckAll();const iv=setInterval(refresh,700);Promise.resolve(c).finally(()=>{clearInterval(iv);refresh()})}}catch(e){}
  await Promise.all(p);refresh();
 };
