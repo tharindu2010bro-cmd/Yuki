@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.30';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.31';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -6604,6 +6604,91 @@ document.addEventListener('visibilitychange',function(){if(document.hidden)push(
 window.yWidgetPush=push;
 })();
 </script>
+<script id="yuki-wrapped">
+/* v47.31 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
+(function(){
+var css=document.createElement('style');
+css.textContent='#yw{position:fixed;inset:0;z-index:10060;background:#080910;color:#f8fafc;display:flex;flex-direction:column;font-family:inherit;user-select:none;-webkit-user-select:none}'
++'#yw .ywb{display:flex;gap:4px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 0}'
++'#yw .ywb i{flex:1;height:3px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden}#yw .ywb i b{display:block;height:100%;width:0;background:#fff;border-radius:9px}'
++'#yw .ywb i.d b{width:100%}#yw .ywb i.c b{animation:ywf 6s linear forwards}@keyframes ywf{to{width:100%}}'
++'#yw .ywx{position:absolute;right:12px;top:calc(env(safe-area-inset-top,0px) + 22px);width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:16px;z-index:3}'
++'#yw .ywc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 28px;animation:ywi .45s ease both}'
++'@keyframes ywi{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}'
++'#yw .ywk{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-bottom:14px}'
++'#yw .ywn{font-size:clamp(3.4rem,20vw,6rem);font-weight:900;line-height:1;background:linear-gradient(135deg,#fff,var(--yc1,#c084fc));-webkit-background-clip:text;background-clip:text;color:transparent}'
++'#yw .ywt{font-size:1.35rem;font-weight:800;margin-top:14px;line-height:1.3}#yw .yws{font-size:.9rem;opacity:.75;margin-top:10px;line-height:1.5}'
++'#yw .ywl{width:100%;max-width:340px;margin-top:18px;text-align:left}#yw .ywl div{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.9rem}'
++'#yw .ywl em{font-style:normal;width:22px;opacity:.7}#yw .ywl span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#yw .ywl u{text-decoration:none;opacity:.7;font-size:.8rem}'
++'#yw .ywg{height:7px;border-radius:9px;background:rgba(255,255,255,.14);width:100%;margin-top:6px;overflow:hidden}#yw .ywg b{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#c084fc,#38bdf8)}'
++'#yw .ywa{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}#yw .ywa button{padding:11px 18px;border-radius:99px;border:0;font-weight:800;font-size:.85rem;background:#fff;color:#1f1533}#yw .ywa button.g{background:rgba(255,255,255,.14);color:#fff}'
++'#yw .ywh{position:absolute;inset:60px 0 0 0;display:flex;z-index:1}#yw .ywh div{flex:1}#yw .ywh div:first-child{flex:.35}'
++'#yw .ywc .ywa{position:relative;z-index:2}';
+document.head.appendChild(css);
+function E(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function S(){
+ var L=(typeof animeList!=='undefined'&&Array.isArray(animeList)?animeList:[]).filter(function(a){return a&&a.name&&a.category!=='wishlist'});
+ var eps=0,sc=0,sn=0,G={},top=[];
+ L.forEach(function(a){eps+=(+a.watched||0);var r=+(a.score||a.rating||0);if(r>0){sc+=r;sn++;top.push({n:a.name,r:r})}
+  (a.genres||[]).slice(0,3).forEach(function(g){if(g)G[g]=(G[g]||0)+1})});
+ top.sort(function(a,b){return b.r-a.r});
+ var gs=Object.keys(G).sort(function(a,b){return G[b]-G[a]}).slice(0,5);
+ var done=L.filter(function(a){return a.category==='completed'}).length;
+ var hrs=Math.round(eps*24/60);
+ return{L:L,eps:eps,hrs:hrs,days:(hrs/24).toFixed(1),avg:sn?(sc/sn).toFixed(1):'–',gs:gs,G:G,top:top.slice(0,5),done:done,rate:L.length?Math.round(done/L.length*100):0}
+}
+function persona(s){
+ var g=(s.gs[0]||'').toLowerCase();
+ if(!s.L.length)return['🌱 Fresh Start','Your journey begins now'];
+ if(s.rate>=70&&s.L.length>=10)return['✅ The Finisher','You actually complete what you start'];
+ if(/romance|slice|drama/.test(g))return['💖 The Romantic','Feelings first, always'];
+ if(/action|adventure|shounen|fantasy/.test(g))return['⚔️ The Adventurer','Give you a fight scene and you are home'];
+ if(/psycho|thriller|mystery|horror|supernatural/.test(g))return['🕵️ The Mind Gamer','You love a plot that bites back'];
+ if(/comedy|sports/.test(g))return['😂 The Good Vibes Fan','Life is better with laughs'];
+ if(s.eps>1500)return['🏔️ The Marathoner','Episodes are just a warm-up'];
+ return['🌌 The Explorer','You sample the whole galaxy']
+}
+var slides,idx,tm,pick=0,root;
+function pickOne(){var P=(typeof animeList!=='undefined'?animeList:[]).filter(function(a){return a&&a.name&&(a.category==='wishlist'||a.category==='ongoing')});
+ if(!P.length)return null;var n;do{n=Math.floor(Math.random()*P.length)}while(P.length>1&&P[n].name===pick);pick=P[n].name;return P[n]}
+function build(){
+ var s=S(),p=persona(s),mx=s.gs.length?s.G[s.gs[0]]:1;
+ slides=[
+  '<div class="ywk">Yuki Wrapped ❄️</div><div class="ywn">'+s.L.length+'</div><div class="ywt">anime in your world</div><div class="yws">'+s.done+' completed · '+s.rate+'% finish rate</div>',
+  '<div class="ywk">Time well spent</div><div class="ywn">'+s.eps.toLocaleString()+'</div><div class="ywt">episodes watched</div><div class="yws">≈ '+s.hrs+' hours, or '+s.days+' days of non-stop anime 😳</div>',
+  '<div class="ywk">Your taste</div><div class="ywt" style="margin:0 0 6px">'+(s.gs[0]?E(s.gs[0]):'Still discovering')+'</div><div class="yws">is your top genre</div>'
+   +(s.gs.length?'<div class="ywl">'+s.gs.map(function(g,i){return'<div><em>'+(i+1)+'</em><span>'+E(g)+'</span><u>'+s.G[g]+'</u></div><div class="ywg" style="margin:-4px 0 4px 32px;width:calc(100% - 32px)"><b style="width:'+Math.round(s.G[g]/mx*100)+'%"></b></div>'}).join('')+'</div>':''),
+  '<div class="ywk">Your favourites</div><div class="ywn" style="font-size:3.4rem">★ '+s.avg+'</div><div class="yws">average score</div>'
+   +(s.top.length?'<div class="ywl">'+s.top.map(function(t,i){return'<div><em>'+(i+1)+'</em><span>'+E(t.n)+'</span><u>★ '+t.r+'</u></div>'}).join('')+'</div>':'<div class="yws">Rate some anime to see your top 5</div>'),
+  '<div class="ywk">You are</div><div class="ywn" style="font-size:2.6rem;line-height:1.2">'+p[0]+'</div><div class="yws">'+p[1]+'</div>',
+  '<div class="ywk">Tonight\'s pick 🎲</div><div id="ywp"></div><div class="ywa"><button onclick="yWrapRoll()">🎲 Re-roll</button><button class="g" onclick="yWrapShare()">📤 Share recap</button><button class="g" onclick="yWrapClose()">Done</button></div>'
+ ];
+}
+function roll(){var e=document.getElementById('ywp');if(!e)return;var a=pickOne();
+ e.innerHTML=a?'<div class="ywt" style="font-size:1.6rem">'+E(a.name)+'</div><div class="yws">'+(a.category==='wishlist'?'From your wishlist':'Continue from ep '+((+a.watched||0)+1))+'</div>':'<div class="yws">Add some anime to your wishlist first ✨</div>'}
+function show(i){
+ idx=Math.max(0,Math.min(slides.length-1,i));clearTimeout(tm);
+ root.innerHTML='<div class="ywb">'+slides.map(function(_,k){return'<i class="'+(k<idx?'d':k===idx?'c':'')+'"><b></b></i>'}).join('')+'</div><button class="ywx" onclick="yWrapClose()" aria-label="Close">✕</button>'
+  +'<div class="ywc" style="--yc1:'+['#c084fc','#38bdf8','#f472b6','#fbbf24','#34d399','#c084fc'][idx]+'">'+slides[idx]+'</div>'
+  +(idx<slides.length-1?'<div class="ywh"><div onclick="yWrapGo(-1)"></div><div onclick="yWrapGo(1)"></div></div>':'');
+ if(idx===slides.length-1)roll();else tm=setTimeout(function(){show(idx+1)},6000)
+}
+window.yWrapGo=function(d){show(idx+d)};
+window.yWrapRoll=roll;
+window.yWrapClose=function(){clearTimeout(tm);if(root){root.remove();root=null}document.body.style.overflow=''};
+window.yWrapShare=function(){var s=S(),p=persona(s);
+ var t='❄️ My Yuki Wrapped\n'+s.L.length+' anime · '+s.eps+' episodes · ~'+s.hrs+'h watched\nTop genre: '+(s.gs[0]||'–')+' · Avg ★ '+s.avg+'\nI am '+p[0];
+ try{if(navigator.share){navigator.share({text:t});return}}catch(e){}
+ try{navigator.clipboard.writeText(t);if(window.toast)toast('Copied to clipboard ✨')}catch(e){}};
+window.yWrapped=function(){try{closeDropdownMenu()}catch(e){}
+ if(root)root.remove();build();root=document.createElement('div');root.id='yw';document.body.appendChild(root);document.body.style.overflow='hidden';show(0)};
+function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySelector('[data-ywrap]'))return;
+ var b=document.createElement('button');b.setAttribute('data-ywrap','1');b.onclick=function(){yWrapped()};b.innerHTML='<span class="ddi">🎁</span>Yuki Wrapped';
+ var ref=m.querySelector('[data-yspace]');if(ref&&ref.parentNode)ref.parentNode.insertBefore(b,ref.nextSibling);else m.appendChild(b)}
+mount();setTimeout(mount,1500);setTimeout(mount,5000);
+})();
+</script>
+
 </body></html>
 
 
