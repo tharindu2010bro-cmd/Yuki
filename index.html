@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.31';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.32';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -6594,18 +6594,20 @@ function push(){try{
  var P=c&&c.Plugins&&c.Plugins.YukiWidget;if(!P||typeof P.update!=='function')return;
  if(typeof airing==='undefined'||!Array.isArray(airing))return;
  var now=Date.now(),L=[];
- airing.forEach(function(x){if(!x||!x.n)return;for(var k=0;k<3;k++){var at=x.n.airingAt*1000+k*7*864e5;if(at>now-30*60*1000&&at-now<14*864e5)L.push({t:String(x.name||'?'),a:at,e:x.n.episode+k})}});
+ airing.forEach(function(x){if(!x||!x.n)return;for(var k=0;k<3;k++){var at=x.n.airingAt*1000+k*7*864e5;if(at>now-30*60*1000&&at-now<14*864e5)L.push({t:String(x.name||'?'),a:at,e:x.n.episode+k,w:+x.watched||0,m:+x.total||0})}});
  L.sort(function(a,b){return a.a-b.a});L=L.slice(0,6);
  var j=JSON.stringify(L);if(j===T)return;T=j;
  P.update({items:j}).catch(function(){T=null})
 }catch(e){}}
-setTimeout(push,8000);setInterval(push,5*60*1000);
+/* v47.32 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
+var tries=0,fast=setInterval(function(){tries++;push();if(T||tries>16)clearInterval(fast)},15000);
+setTimeout(push,3000);setInterval(push,5*60*1000);
 document.addEventListener('visibilitychange',function(){if(document.hidden)push()});
 window.yWidgetPush=push;
 })();
 </script>
 <script id="yuki-wrapped">
-/* v47.31 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
+/* v47.32 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
 (function(){
 var css=document.createElement('style');
 css.textContent='#yw{position:fixed;inset:0;z-index:10060;background:#080910;color:#f8fafc;display:flex;flex-direction:column;font-family:inherit;user-select:none;-webkit-user-select:none}'
@@ -6686,6 +6688,64 @@ function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySel
  var b=document.createElement('button');b.setAttribute('data-ywrap','1');b.onclick=function(){yWrapped()};b.innerHTML='<span class="ddi">🎁</span>Yuki Wrapped';
  var ref=m.querySelector('[data-yspace]');if(ref&&ref.parentNode)ref.parentNode.insertBefore(b,ref.nextSibling);else m.appendChild(b)}
 mount();setTimeout(mount,1500);setTimeout(mount,5000);
+})();
+</script>
+
+<script id="yuki-widget-photo">
+/* v47.32 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
+(function(){
+var css=document.createElement('style');
+css.textContent='#ywp{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 28px;font-family:inherit}'
++'#ywp h3{font-size:1.1rem;margin-bottom:12px}#ywp .r{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}'
++'#ywp .c{padding:8px 13px;border-radius:99px;border:1px solid var(--b,#444);background:var(--card,#111);color:inherit;font-size:.78rem;font-weight:700}#ywp .c.on{background:var(--p,#c084fc);color:#fff;border-color:var(--p,#c084fc)}'
++'#ywp canvas{width:100%;max-width:420px;display:block;margin:12px auto;border-radius:22px;border:1px solid var(--b,#444);touch-action:none;background:#222}'
++'#ywp input[type=range]{flex:1}#ywp .big{flex:1;padding:13px;border-radius:14px;border:0;font-weight:800;background:var(--p,#c084fc);color:#fff}#ywp .big.g{background:var(--card,#222);color:inherit;border:1px solid var(--b,#444)}'
++'#ywp .s{font-size:.78rem;opacity:.7;line-height:1.5}';
+document.head.appendChild(css);
+var R,cv,cx,img=null,st={as:[1,1],fit:'contain',bg:'auto',z:1,x:0,y:0},drag=null,auto='#ffffff';
+var AS=[['1:1',[1,1]],['4:3',[4,3]],['3:2',[3,2]],['2:1',[2,1]],['1:2',[1,2]]];
+function chip(on,t,f){return'<button class="c'+(on?' on':'')+'" onclick="'+f+'">'+t+'</button>'}
+function ui(){
+ R.innerHTML='<h3>🖼️ Widget Photo Maker</h3><div class="s">Photo ekak thoranna, widget eke shape eka thoranna, drag/zoom karala set karanna. Eka save karala launcher eke photo widget ekata danna.</div>'
+ +'<div class="r"><button class="big" onclick="document.getElementById(\'ywpf\').click()">📷 Photo thoranna</button><button class="big g" onclick="yWpClose()">Close</button></div><input id="ywpf" type="file" accept="image/*" style="display:none" onchange="yWpLoad(this.files[0])">'
+ +'<div class="r">'+AS.map(function(a){return chip(st.as===a[1],a[0],'yWpSet(\'as\','+JSON.stringify(a[1])+')')}).join('')+'</div>'
+ +'<div class="r">'+chip(st.fit==='contain','Fit (full pic)','yWpSet(\'fit\',\'contain\')')+chip(st.fit==='cover','Fill (crop)','yWpSet(\'fit\',\'cover\')')+'</div>'
+ +'<div class="r">'+[['auto','Auto'],['#ffffff','White'],['#0b0c14','Dark'],['blur','Blur']].map(function(b){return chip(st.bg===b[0],b[1],'yWpSet(\'bg\',\''+b[0]+'\')')}).join('')+'</div>'
+ +'<canvas id="ywpc"></canvas><div class="r"><span>🔍</span><input type="range" min="50" max="300" value="'+Math.round(st.z*100)+'" oninput="yWpZoom(this.value)"><button class="c" onclick="yWpReset()">Reset</button></div>'
+ +'<div class="r"><button class="big" onclick="yWpSave()">💾 Save</button><button class="big g" onclick="yWpShare()">📤 Share</button></div>';
+ cv=document.getElementById('ywpc');cx=cv.getContext('2d');bind();draw()
+}
+function dims(){var W=1200,a=st.as;return[W,Math.round(W*a[1]/a[0])]}
+function sample(){try{var t=document.createElement('canvas');t.width=t.height=8;var c=t.getContext('2d');c.drawImage(img,0,0,8,8);var d=c.getImageData(0,0,1,1).data;auto='rgb('+d[0]+','+d[1]+','+d[2]+')'}catch(e){auto='#ffffff'}}
+function draw(){
+ var d=dims(),W=d[0],H=d[1];cv.width=W;cv.height=H;cx.clearRect(0,0,W,H);
+ if(!img){cx.fillStyle='#1b1d2b';cx.fillRect(0,0,W,H);cx.fillStyle='#94a3b8';cx.font='46px sans-serif';cx.textAlign='center';cx.fillText('Photo ekak thoranna',W/2,H/2);return}
+ var iw=img.naturalWidth,ih=img.naturalHeight;
+ if(st.bg==='blur'){var s0=Math.max(W/iw,H/ih);cx.filter='blur(40px)';cx.drawImage(img,(W-iw*s0)/2-30,(H-ih*s0)/2-30,iw*s0+60,ih*s0+60);cx.filter='none'}
+ else{cx.fillStyle=st.bg==='auto'?auto:st.bg;cx.fillRect(0,0,W,H)}
+ var s=(st.fit==='cover'?Math.max(W/iw,H/ih):Math.min(W/iw,H/ih))*st.z,w=iw*s,h=ih*s;
+ cx.drawImage(img,(W-w)/2+st.x*W,(H-h)/2+st.y*H,w,h)
+}
+function bind(){
+ var P=function(e){var r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+ cv.onpointerdown=function(e){drag=P(e);cv.setPointerCapture(e.pointerId)};
+ cv.onpointermove=function(e){if(!drag)return;var p=P(e);st.x+=p[0]-drag[0];st.y+=(p[1]-drag[1])*(cv.width/cv.height)*(cv.height/cv.width);drag=p;draw()};
+ cv.onpointerup=cv.onpointercancel=function(){drag=null}
+}
+window.yWpSet=function(k,v){st[k]=v;if(k==='as'||k==='fit'){st.x=st.y=0}ui()};
+window.yWpZoom=function(v){st.z=v/100;draw()};
+window.yWpReset=function(){st.z=1;st.x=st.y=0;ui()};
+window.yWpLoad=function(f){if(!f)return;var u=URL.createObjectURL(f),i=new Image();i.onload=function(){img=i;sample();st.z=1;st.x=st.y=0;ui()};i.src=u};
+function blob(cb){if(!img){try{toast('Mulin photo ekak thoranna')}catch(e){}return}cv.toBlob(cb,'image/png')}
+window.yWpSave=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='yuki-widget-photo.png';document.body.appendChild(a);a.click();a.remove();try{toast('Saved ✨ (Downloads)')}catch(e){}})};
+window.yWpShare=function(){blob(function(b){var f=new File([b],'yuki-widget-photo.png',{type:'image/png'});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]});return}}catch(e){}yWpSave()})};
+window.yWpClose=function(){if(R){R.remove();R=null}document.body.style.overflow=''};
+window.yWidgetPhoto=function(){try{closeDropdownMenu()}catch(e){}if(R)R.remove();R=document.createElement('div');R.id='ywp';document.body.appendChild(R);document.body.style.overflow='hidden';ui()};
+function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySelector('[data-ywph]'))return;
+ var b=document.createElement('button');b.setAttribute('data-ywph','1');b.onclick=function(){yWidgetPhoto()};b.innerHTML='<span class="ddi">🖼️</span>Widget Photo Maker';
+ var ref=m.querySelector('[data-ywrap]')||m.querySelector('[data-yspace]');if(ref&&ref.parentNode)ref.parentNode.insertBefore(b,ref.nextSibling);else m.appendChild(b)}
+mount();setTimeout(mount,1800);setTimeout(mount,5200);
 })();
 </script>
 
