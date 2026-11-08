@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.34';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.37';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -3720,7 +3720,7 @@ nav button:nth-child(1).on b{background:color-mix(in srgb,var(--c-orange) 26%,tr
 /* manga keeps its bold outline */
 [data-theme=manga] .lgrid .ac26:not(.fr) .aca button,[data-theme=manga] .cw-actions button{border:2px solid #16130e!important}
 </style>
-<style id="yuki-polish">
+<style id="yuki-polish-2">
 /* ---------- polish ---------- */
 /* accent edge: a full neat outline (no chopped-looking side stripe) */
 .ac26,.cw-slide{--ac:var(--c-violet);border:1px solid color-mix(in srgb,var(--ac) 50%,transparent)!important;border-left:1px solid color-mix(in srgb,var(--ac) 50%,transparent)!important;box-shadow:0 8px 22px rgba(0,0,0,.26),0 0 16px color-mix(in srgb,var(--ac) 14%,transparent)!important}
@@ -5301,7 +5301,7 @@ window.vNews=function(){setTimeout(function(){yNewsLoad(false);paint()},0);
 return'<div class="nw-top"><div class="nw-sub"><b>Latest headlines</b>ANN · MAL · Crunchyroll · Reddit</div><button id="yNewsRef" onclick="yNewsLoad(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Refresh</span></button></div><div class="nw-chips" id="yNewsChips">'+chips()+'</div><div id="yNewsStat">'+statHtml()+infoHtml()+'</div><div id="yNewsBody">'+cards()+'</div>'};
 })();
 </script>
-<style id="yuki-polish">
+<style id="yuki-polish-3">
 /* v45.13 · polish: smoother motion, image fade-in, tidy filters */
 html{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain}
 body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -6465,7 +6465,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 img{background:var(--inner)}
 h1,h2,h3{text-wrap:balance}
 </style>
-<style id="yuki-tidy">
+<style id="yuki-tidy-2">
 /* v46.90 tidy layer: one place for shared radii, spacing, focus and menu look (loads last, wins over older patches) */
 :root{--r-s:10px;--r-m:14px;--r-l:18px;--sp:12px}
 button,input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparent}
@@ -6520,7 +6520,7 @@ function nat(){var A=plug();if(!A||!A.addListener)return false;A.addListener('ba
 function web(){if(done)return;done=1;try{history.pushState({yk:1},'');window.addEventListener('popstate',function(){if(handle()==='exit')history.go(-1);else history.pushState({yk:1},'')})}catch(e){}}
 if(!nat())setTimeout(function(){if(!nat())web()},800)})();
 </script>
-<script id="yuki-polish-js">/* page transition on every navigation */
+<script id="yuki-polish-js-2">/* page transition on every navigation */
 (function(){function wrap(n){var f=window[n];if(typeof f!=='function'||f.__y)return;var w=function(){var r=f.apply(this,arguments);try{var m=document.getElementById('main');if(m){m.classList.remove('yIn');void m.offsetWidth;m.classList.add('yIn')}}catch(e){}return r};w.__y=1;window[n]=w}
 wrap('go');wrap('lib')})();
 </script>
@@ -6599,7 +6599,7 @@ function push(){try{
  var j=JSON.stringify(L);if(j===T)return;T=j;
  P.update({items:j}).catch(function(){T=null})
 }catch(e){}}
-/* v47.34 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
+/* v47.37 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
 var tries=0,fast=setInterval(function(){tries++;push();if(T||tries>16)clearInterval(fast)},15000);
 setTimeout(push,3000);setInterval(push,5*60*1000);
 document.addEventListener('visibilitychange',function(){if(document.hidden)push()});
@@ -6607,7 +6607,7 @@ window.yWidgetPush=push;
 })();
 </script>
 <script id="yuki-wrapped">
-/* v47.34 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
+/* v47.37 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
 (function(){
 var css=document.createElement('style');
 css.textContent='#yw{position:fixed;inset:0;z-index:10060;background:#080910;color:#f8fafc;display:flex;flex-direction:column;font-family:inherit;user-select:none;-webkit-user-select:none}'
@@ -6650,9 +6650,7 @@ function persona(s){
  if(s.eps>1500)return['🏔️ The Marathoner','Episodes are just a warm-up'];
  return['🌌 The Explorer','You sample the whole galaxy']
 }
-var slides,idx,tm,pick=0,root;
-function pickOne(){var P=(typeof animeList!=='undefined'?animeList:[]).filter(function(a){return a&&a.name&&(a.category==='wishlist'||a.category==='ongoing')});
- if(!P.length)return null;var n;do{n=Math.floor(Math.random()*P.length)}while(P.length>1&&P[n].name===pick);pick=P[n].name;return P[n]}
+var slides,idx,tm,root;
 function build(){
  var s=S(),p=persona(s),mx=s.gs.length?s.G[s.gs[0]]:1;
  slides=[
@@ -6663,20 +6661,17 @@ function build(){
   '<div class="ywk">Your favourites</div><div class="ywn" style="font-size:3.4rem">★ '+s.avg+'</div><div class="yws">average score</div>'
    +(s.top.length?'<div class="ywl">'+s.top.map(function(t,i){return'<div><em>'+(i+1)+'</em><span>'+E(t.n)+'</span><u>★ '+t.r+'</u></div>'}).join('')+'</div>':'<div class="yws">Rate some anime to see your top 5</div>'),
   '<div class="ywk">You are</div><div class="ywn" style="font-size:2.6rem;line-height:1.2">'+p[0]+'</div><div class="yws">'+p[1]+'</div>',
-  '<div class="ywk">Tonight\'s pick 🎲</div><div id="ywp"></div><div class="ywa"><button onclick="yWrapRoll()">🎲 Re-roll</button><button class="g" onclick="yWrapShare()">📤 Share recap</button><button class="g" onclick="yWrapClose()">Done</button></div>'
+  '<div class="ywk">That\'s a wrap ❄️</div><div class="ywt">Keep watching, keep tracking</div><div class="ywa"><button onclick="yWrapShare()">📤 Share recap</button><button class="g" onclick="yWrapClose()">Done</button></div>'
  ];
 }
-function roll(){var e=document.getElementById('ywp');if(!e)return;var a=pickOne();
- e.innerHTML=a?'<div class="ywt" style="font-size:1.6rem">'+E(a.name)+'</div><div class="yws">'+(a.category==='wishlist'?'From your wishlist':'Continue from ep '+((+a.watched||0)+1))+'</div>':'<div class="yws">Add some anime to your wishlist first ✨</div>'}
 function show(i){
  idx=Math.max(0,Math.min(slides.length-1,i));clearTimeout(tm);
  root.innerHTML='<div class="ywb">'+slides.map(function(_,k){return'<i class="'+(k<idx?'d':k===idx?'c':'')+'"><b></b></i>'}).join('')+'</div><button class="ywx" onclick="yWrapClose()" aria-label="Close">✕</button>'
   +'<div class="ywc" style="--yc1:'+['#c084fc','#38bdf8','#f472b6','#fbbf24','#34d399','#c084fc'][idx]+'">'+slides[idx]+'</div>'
   +(idx<slides.length-1?'<div class="ywh"><div onclick="yWrapGo(-1)"></div><div onclick="yWrapGo(1)"></div></div>':'');
- if(idx===slides.length-1)roll();else tm=setTimeout(function(){show(idx+1)},6000)
+ if(idx<slides.length-1)tm=setTimeout(function(){show(idx+1)},6000)
 }
 window.yWrapGo=function(d){show(idx+d)};
-window.yWrapRoll=roll;
 window.yWrapClose=function(){clearTimeout(tm);if(root){root.remove();root=null}document.body.style.overflow=''};
 window.yWrapShare=function(){var s=S(),p=persona(s);
  var t='❄️ My Yuki Wrapped\n'+s.L.length+' anime · '+s.eps+' episodes · ~'+s.hrs+'h watched\nTop genre: '+(s.gs[0]||'–')+' · Avg ★ '+s.avg+'\nI am '+p[0];
@@ -6692,7 +6687,7 @@ mount();setTimeout(mount,1500);setTimeout(mount,5000);
 </script>
 
 <script id="yuki-widget-photo">
-/* v47.34 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
+/* v47.37 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
 (function(){
 var css=document.createElement('style');
 css.textContent='#ywp{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);display:flex;flex-direction:column;font-family:inherit}'
@@ -6754,6 +6749,7 @@ function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySel
 mount();setTimeout(mount,1800);setTimeout(mount,5200);
 })();
 </script>
+
 
 </body></html>
 
