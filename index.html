@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.40';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.41';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5848,7 +5848,7 @@ async function getSeasons(a){
  if(!a||a.category==='movies')return [];
  const k=nrm(a.name),c=DS[k],need=Math.max(Number(a.total)||0,(Number(a.watched)||0)+1);
  const ttl=a.category==='ongoing'?6*36e5:30*864e5;
- /* v47.40 · season/episode data is re-fetched when it is older than the ttl (or you watched past what is cached), so newly released episodes show up */
+ /* v47.41 · season/episode data is re-fetched when it is older than the ttl (or you watched past what is cached), so newly released episodes show up */
  const st0=(c&&c.st)||0,age=Date.now()-st0,tot0=c&&c.S.length?c.S.reduce((m,x)=>Math.max(m,x.off+x.count),0):0,expired=age>=ttl||(tot0<need&&a.category==='ongoing'&&age>=10*60*1000);
  if(c&&c.S.length&&!expired&&Date.now()-c.t<ttl&&c.S.every(s=>s.th&&s.v===3))return c.S;
  let S=c&&c.S.length?c.S:[],fresh=st0;
@@ -6602,7 +6602,7 @@ function push(){try{
  var j=JSON.stringify(L);if(j===T)return;T=j;
  P.update({items:j}).catch(function(){T=null})
 }catch(e){}}
-/* v47.40 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
+/* v47.41 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
 var tries=0,fast=setInterval(function(){tries++;push();if(T||tries>16)clearInterval(fast)},15000);
 setTimeout(push,3000);setInterval(push,5*60*1000);
 document.addEventListener('visibilitychange',function(){if(document.hidden)push()});
@@ -6610,7 +6610,7 @@ window.yWidgetPush=push;
 })();
 </script>
 <script id="yuki-wrapped">
-/* v47.40 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
+/* v47.41 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
 (function(){
 var css=document.createElement('style');
 css.textContent='#yw{position:fixed;inset:0;z-index:10060;background:#080910;color:#f8fafc;display:flex;flex-direction:column;font-family:inherit;user-select:none;-webkit-user-select:none}'
@@ -6690,7 +6690,7 @@ mount();setTimeout(mount,1500);setTimeout(mount,5000);
 </script>
 
 <script id="yuki-widget-photo">
-/* v47.40 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
+/* v47.41 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
 (function(){
 var css=document.createElement('style');
 css.textContent='#ywp{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);display:flex;flex-direction:column;font-family:inherit}'
@@ -6777,6 +6777,58 @@ mount();setTimeout(mount,1800);setTimeout(mount,5200);
 })();
 </script>
 
+
+<script id="yuki-tier">
+/* v47.41 · Tier List: rank your anime S to D by tapping (pick a show, tap a tier), auto-fill from your scores, share as text */
+(function(){
+var T=['S','A','B','C','D'],CL={S:'#ef4444',A:'#f59e0b',B:'#eab308',C:'#22c55e',D:'#38bdf8',U:'#64748b'},K='yukiTier_v1';
+var css=document.createElement('style');
+css.textContent='#ytl{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);display:flex;flex-direction:column;font-family:inherit}'
++'#ytl .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 6px}#ytl h3{font-size:1.1rem;margin:0}'
++'#ytl .x{width:36px;height:36px;border-radius:50%;border:1px solid var(--b,#444);background:var(--card,#111);color:inherit;font-size:15px}'
++'#ytl .bd{flex:1;min-height:0;overflow:auto;padding:4px 12px 120px}'
++'#ytl .tr{display:flex;margin:6px 0;border-radius:14px;overflow:hidden;border:1px solid var(--b,#333);background:var(--card,#111);min-height:62px}'
++'#ytl .tl{width:46px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;color:#fff}'
++'#ytl .ti{flex:1;display:flex;flex-wrap:wrap;gap:6px;padding:6px;align-content:flex-start}'
++'#ytl .lb{font-size:.7rem;opacity:.6;text-transform:uppercase;letter-spacing:.08em;margin:14px 4px 4px}'
++'#ytl .it{width:54px;text-align:center;position:relative}#ytl .it i{display:block;width:54px;height:54px;border-radius:10px;background:#222 center/cover;border:2px solid transparent;font-style:normal;font-size:.7rem;font-weight:800;line-height:50px;overflow:hidden}'
++'#ytl .it.on i{border-color:#fff;box-shadow:0 0 0 2px var(--p,#c084fc)}#ytl .it small{display:block;font-size:.58rem;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}'
++'#ytl .pl{display:flex;flex-wrap:wrap;gap:8px}'
++'#ytl .bar{position:absolute;left:0;right:0;bottom:0;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 74px);background:var(--bg,#080910);border-top:1px solid var(--b,#333)}'
++'#ytl .hint{font-size:.78rem;opacity:.8;text-align:center;margin-bottom:8px;min-height:1.1em}#ytl .bt{display:flex;gap:8px}'
++'#ytl .bt button{flex:1;min-height:42px;border-radius:12px;border:1px solid var(--b,#444);background:var(--card,#222);color:inherit;font-weight:800;font-size:.8rem;white-space:nowrap}#ytl .bt button.p{background:var(--p,#c084fc);color:#fff;border:0}';
+document.head.appendChild(css);
+function E(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var R,M={},sel=null;
+function load(){try{M=JSON.parse(localStorage.getItem(K))||{}}catch(e){M={}}}
+function save(){try{localStorage.setItem(K,JSON.stringify(M))}catch(e){}}
+function L(){return(typeof animeList!=='undefined'&&Array.isArray(animeList)?animeList:[]).filter(function(a){return a&&a.name&&a.category!=='wishlist'})}
+function chip(a){var c=a.cover||a.image||'',n=a.name,on=sel===n;
+ return'<div class="it'+(on?' on':'')+'" onclick="yTlPick(\''+encodeURIComponent(n)+'\')"><i style="'+(c?'background-image:url(&quot;'+E(c)+'&quot;)':'')+'">'+(c?'':E(n.slice(0,2)))+'</i><small>'+E(n)+'</small></div>'}
+function draw(){
+ var all=L(),by={};T.forEach(function(t){by[t]=[]});by.U=[];
+ all.forEach(function(a){var t=M[a.name];(by[t]||by.U).push(a)});
+ R.querySelector('.bd').innerHTML=T.map(function(t){return'<div class="tr" onclick="yTlPlace(\''+t+'\')"><div class="tl" style="background:'+CL[t]+'">'+t+'</div><div class="ti">'+by[t].map(chip).join('')+'</div></div>'}).join('')
+  +'<div class="lb" onclick="yTlPlace(\'U\')">Unranked ('+by.U.length+') · tap here to un-rank the selected</div><div class="pl">'+(by.U.length?by.U.map(chip).join(''):'<div style="opacity:.6;font-size:.85rem;padding:8px">Everything is ranked 🎉</div>')+'</div>';
+ R.querySelector('.hint').textContent=sel?'Selected: '+sel+' → tap a tier row':'Tap a show, then tap the tier you want'
+}
+window.yTlPick=function(n){n=decodeURIComponent(n);sel=sel===n?null:n;draw()};
+window.yTlPlace=function(t){if(!sel)return;if(t==='U')delete M[sel];else M[sel]=t;save();sel=null;draw()};
+window.yTlAuto=function(){L().forEach(function(a){var r=+(a.score||a.rating||0);if(r>0)M[a.name]=r>=9?'S':r>=8?'A':r>=7?'B':r>=6?'C':'D'});save();sel=null;draw()};
+window.yTlReset=function(){if(!confirm('Clear your tier list?'))return;M={};save();sel=null;draw()};
+window.yTlShare=function(){var t='🏅 My Anime Tier List\n'+T.map(function(k){var n=L().filter(function(a){return M[a.name]===k}).map(function(a){return a.name});return n.length?k+': '+n.join(', '):''}).filter(Boolean).join('\n');
+ try{if(navigator.share){navigator.share({text:t});return}}catch(e){}
+ try{navigator.clipboard.writeText(t);if(window.toast)toast('Copied to clipboard ✨')}catch(e){}};
+window.yTlClose=function(){if(R){R.remove();R=null}document.body.style.overflow=''};
+window.yTierList=function(){try{closeDropdownMenu()}catch(e){}if(R)R.remove();load();sel=null;R=document.createElement('div');R.id='ytl';
+ R.innerHTML='<div class="h"><h3>🏅 Tier List</h3><button class="x" onclick="yTlClose()" aria-label="Close">✕</button></div><div class="bd"></div><div class="bar"><div class="hint"></div><div class="bt"><button class="p" onclick="yTlAuto()">✨ Auto from scores</button><button onclick="yTlShare()">📤 Share</button><button onclick="yTlReset()">Reset</button></div></div>';
+ document.body.appendChild(R);document.body.style.overflow='hidden';draw()};
+function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySelector('[data-ytier]'))return;
+ var b=document.createElement('button');b.setAttribute('data-ytier','1');b.onclick=function(){yTierList()};b.innerHTML='<span class="ddi">🏅</span>Tier List';
+ var ref=m.querySelector('[data-ywrap]')||m.querySelector('[data-yspace]');if(ref&&ref.parentNode)ref.parentNode.insertBefore(b,ref.nextSibling);else m.appendChild(b)}
+mount();setTimeout(mount,2000);setTimeout(mount,5400);
+})();
+</script>
 
 </body></html>
 
