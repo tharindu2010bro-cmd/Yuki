@@ -191,6 +191,31 @@ public class YukiWidgetPlugin extends Plugin {{
         YukiWidgetProvider.refresh(getContext());
         call.resolve();
     }}
+
+    /** from the in-app Widget Photo Maker: data = base64 image, mode = "fit" (whole picture) or "fill" (crop) */
+    @PluginMethod
+    public void setPhoto(PluginCall call) {{
+        try {{
+            String d = call.getString("data", "");
+            int i = d.indexOf(',');
+            if (i >= 0) d = d.substring(i + 1);
+            byte[] by = android.util.Base64.decode(d, android.util.Base64.DEFAULT);
+            android.graphics.Bitmap b = android.graphics.BitmapFactory.decodeByteArray(by, 0, by.length);
+            if (b == null || !YukiPhotoWidgetProvider.saveBitmap(getContext(), b)) {{ call.reject("Could not use that picture"); return; }}
+            getContext().getSharedPreferences(YukiWidgetProvider.PREFS, 0).edit().putString("pmode", "fill".equals(call.getString("mode", "fit")) ? "fill" : "fit").apply();
+            YukiPhotoWidgetProvider.refresh(getContext());
+            call.resolve();
+        }} catch (Throwable t) {{
+            call.reject(String.valueOf(t.getMessage()));
+        }}
+    }}
+
+    @PluginMethod
+    public void setPhotoMode(PluginCall call) {{
+        getContext().getSharedPreferences(YukiWidgetProvider.PREFS, 0).edit().putString("pmode", "fill".equals(call.getString("mode", "fit")) ? "fill" : "fit").apply();
+        YukiPhotoWidgetProvider.refresh(getContext());
+        call.resolve();
+    }}
 }}
 ''')
 
@@ -612,6 +637,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -657,7 +683,8 @@ public class YukiPhotoWidgetProvider extends AppWidgetProvider {
                 float d = c.getResources().getDisplayMetrics().density;
                 int w = Math.max(120, Math.min(900, (int) (o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 160) * d)));
                 int h = Math.max(120, Math.min(900, (int) (o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 160) * d)));
-                Bitmap b = render(f, w, h, 24f * d);
+                boolean fit = !"fill".equals(c.getSharedPreferences("YukiWidget", 0).getString("pmode", "fit"));
+                Bitmap b = render(f, w, h, 24f * d, fit);
                 if (b != null) {
                     v.setImageViewBitmap(R.id.yp_img, b);
                     shown = true;
@@ -673,8 +700,23 @@ public class YukiPhotoWidgetProvider extends AppWidgetProvider {
         return v;
     }
 
-    /** centre-crop the photo to w x h and round the corners */
-    static Bitmap render(File f, int w, int h, float radius) {
+    /** average colour of the picture's border: used to fill the empty space in "fit" mode */
+    static int edgeColor(Bitmap b) {
+        long r = 0, g = 0, bl = 0;
+        int n = 0, w = b.getWidth(), h = b.getHeight(), st = Math.max(1, Math.min(w, h) / 24);
+        for (int x = 0; x < w; x += st) {
+            int c1 = b.getPixel(x, 0), c2 = b.getPixel(x, h - 1);
+            r += Color.red(c1) + Color.red(c2); g += Color.green(c1) + Color.green(c2); bl += Color.blue(c1) + Color.blue(c2); n += 2;
+        }
+        for (int y = 0; y < h; y += st) {
+            int c1 = b.getPixel(0, y), c2 = b.getPixel(w - 1, y);
+            r += Color.red(c1) + Color.red(c2); g += Color.green(c1) + Color.green(c2); bl += Color.blue(c1) + Color.blue(c2); n += 2;
+        }
+        return Color.rgb((int) (r / n), (int) (g / n), (int) (bl / n));
+    }
+
+    /** fit = the WHOLE picture is shown (empty space gets the picture's edge colour); fill = centre-crop. Corners are rounded either way */
+    static Bitmap render(File f, int w, int h, float radius, boolean fit) {
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(f.getAbsolutePath(), o);
@@ -688,15 +730,43 @@ public class YukiPhotoWidgetProvider extends AppWidgetProvider {
         Bitmap out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(out);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        float sc = Math.max((float) w / src.getWidth(), (float) h / src.getHeight());
+        float sc = fit ? Math.min((float) w / src.getWidth(), (float) h / src.getHeight())
+                       : Math.max((float) w / src.getWidth(), (float) h / src.getHeight());
+        float tx = (w - src.getWidth() * sc) / 2f, ty = (h - src.getHeight() * sc) / 2f;
+        if (fit) {
+            Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
+            bg.setColor(edgeColor(src));
+            cv.drawRoundRect(new RectF(0, 0, w, h), radius, radius, bg);
+        }
         Matrix mx = new Matrix();
         mx.setScale(sc, sc);
-        mx.postTranslate((w - src.getWidth() * sc) / 2f, (h - src.getHeight() * sc) / 2f);
+        mx.postTranslate(tx, ty);
         BitmapShader sh = new BitmapShader(src, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         sh.setLocalMatrix(mx);
         p.setShader(sh);
-        cv.drawRoundRect(new RectF(0, 0, w, h), radius, radius, p);
+        RectF dst = fit ? new RectF(tx, ty, tx + src.getWidth() * sc, ty + src.getHeight() * sc) : new RectF(0, 0, w, h);
+        cv.drawRoundRect(dst, radius, radius, p);
         return out;
+    }
+
+    /** stores a ready-made bitmap (e.g. from the in-app Widget Photo Maker) as the widget picture, max 1280 px */
+    static boolean saveBitmap(Context c, Bitmap b) {
+        try {
+            int m = Math.max(b.getWidth(), b.getHeight());
+            if (m > 1280) {
+                float k = 1280f / m;
+                b = Bitmap.createScaledBitmap(b, Math.max(1, (int) (b.getWidth() * k)), Math.max(1, (int) (b.getHeight() * k)), true);
+            }
+            File tmp = new File(c.getFilesDir(), FILE + ".tmp");
+            FileOutputStream os = new FileOutputStream(tmp);
+            b.compress(Bitmap.CompressFormat.JPEG, 92, os);
+            os.close();
+            File dst = photoFile(c);
+            if (dst.exists()) dst.delete();
+            return tmp.renameTo(dst);
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     /** copies the chosen picture into the app (max 1280 px, upright) so it keeps working even if the original is deleted */
