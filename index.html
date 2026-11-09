@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.37';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.40';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -5848,13 +5848,16 @@ async function getSeasons(a){
  if(!a||a.category==='movies')return [];
  const k=nrm(a.name),c=DS[k],need=Math.max(Number(a.total)||0,(Number(a.watched)||0)+1);
  const ttl=a.category==='ongoing'?6*36e5:30*864e5;
- if(c&&c.S.length&&Date.now()-c.t<ttl&&c.S.every(s=>s.th&&s.v===3))return c.S;
- let S=c&&c.S.length?c.S:[];
- if(!S.length){try{S=await seasonsJ(a,need)}catch(e){S=[]}}
+ /* v47.40 · season/episode data is re-fetched when it is older than the ttl (or you watched past what is cached), so newly released episodes show up */
+ const st0=(c&&c.st)||0,age=Date.now()-st0,tot0=c&&c.S.length?c.S.reduce((m,x)=>Math.max(m,x.off+x.count),0):0,expired=age>=ttl||(tot0<need&&a.category==='ongoing'&&age>=10*60*1000);
+ if(c&&c.S.length&&!expired&&Date.now()-c.t<ttl&&c.S.every(s=>s.th&&s.v===3))return c.S;
+ let S=c&&c.S.length?c.S:[],fresh=st0;
+ if(!S.length||expired){try{const N=await seasonsJ(a,need);if(N.length){N.forEach(n=>{const o=S.find(x=>x.mal&&x.mal===n.mal);if(o){n.th=o.th;n.pool=o.pool;n._pt=o._pt;n.v=o.v}});S=N;fresh=Date.now()}}catch(e){if(!S.length)S=[]}}
  if(!S.length){const nm=await get(a),ks=Object.keys(nm).map(Number);
   S=[{mal:0,name:a.name,alt:a.alt||'',from:'',off:0,count:Math.max(Number(a.total)||0,...ks,0),e:Object.fromEntries(ks.map(n=>[n,{t:nm[n],a:''}])),th:null}]}
  if(navigator.onLine!==false)await extras(a,S);else S.forEach(s=>{s.th=s.th||{}});
- DS[k]={t:Date.now(),S};saveS();
+ {const w=Number(a.watched)||0,L=S[S.length-1];if(L&&L.off+L.count<w)L.count=w-L.off}
+ DS[k]={t:Date.now(),st:fresh,S};saveS();
  const f=flat(S),e=DB[k]||{t:Date.now(),e:{},src:'Jikan'};e.e=Object.assign({},e.e,f);DB[k]=e;save();return S}
 function next(a){const c=DB[nrm(a.name)];if(!c)return '';const n=(Number(a.watched)||0)+1;return c.e[n]||''}
 let q=[],busy=false;
@@ -6599,7 +6602,7 @@ function push(){try{
  var j=JSON.stringify(L);if(j===T)return;T=j;
  P.update({items:j}).catch(function(){T=null})
 }catch(e){}}
-/* v47.37 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
+/* v47.40 · feed the widget sooner: retry every 15s until it has shows, then every 5 min */
 var tries=0,fast=setInterval(function(){tries++;push();if(T||tries>16)clearInterval(fast)},15000);
 setTimeout(push,3000);setInterval(push,5*60*1000);
 document.addEventListener('visibilitychange',function(){if(document.hidden)push()});
@@ -6607,7 +6610,7 @@ window.yWidgetPush=push;
 })();
 </script>
 <script id="yuki-wrapped">
-/* v47.37 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
+/* v47.40 · Yuki Wrapped: swipeable story recap of your list (stats, top genre, top rated, persona, tonight's pick, share) */
 (function(){
 var css=document.createElement('style');
 css.textContent='#yw{position:fixed;inset:0;z-index:10060;background:#080910;color:#f8fafc;display:flex;flex-direction:column;font-family:inherit;user-select:none;-webkit-user-select:none}'
@@ -6687,7 +6690,7 @@ mount();setTimeout(mount,1500);setTimeout(mount,5000);
 </script>
 
 <script id="yuki-widget-photo">
-/* v47.37 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
+/* v47.40 · Widget Photo Maker: pick a photo, fit/zoom/drag it, choose the widget shape + background, save a perfectly framed image for any home-screen photo widget */
 (function(){
 var css=document.createElement('style');
 css.textContent='#ywp{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);display:flex;flex-direction:column;font-family:inherit}'
@@ -6709,11 +6712,11 @@ function chip(on,t,f){return'<button class="c'+(on?' on':'')+'" onclick="'+f+'">
 function ui(){
  R.innerHTML='<div class="bd"><div class="hd"><h3>🖼️ Widget Photo Maker</h3><button class="x" onclick="yWpClose()" aria-label="Close">✕</button></div>'
  +'<div class="s">Pick a photo, choose the widget shape, then drag and zoom to frame it.</div>'
- +'<div class="r"><button class="big" style="flex:none;padding:0 18px" onclick="document.getElementById(\'ywpf\').click()">📷 Choose photo</button>'+chip(st.fit==='contain','Fit','yWpSet(\'fit\',\'contain\')')+chip(st.fit==='cover','Fill','yWpSet(\'fit\',\'cover\')')+'</div><input id="ywpf" type="file" accept="image/*" style="display:none" onchange="yWpLoad(this.files[0])">'
+ +'<div class="r"><label class="big" style="flex:none;padding:0 18px;display:flex;align-items:center;position:relative;overflow:hidden">📷 Choose photo<input id="ywpf" type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;width:100%;height:100%" onchange="yWpLoad(this.files&&this.files[0])"></label>'+chip(st.fit==='contain','Fit','yWpSet(\'fit\',\'contain\')')+chip(st.fit==='cover','Fill','yWpSet(\'fit\',\'cover\')')+'</div>'
  +'<div class="lb">Shape</div><div class="r">'+AS.map(function(a){return chip(st.as===a[1],a[0],'yWpSet(\'as\','+JSON.stringify(a[1])+')')}).join('')+'</div>'
  +'<div class="lb">Background</div><div class="r">'+[['auto','Auto'],['#ffffff','White'],['#0b0c14','Dark'],['blur','Blur']].map(function(b){return chip(st.bg===b[0],b[1],'yWpSet(\'bg\',\''+b[0]+'\')')}).join('')+'</div>'
  +'<canvas id="ywpc"></canvas><div class="r"><span>🔍</span><input type="range" min="50" max="300" value="'+Math.round(st.z*100)+'" oninput="yWpZoom(this.value)"><button class="c" onclick="yWpReset()">Reset</button></div></div>'
- +'<div class="bar"><button class="big" onclick="yWpSave()">💾 Save</button><button class="big g" onclick="yWpShare()">📤 Share</button></div>';
+ +'<div class="bar"><button class="big" onclick="yWpWidget()">📲 Set as widget</button><button class="big g" onclick="yWpSave()">💾 Save</button><button class="big g" onclick="yWpShare()">📤</button></div>';
  cv=document.getElementById('ywpc');cx=cv.getContext('2d');bind();draw()
 }
 function dims(){var W=1200,a=st.as;return[W,Math.round(W*a[1]/a[0])]}
@@ -6736,11 +6739,35 @@ function bind(){
 window.yWpSet=function(k,v){st[k]=v;if(k==='as'||k==='fit'){st.x=st.y=0}ui()};
 window.yWpZoom=function(v){st.z=v/100;draw()};
 window.yWpReset=function(){st.z=1;st.x=st.y=0;ui()};
-window.yWpLoad=function(f){if(!f)return;var u=URL.createObjectURL(f),i=new Image();i.onload=function(){img=i;sample();st.z=1;st.x=st.y=0;ui()};i.src=u};
+window.yWpLoad=function(f){if(!f)return;var fr=new FileReader();fr.onerror=function(){try{toast('Could not read this photo')}catch(e){}};fr.onload=function(){var i=new Image();i.onload=function(){img=i;sample();st.z=1;st.x=st.y=0;ui()};i.onerror=function(){try{toast('This photo format is not supported')}catch(e){}};i.src=fr.result};fr.readAsDataURL(f)};
 function blob(cb){if(!img){try{toast('Choose a photo first')}catch(e){}return}cv.toBlob(cb,'image/png')}
-window.yWpSave=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='yuki-widget-photo.png';document.body.appendChild(a);a.click();a.remove();try{toast('Saved ✨ (Downloads)')}catch(e){}})};
-window.yWpShare=function(){blob(function(b){var f=new File([b],'yuki-widget-photo.png',{type:'image/png'});
- try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]});return}}catch(e){}yWpSave()})};
+function nm(){return 'yuki-widget-'+Date.now().toString(36)+'.png'}
+function T(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},ms)})])}
+function b64(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1])};r.onerror=rej;r.readAsDataURL(b)})}
+function cap(){try{if(window.top&&window.top!==window&&window.top.Capacitor)return window.top.Capacitor}catch(e){}return window.Capacitor}
+function say(m){try{toast(m)}catch(e){}}
+async function saveNative(b,name){
+ var C=cap(),P=(C&&C.Plugins)||{},FS=P.Filesystem,SH=P.Share;if(!FS)return false;
+ var d=await b64(b);
+ try{if(FS.requestPermissions)await T(FS.requestPermissions(),6000)}catch(e){}
+ var tries=[['EXTERNAL_STORAGE','Pictures/Yuki/'],['DOCUMENTS','Yuki/']];
+ for(var k=0;k<tries.length;k++){try{await T(FS.writeFile({path:tries[k][1]+name,data:d,directory:tries[k][0],recursive:true}),8000);say('Saved ✨ '+tries[k][1]+name);return true}catch(e){}}
+ try{var w=await T(FS.writeFile({path:name,data:d,directory:'CACHE'}),8000);if(SH&&SH.share){await SH.share({title:name,url:w.uri,dialogTitle:'Save or send photo'});say('Pick Photos / Gallery to keep it');return true}}catch(e){if(/cancel|dismiss/i.test(String(e&&e.message||e)))return true}
+ return false}
+window.yWpSave=async function(){if(!img){say('Choose a photo first');return}
+ cv.toBlob(async function(b){var name=nm();
+  try{if(await saveNative(b,name))return}catch(e){}
+  try{var f=new File([b],name,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==='AbortError')return}
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();say('Saved ✨ (Downloads)')},'image/png')};
+window.yWpShare=function(){if(!img){say('Choose a photo first');return}
+ cv.toBlob(async function(b){var name=nm();
+  try{var f=new File([b],name,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==='AbortError')return}
+  var C=cap(),P=(C&&C.Plugins)||{};try{if(P.Filesystem&&P.Share){var w=await T(P.Filesystem.writeFile({path:name,data:await b64(b),directory:'CACHE'}),8000);await P.Share.share({title:name,url:w.uri});return}}catch(e){if(/cancel|dismiss/i.test(String(e&&e.message||e)))return}
+  window.yWpSave()},'image/png')};
+window.yWpWidget=function(){if(!img){say('Choose a photo first');return}
+ var C=cap(),P=(C&&C.Plugins)||{},W=P.YukiWidget;
+ if(!W||typeof W.setPhoto!=='function'){say('Needs the latest app build (Photo frame widget). Use Save instead.');return}
+ cv.toBlob(async function(b){try{await T(W.setPhoto({data:await b64(b),mode:'fit'}),10000);say('Widget photo updated ✨ Add the "Photo frame" widget if you have not yet')}catch(e){say('Could not update widget: '+(e&&e.message||e))}},'image/jpeg',0.92)};
 window.yWpClose=function(){if(R){R.remove();R=null}document.body.style.overflow=''};
 window.yWidgetPhoto=function(){try{closeDropdownMenu()}catch(e){}if(R)R.remove();R=document.createElement('div');R.id='ywp';document.body.appendChild(R);document.body.style.overflow='hidden';ui()};
 function mount(){var m=document.getElementById('dropdownMenu');if(!m||m.querySelector('[data-ywph]'))return;
