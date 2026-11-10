@@ -164,8 +164,13 @@ public class YukiWidgetProvider extends AppWidgetProvider {
 
     /** how many rows fit: header ~44dp, each row ~44dp */
     static int rowsFor(Bundle o) {
-        int h = o == null ? 180 : o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 180);
-        int n = (h - 44) / 44;
+        int h = 180;
+        if (o != null) {
+            int mn = o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 180);
+            int mx = o.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 180);
+            h = Math.max(mn, mx);
+        }
+        int n = (h - 40) / 46;
         return Math.max(1, Math.min(MAX, n));
     }
 
