@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.41';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.42';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -6786,15 +6786,15 @@ var css=document.createElement('style');
 css.textContent='#ytl{position:fixed;inset:0;z-index:10060;background:var(--bg,#080910);color:var(--t,#f8fafc);display:flex;flex-direction:column;font-family:inherit}'
 +'#ytl .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 6px}#ytl h3{font-size:1.1rem;margin:0}'
 +'#ytl .x{width:36px;height:36px;border-radius:50%;border:1px solid var(--b,#444);background:var(--card,#111);color:inherit;font-size:15px}'
-+'#ytl .bd{flex:1;min-height:0;overflow:auto;padding:4px 12px 120px}'
++'#ytl .bd{flex:1;min-height:0;overflow:auto;padding:4px 12px 230px}'
 +'#ytl .tr{display:flex;margin:6px 0;border-radius:14px;overflow:hidden;border:1px solid var(--b,#333);background:var(--card,#111);min-height:62px}'
-+'#ytl .tl{width:46px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;color:#fff}'
++'#ytl .tr .tl{width:46px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;color:#fff;margin:0;border:0;border-radius:0;align-self:stretch;overflow:visible}'
 +'#ytl .ti{flex:1;display:flex;flex-wrap:wrap;gap:6px;padding:6px;align-content:flex-start}'
-+'#ytl .lb{font-size:.7rem;opacity:.6;text-transform:uppercase;letter-spacing:.08em;margin:14px 4px 4px}'
++'#ytl .lb{font-size:.7rem;opacity:.6;text-transform:uppercase;letter-spacing:.08em;margin:14px 4px 6px;color:inherit;font-weight:700}'
 +'#ytl .it{width:54px;text-align:center;position:relative}#ytl .it i{display:block;width:54px;height:54px;border-radius:10px;background:#222 center/cover;border:2px solid transparent;font-style:normal;font-size:.7rem;font-weight:800;line-height:50px;overflow:hidden}'
 +'#ytl .it.on i{border-color:#fff;box-shadow:0 0 0 2px var(--p,#c084fc)}#ytl .it small{display:block;font-size:.58rem;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}'
 +'#ytl .pl{display:flex;flex-wrap:wrap;gap:8px}'
-+'#ytl .bar{position:absolute;left:0;right:0;bottom:0;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 74px);background:var(--bg,#080910);border-top:1px solid var(--b,#333)}'
++'#ytl .bar{position:absolute;left:0;right:0;bottom:0;height:auto;overflow:visible;border-radius:0;margin:0;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 74px);background:var(--bg,#080910);border-top:1px solid var(--b,#333)}'
 +'#ytl .hint{font-size:.78rem;opacity:.8;text-align:center;margin-bottom:8px;min-height:1.1em}#ytl .bt{display:flex;gap:8px}'
 +'#ytl .bt button{flex:1;min-height:42px;border-radius:12px;border:1px solid var(--b,#444);background:var(--card,#222);color:inherit;font-weight:800;font-size:.8rem;white-space:nowrap}#ytl .bt button.p{background:var(--p,#c084fc);color:#fff;border:0}';
 document.head.appendChild(css);
@@ -6830,6 +6830,22 @@ mount();setTimeout(mount,2000);setTimeout(mount,5400);
 })();
 </script>
 
+<script id="yuki-genre-heal">
+/* v47.42 · when a details page opens and the show has no genres (the add-time fetch failed), fetch them once from AniList and fill them in */
+(function(){var tried={};
+function wrap(){var o=window.openDetailsModal;if(typeof o!=='function'||o.__yg)return;
+var f=function(i){var r=o.apply(this,arguments);
+try{var a=animeList[i];if(a&&a.name&&!gl(a).length&&!tried[a.name]){tried[a.name]=1;
+fetchAniListData(a.name).then(function(m){if(!m||!m.genres||!m.genres.length)return;
+a.genres=m.genres;if(!a.description||/No description/i.test(a.description))a.description=m.description||a.description;
+if(!a.studio&&m.studio)a.studio=m.studio;
+saveStorage();var g=document.getElementById('detailGenres');
+if(g&&detailIndex===i)g.innerHTML=m.genres.map(function(x){return'<span class="gch">'+esc(x)+'</span>'}).join('');
+try{render()}catch(e){}}).catch(function(){tried[a.name]=0})}}catch(e){}
+return r};f.__yg=1;window.openDetailsModal=f}
+wrap();setTimeout(wrap,1500);setTimeout(wrap,5000);
+})();
+</script>
 </body></html>
 
 
