@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- CODE MAP (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
+<!-- CODE MAP (v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.42';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.44';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1566,7 +1566,7 @@ function stAch(){const R=achList(),M=achTiers(R),A=R.map(a=>({tr:M[a[1]],i:a[0],
 function go(v){view=v;window.scrollTo(0,0);render()}
 function refreshAll(){toast('🔄 Refreshing...');try{animeList=JSON.parse(localStorage.getItem(KEY))||animeList}catch(e){yLog(e)}try{log=JSON.parse(localStorage.getItem(LK))||log}catch(e){yLog(e)}try{animeLog=JSON.parse(localStorage.getItem(ALK))||animeLog}catch(e){yLog(e)}try{wish=JSON.parse(localStorage.getItem('yukiWishlist_v1'))||wish}catch(e){yLog(e)}trend=null;recs=null;trendBusy=false;recsBusy=false;if(dq||filtersActive())dSearch(dq,1);airing=null;airAt=0;airErr=false;loadAiring(true);render();closeDropdownMenu()}
 function lib(c){libF=c;go('library')}
-function render(){const T={home:'Dashboard',library:'My Library',stats:'Statistics',discover:'Discover',profile:'Profile',calendar:'Seasonal Calendar',news:'Anime News',about:'About',settings:'Settings',ailab:'AI Lab',space:'Yuki Space'};$('vt').innerText=T[view];document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view||(b.dataset.v==='profile'&&['calendar','news','about','settings','ailab','space'].includes(view))));$('fabAddBtn').style.display=['home','library'].includes(view)?'flex':'none';const nv=document.querySelector('nav');if(nv)nv.style.display='flex';if(!animeList)return;{const vc=view!==_lv,y=window.scrollY;_lv=view;$('main').classList.toggle('enter',vc);$('main').innerHTML=({home:vHome,library:vLib,stats:vStats,discover:vDisc,profile:vProf,calendar:vCal,news:vNews,about:vAbout,settings:vSettings,ailab:window.vAiLab,space:window.vSpace})[view]();if(window.yMount&&yMount[view])yMount[view]();if(!vc)window.scrollTo(0,y);if(view==='home')carRestore()}if(view==='discover')loadTrend();if(['discover','calendar','home'].includes(view))loadAiring();if(view==='home'){loadSeq();loadCar()}if(view==='calendar')loadSeason()}
+function render(){const T={home:'Dashboard',library:'My Library',stats:'Statistics',discover:'Discover',profile:'Profile',calendar:'Seasonal Calendar',news:'Anime News',about:'About',settings:'Settings',ailab:'AI Lab',space:'Yuki Space',universe:'Anime Universe'};$('vt').innerText=T[view];document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view||(b.dataset.v==='profile'&&['calendar','news','about','settings','ailab','space','universe'].includes(view))));$('fabAddBtn').style.display=['home','library'].includes(view)?'flex':'none';const nv=document.querySelector('nav');if(nv)nv.style.display='flex';if(!animeList)return;{const vc=view!==_lv,y=window.scrollY;_lv=view;$('main').classList.toggle('enter',vc);$('main').innerHTML=({home:vHome,library:vLib,stats:vStats,discover:vDisc,profile:vProf,calendar:vCal,news:vNews,about:vAbout,settings:vSettings,ailab:window.vAiLab,space:window.vSpace,universe:window.vUniverse})[view]();if(window.yMount&&yMount[view])yMount[view]();if(!vc)window.scrollTo(0,y);if(view==='home')carRestore()}if(view==='discover')loadTrend();if(['discover','calendar','home'].includes(view))loadAiring();if(view==='home'){loadSeq();loadCar()}if(view==='calendar')loadSeason()}
 const durOf=a=>a&&a.dur>0?a.dur:24;
 function hoursAll(){return animeList.reduce((x,a)=>x+(a.watched||0)*durOf(a)/60+xh(a),0)}
 function epsHours(m){let h=0;for(const n in m)h+=m[n]*durOf(animeList.find(y=>y.name===n))/60;return h}
@@ -6459,6 +6459,207 @@ window.yCloud={ui:ui,up:function(){up(false)},down:down,gen:function(){var c=doc
 })();
 </script>
 
+<style id="yuki-universe-css">/* v47.43 · Anime Universe page */
+.yu .ch{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.yu .ch button{border:1px solid var(--b,rgba(255,255,255,.12));background:var(--inner,rgba(255,255,255,.05));color:var(--t,#eee);border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.yu .ch button.on{background:var(--p,#8b5cf6);border-color:transparent;color:#fff}
+.yu .yr{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--b,rgba(255,255,255,.08))}
+.yu .yr:last-child{border-bottom:0}
+.yu .yr img{width:42px;height:60px;object-fit:cover;border-radius:8px;flex:none;background:var(--inner,#222)}
+.yu .yr .yi{min-width:0;flex:1}
+.yu .yr b{display:block;font-size:13.5px;line-height:1.25}
+.yu .yr small{display:block;opacity:.7;font-size:11.5px;margin-top:2px}
+.yu .yn{flex:none;width:24px;text-align:center;font-size:11px;opacity:.55;font-weight:700}
+.yu .yb{flex:none;font-size:11px;padding:4px 9px;border-radius:999px;font-weight:700;white-space:nowrap}
+.yu .yb.done{background:rgba(52,211,153,.18);color:#34d399}
+.yu .yb.part{background:rgba(251,191,36,.18);color:#fbbf24}
+.yu .yb.list{background:rgba(167,139,250,.2);color:#a78bfa}
+.yu .yb.none{background:rgba(148,163,184,.15);color:inherit;opacity:.8}
+.yu .ya{flex:none;border:0;border-radius:999px;padding:6px 11px;font:inherit;font-size:11.5px;font-weight:700;background:var(--p,#8b5cf6);color:#fff;cursor:pointer}
+.yu .ybar{height:8px;border-radius:99px;background:var(--inner,rgba(255,255,255,.1));overflow:hidden;margin:8px 0}
+.yu .ybar i{display:block;height:100%;background:linear-gradient(90deg,#8b5cf6,#38bdf8);border-radius:99px}
+.yu .yst{display:flex;gap:8px;margin:10px 0}
+.yu .yst div{flex:1;text-align:center;padding:10px 4px;border-radius:14px;background:var(--inner,rgba(255,255,255,.05))}
+.yu .yst b{display:block;font-size:17px}
+.yu .yst small{font-size:10.5px;opacity:.7}
+.yu .ymb{display:flex;align-items:flex-end;gap:4px;height:90px;margin:10px 0 4px}
+.yu .ymb div{flex:1;background:linear-gradient(180deg,#a78bfa,#6d4fe0);border-radius:5px 5px 2px 2px;min-height:3px;position:relative}
+.yu .yml{display:flex;gap:4px;font-size:9.5px;opacity:.6}
+.yu .yml span{flex:1;text-align:center}
+.yu details{border-top:1px solid var(--b,rgba(255,255,255,.08));padding:8px 0}
+.yu summary{cursor:pointer;font-weight:700;font-size:13.5px;display:flex;justify-content:space-between;gap:8px}
+.yu svg.ymap{width:100%;height:auto;display:block;border-radius:18px;background:var(--inner,rgba(255,255,255,.04));touch-action:manipulation}
+.yu .yinfo{margin-top:8px}
+.yu .yw{opacity:.75;font-size:12.5px;padding:10px 2px}
+.yu input.t{width:100%;box-sizing:border-box}
+</style>
+<script id="yuki-universe">/* v47.43 · Anime Universe: franchise map, hidden gems, timeline, airing in Sri Lanka time */
+(function(){
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var tab='map',fmode='all',cur=null,gsel=null,tlYear=null,CK='yukiUniverse_v1';
+var REL_OK=['PREQUEL','SEQUEL','PARENT','SIDE_STORY','SPIN_OFF','ALTERNATIVE','SUMMARY'];
+var REL_LBL={PREQUEL:'Prequel',SEQUEL:'Sequel',PARENT:'Parent story',SIDE_STORY:'Side story',SPIN_OFF:'Spin-off',ALTERNATIVE:'Alternative',SUMMARY:'Recap'};
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function G(f,d){try{return f()}catch(e){try{yLog(e)}catch(_){}return d}}
+function aid(a){var m=((a&&a.siteUrl)||'').match(/anilist\.co\/anime\/(\d+)/);return m?+m[1]:0}
+function nrm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function ttl(n){return (n.title&&(n.title.english||n.title.romaji))||n.t||'?'}
+function findLib(n){
+  var i,a;for(i=0;i<animeList.length;i++){a=animeList[i];if(aid(a)&&aid(a)===n.id)return a}
+  var nm=[n.title&&n.title.english,n.title&&n.title.romaji].map(nrm).filter(Boolean);if(!nm.length)return null;
+  for(i=0;i<animeList.length;i++){a=animeList[i];var b=[a.name,a.alt].map(nrm);if(nm.some(function(x){return b.indexOf(x)>-1}))return a}
+  return null}
+function st(a){
+  if(!a)return {k:'none',t:'Not in list'};
+  var w=+a.watched||0,tot=+a.total||0;
+  if(a.category==='completed'||(a.category==='movies'&&w>0)||(tot>0&&w>=tot))return {k:'done',t:'✓ Watched'};
+  if(w>0)return {k:'part',t:'▶ '+w+(tot?'/'+tot:'')};
+  return {k:'list',t:'In your list'}}
+function isMain(n){return ['TV','TV_SHORT'].indexOf(n.format)>-1&&!(typeof SHORTX==='function'&&SHORTX(n.format,n.episodes,ttl(n)))}
+function addBtn(n){return '<button class="ya" data-n="'+esc(ttl(n))+'" data-i="'+(n.id||0)+'" onclick="openAddModal(this.dataset.n,+this.dataset.i)">＋ Add</button>'}
+function cache(k,v){try{var c=JSON.parse(localStorage.getItem(CK)||'{}');if(v===undefined){var e=c[k];return e&&Date.now()-e.ts<432e5?e.v:null}c[k]={ts:Date.now(),v:v};var ks=Object.keys(c).sort(function(a,b){return c[a].ts-c[b].ts});while(ks.length>12)delete c[ks.shift()];localStorage.setItem(CK,JSON.stringify(c))}catch(e){return null}}
+
+/* ---------- 1. Franchise Universe ---------- */
+async function crawl(id){
+  var hit=cache('f'+id);if(hit)return hit;
+  var F='id type format status episodes averageScore startDate{year month}title{english romaji}coverImage{medium}relations{edges{relationType node{id type format}}}';
+  var seen={},nodes={},edges=[],depth={},lvl=[id],d=0;seen[id]=1;depth[id]=0;
+  while(lvl.length&&Object.keys(nodes).length<45&&d<10){
+    var next=[];
+    for(var c=0;c<lvl.length;c+=10){
+      var ch=lvl.slice(c,c+10),vs={};ch.forEach(function(x,i){vs['v'+i]=x});
+      var q='query('+ch.map(function(_,i){return '$v'+i+':Int'}).join(',')+'){'+ch.map(function(_,i){return 'm'+i+':Media(id:$v'+i+'){'+F+'}'}).join(' ')+'}';
+      var j=await aq(q,vs);if(!j||!j.data)throw new Error('AniList did not respond. Please try again in a moment.');
+      ch.forEach(function(x,i){var m=j.data['m'+i];if(!m)return;nodes[m.id]=m;
+        ((m.relations&&m.relations.edges)||[]).forEach(function(e){var n=e.node;
+          if(!n||n.type!=='ANIME'||n.format==='MUSIC'||REL_OK.indexOf(e.relationType)<0)return;
+          edges.push({a:m.id,b:n.id,r:e.relationType});
+          if(!seen[n.id]){seen[n.id]=1;depth[n.id]=d+1;next.push(n.id)}})})}
+    lvl=next;d++}
+  var key=function(m){return ((m.startDate&&m.startDate.year)||9999)*12+((m.startDate&&m.startDate.month)||0)};
+  var list=Object.keys(nodes).map(function(k){return nodes[k]}).filter(function(m){return m.format!=='MUSIC'}).sort(function(a,b){return key(a)-key(b)});
+  var ids={};list.forEach(function(m,i){ids[m.id]=i+1;m.depth=depth[m.id]||0;m.no=i+1;delete m.relations});
+  var E=edges.filter(function(e){return ids[e.a]&&ids[e.b]});
+  var rel={};E.forEach(function(e){if(!rel[e.b]&&e.b!==id)rel[e.b]=e.r});
+  list.forEach(function(m){m.rel=rel[m.id]||''});
+  var out={root:id,list:list,edges:E};cache('f'+id,out);return out}
+async function resolveId(name){
+  var a=animeList.filter(function(x){return x.name===name})[0];
+  if(a){var i=aid(a);if(i)return i;if(typeof alId==='function'){i=await alId(a);if(i)return +i}}
+  var j=await aq('query($s:String){Media(search:$s,type:ANIME,sort:SEARCH_MATCH){id}}',{s:name});
+  var m=j&&j.data&&j.data.Media;return m?m.id:0}
+function mapHtml(R){
+  var N=R.list,by={},W=340,H=340,cx=170,cy=170,md=0,ring={};
+  N.forEach(function(n){by[n.id]=n;md=Math.max(md,n.depth);(ring[n.depth]=ring[n.depth]||[]).push(n)});
+  var step=md?Math.min(62,138/md):0;
+  N.forEach(function(n){var r=ring[n.depth],i=r.indexOf(n),rad=n.depth*step,ang=(i/r.length)*Math.PI*2-Math.PI/2+n.depth*.55;n.x=cx+Math.cos(ang)*rad;n.y=cy+Math.sin(ang)*rad});
+  var col={done:'#34d399',part:'#fbbf24',list:'#a78bfa',none:'#64748b'},s='<svg class="ymap" viewBox="0 0 '+W+' '+H+'">';
+  R.edges.forEach(function(e){var a=by[e.a],b=by[e.b];if(a&&b)s+='<line x1="'+a.x.toFixed(1)+'" y1="'+a.y.toFixed(1)+'" x2="'+b.x.toFixed(1)+'" y2="'+b.y.toFixed(1)+'" stroke="#a78bfa" stroke-opacity=".35" stroke-width="1.3"/>'});
+  N.forEach(function(n){var k=st(findLib(n)).k,r=n.id===R.root?13:10;
+    s+='<g onclick="yuSel('+n.id+')" style="cursor:pointer"><circle cx="'+n.x.toFixed(1)+'" cy="'+n.y.toFixed(1)+'" r="'+r+'" fill="'+col[k]+'" stroke="'+(n.id===R.root?'#fff':'none')+'" stroke-width="2"/><text x="'+n.x.toFixed(1)+'" y="'+(n.y+3.5).toFixed(1)+'" text-anchor="middle" font-size="'+(n.no>9?8:9.5)+'" font-weight="700" fill="#0b0b14">'+n.no+'</text></g>'});
+  return s+'</svg><div class="yw">🟢 watched · 🟡 in progress · 🟣 in your list · ⚪ not in list. Numbers match the release-order list below. Tap a node for details.</div><div id="yuInfo" class="yinfo"></div>'}
+window.yuSel=function(id){
+  if(!cur)return;var n=cur.list.filter(function(x){return x.id===id})[0],e=$('yuInfo');if(!n||!e)return;
+  var a=findLib(n),s=st(a);
+  e.innerHTML='<div class="yr"><div class="yn">#'+n.no+'</div><img src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yi"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:'',n.averageScore?'⭐ '+n.averageScore:''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}
+function listHtml(R){
+  var L=R.list.filter(function(n){return fmode==='main'?isMain(n):fmode==='todo'?st(findLib(n)).k!=='done':true});
+  if(!L.length)return '<div class="yw">Nothing to show for this filter.</div>';
+  return L.map(function(n){var a=findLib(n),s=st(a);
+    return '<div class="yr"><div class="yn">'+n.no+'</div><img loading="lazy" src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yi"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:(n.id===R.root?'Starting point':''),n.status==='NOT_YET_RELEASED'?'Not released yet':''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}).join('')}
+function drawMap(R){
+  var T=R.list.length,done=R.list.filter(function(n){return st(findLib(n)).k==='done'}).length,mains=R.list.filter(isMain),
+      next=mains.filter(function(n){return st(findLib(n)).k!=='done'&&n.status!=='NOT_YET_RELEASED'})[0],pc=T?Math.round(done/T*100):0,root=R.list.filter(function(n){return n.id===R.root})[0];
+  $('yuO').innerHTML='<div class="card"><b>🌌 '+esc(root?ttl(root):'Franchise')+' universe</b><div class="s" style="margin-top:4px">'+T+' entries · '+mains.length+' main seasons · '+(T-mains.length)+' movies / OVA / specials</div><div class="ybar"><i style="width:'+pc+'%"></i></div><div class="s">You have watched <b>'+done+' of '+T+'</b> ('+pc+'%).'+(next?' Next main entry: <b>'+esc(ttl(next))+'</b>.':'')+'</div></div>'+
+   '<div class="card">'+mapHtml(R)+'</div><div class="card"><div class="l">Release order</div><div class="ch" id="yuF">'+[['all','All'],['main','Main story'],['todo','Not watched']].map(function(x){return '<button data-f="'+x[0]+'"'+(fmode===x[0]?' class="on"':'')+'>'+x[1]+'</button>'}).join('')+'</div><div id="yuL">'+listHtml(R)+'</div></div>';
+  Array.prototype.forEach.call(document.querySelectorAll('#yuF button'),function(b){b.onclick=function(){fmode=b.dataset.f;drawMap(R)}})}
+async function buildMap(name){
+  var o=$('yuO');if(!name)return;o.innerHTML='<div class="yw">⏳ Mapping the franchise…</div>';
+  try{var id=await resolveId(name);if(!id)throw new Error('Could not find that anime on AniList.');cur=await crawl(id);drawMap(cur)}
+  catch(e){o.innerHTML='<div class="card yw">⚠️ '+esc(e&&e.message||e)+'</div>'}}
+function mapView(){
+  return '<div class="card"><div class="s" style="margin:0 0 10px">See every season, movie, OVA and spin-off of a franchise in release order, and which ones you have already watched.</div><input class="t" id="yuN" list="yuL2" placeholder="Pick from your list or type a name" autocomplete="off"><datalist id="yuL2">'+animeList.map(function(a){return '<option value="'+esc(a.name)+'">'}).join('')+'</datalist><button class="go" id="yuG" style="margin-top:10px">Build universe map</button></div><div id="yuO"></div>'}
+function mapMount(){
+  $('yuG').onclick=function(){buildMap(($('yuN').value||'').trim())};
+  $('yuN').onkeydown=function(e){if(e.key==='Enter')$('yuG').click()};
+  if(window._yuPre){$('yuN').value=window._yuPre;var p=window._yuPre;window._yuPre=null;buildMap(p)}else if(cur){drawMap(cur)}}
+
+/* ---------- 2. Hidden Gems ---------- */
+function topGenres(){var g={};animeList.forEach(function(a){(a.genres||[]).forEach(function(k){g[k]=(g[k]||0)+1})});var G2=Object.keys(g).sort(function(x,y){return g[y]-g[x]}).slice(0,8);return G2.length?G2:['Action','Drama','Fantasy','Comedy']}
+function gemView(){
+  var T=topGenres();if(!gsel)gsel=T.slice(0,3);
+  return '<div class="card"><div class="s" style="margin:0 0 10px">Highly rated anime that few people have watched, matched to your favorite genres and not already in your list.</div><div class="ch" id="yuGc">'+T.map(function(g){return '<button data-g="'+esc(g)+'"'+(gsel.indexOf(g)>-1?' class="on"':'')+'>'+esc(g)+'</button>'}).join('')+'</div><button class="go" id="yuGo">💎 Find hidden gems</button></div><div id="yuO"></div>'}
+async function findGems(){
+  var o=$('yuO');o.innerHTML='<div class="yw">⏳ Searching…</div>';
+  try{var ex=animeList.map(aid).filter(Boolean);if(!ex.length)ex=[0];
+    var q='query($g:[String],$ex:[Int],$p:Int){Page(page:$p,perPage:40){media(type:ANIME,genre_in:$g,averageScore_greater:74,popularity_greater:2500,popularity_lesser:70000,id_not_in:$ex,isAdult:false,format_in:[TV,MOVIE,OVA,ONA],sort:SCORE_DESC){id title{english romaji}coverImage{medium}averageScore popularity genres episodes format seasonYear}}}';
+    var j=await aq(q,{g:gsel.length?gsel:topGenres().slice(0,3),ex:ex,p:1+Math.floor(Math.random()*3)});
+    var M=(j&&j.data&&j.data.Page&&j.data.Page.media)||[];if(!j||!j.data)throw new Error('AniList did not respond. Please try again.');
+    M=M.filter(function(m){return !findLib(m)});
+    for(var i=M.length-1;i>0;i--){var k=Math.floor(Math.random()*(i+1)),t=M[i];M[i]=M[k];M[k]=t}
+    M=M.slice(0,12);
+    if(!M.length){o.innerHTML='<div class="card yw">No new gems for this mix. Try other genres or tap again.</div>';return}
+    o.innerHTML='<div class="card">'+M.map(function(m){var sh=(m.genres||[]).filter(function(g){return gsel.indexOf(g)>-1});
+      return '<div class="yr"><img loading="lazy" src="'+esc(m.coverImage&&m.coverImage.medium||'')+'" alt=""><div class="yi"><b>'+esc(ttl(m))+'</b><small>⭐ '+m.averageScore+' · '+(m.popularity>=1000?Math.round(m.popularity/1000)+'k':m.popularity)+' fans only · '+esc(m.format||'')+(m.episodes?' · '+m.episodes+' eps':'')+(m.seasonYear?' · '+m.seasonYear:'')+'</small><small>Matches your taste: '+esc(sh.join(', ')||'genre mix')+'</small></div>'+addBtn(m)+'</div>'}).join('')+'</div>'}
+  catch(e){o.innerHTML='<div class="card yw">⚠️ '+esc(e&&e.message||e)+'</div>'}}
+function gemMount(){
+  Array.prototype.forEach.call(document.querySelectorAll('#yuGc button'),function(b){b.onclick=function(){var g=b.dataset.g,i=gsel.indexOf(g);if(i>-1)gsel.splice(i,1);else gsel.push(g);b.classList.toggle('on')}});
+  $('yuGo').onclick=findGems}
+
+/* ---------- 3. Timeline ---------- */
+function tlData(){
+  var M={};
+  function slot(ym){return M[ym]=M[ym]||{eps:0,days:{},a:{}}}
+  var k,n,m;
+  for(k in animeLog){m=animeLog[k];if(!m||typeof m!=='object')continue;var s=slot(k.slice(0,7));s.days[k]=1;for(n in m){s.a[n]=(s.a[n]||0)+(+m[n]||0);s.eps+=(+m[n]||0)}}
+  for(k in epDet){if(animeLog[k])continue;m=epDet[k];if(!m||typeof m!=='object')continue;var s2=slot(k.slice(0,7));s2.days[k]=1;for(n in m){var r=m[n];if(!Array.isArray(r))continue;var c=r[1]-r[0]+1;s2.a[n]=(s2.a[n]||0)+c;s2.eps+=c}}
+  var L={};for(k in log)L[k.slice(0,7)]=(L[k.slice(0,7)]||0)+(+log[k]||0);
+  for(var ym in L){var t=slot(ym);if(L[ym]>t.eps)t.eps=L[ym]}
+  return M}
+function tlView(){
+  var M=tlData(),yrs={};Object.keys(M).forEach(function(k){yrs[k.slice(0,4)]=1});
+  var Y=Object.keys(yrs).sort().reverse();
+  if(!Y.length)return '<div class="card yw">No watch history yet. Mark episodes as watched and your journey will appear here.</div>';
+  if(!tlYear||!yrs[tlYear])tlYear=Y[0];
+  var mo=[],i,tot=0,days=0,names={},hrs=0;
+  for(i=1;i<=12;i++){var ym=tlYear+'-'+(i<10?'0'+i:i),x=M[ym]||{eps:0,days:{},a:{}};mo.push({ym:ym,i:i,x:x});tot+=x.eps;days+=Object.keys(x.days).length;Object.keys(x.a).forEach(function(n){names[n]=1;hrs+=G(function(){var o={};o[n]=x.a[n];return epsHours(o)},x.a[n]*.4)})}
+  var mx=Math.max.apply(null,mo.map(function(o){return o.x.eps}).concat([1]));
+  return '<div class="card"><div class="ch" id="yuY">'+Y.map(function(y){return '<button data-y="'+y+'"'+(y===tlYear?' class="on"':'')+'>'+y+'</button>'}).join('')+'</div>'+
+   '<div class="yst"><div><b>'+tot+'</b><small>episodes</small></div><div><b>'+Object.keys(names).length+'</b><small>anime</small></div><div><b>'+Math.round(hrs)+'h</b><small>watched</small></div><div><b>'+days+'</b><small>active days</small></div></div>'+
+   '<div class="ymb">'+mo.map(function(o){return '<div title="'+MON[o.i-1]+': '+o.x.eps+' eps" style="height:'+Math.max(3,Math.round(o.x.eps/mx*100))+'%"></div>'}).join('')+'</div><div class="yml">'+MON.map(function(m){return '<span>'+m[0]+'</span>'}).join('')+'</div></div>'+
+   '<div class="card">'+mo.slice().reverse().filter(function(o){return o.x.eps>0}).map(function(o){
+     var A=Object.keys(o.x.a).sort(function(a,b){return o.x.a[b]-o.x.a[a]});
+     return '<details><summary><span>'+MON[o.i-1]+' '+tlYear+'</span><span style="opacity:.7;font-weight:500">'+o.x.eps+' eps · '+A.length+' anime</span></summary>'+A.map(function(n){var a=animeList.filter(function(y){return y.name===n})[0];return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||'')+'" alt=""><div class="yi"><b>'+esc(n)+'</b><small>'+o.x.a[n]+' episodes</small></div></div>'}).join('')+(A.length?'':'<div class="yw">Episode count only (older data has no titles).</div>')+'</details>'}).join('')+'</div>'}
+function tlMount(){Array.prototype.forEach.call(document.querySelectorAll('#yuY button'),function(b){b.onclick=function(){tlYear=b.dataset.y;show('tl')}})}
+
+/* ---------- 4. Airing in Sri Lanka time ---------- */
+function lk(ts,o){return new Intl.DateTimeFormat('en-GB',Object.assign({timeZone:'Asia/Colombo'},o)).format(new Date(ts*1000))}
+function airView(){
+  var A=G(function(){return (typeof airing!=='undefined'&&Array.isArray(airing))?airing:null},null);
+  if(!A)return '<div class="card"><div class="s">Episode times for your Ongoing anime, converted to Sri Lanka time (GMT+5:30).</div><button class="go" id="yuAl" style="margin-top:10px">📡 Load airing schedule</button></div><div id="yuO"></div>';
+  if(!A.length)return '<div class="card yw">No upcoming episodes for your Ongoing list.</div>';
+  var now=Date.now();
+  return '<div class="card"><div class="l">Sri Lanka time (GMT+5:30)</div>'+A.map(function(x){var ms=x.n.airingAt*1000-now,d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),tag=ms<=0?'aired':(d>0?d+'d '+h+'h':h>0?h+'h '+m+'m':m+'m'),a=animeList.filter(function(y){return y.name===x.name})[0];
+    return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||x.c||'')+'" alt=""><div class="yi"><b>'+esc(x.name)+'</b><small>Episode '+x.n.episode+(x.tot?' / '+x.tot:'')+'</small><small>'+lk(x.n.airingAt,{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:true})+'</small></div><span class="yb '+(ms>0&&ms<864e5?'part':'list')+'">'+(ms>0?'⏳ ':'')+tag+'</span></div>'}).join('')+'</div>'}
+function airMount(){var b=$('yuAl');if(!b)return;b.onclick=function(){b.disabled=true;b.textContent='⏳ Loading…';try{loadAiring(true)}catch(e){}var t=0,iv=setInterval(function(){t+=700;var ok=G(function(){return Array.isArray(airing)},false);if(ok||t>14000){clearInterval(iv);if(tab==='air'&&$('yuB'))show('air')}},700)}}
+
+/* ---------- page shell ---------- */
+var V={map:[mapView,mapMount],gem:[gemView,gemMount],tl:[tlView,tlMount],air:[airView,airMount]};
+var TABS=[['map','🌌 Franchise'],['gem','💎 Gems'],['tl','📜 Timeline'],['air','🗓️ Airing']];
+function show(t){tab=t;var b=$('yuB');if(!b)return;
+  Array.prototype.forEach.call(document.querySelectorAll('#yuH button'),function(x){x.classList.toggle('on',x.dataset.t===t)});
+  b.innerHTML=V[t][0]();V[t][1]()}
+window.vUniverse=function(){return '<div class="yu"><div class="ch" id="yuH">'+TABS.map(function(x){return '<button data-t="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div><div id="yuB"></div></div>'};
+(window.yMount=window.yMount||{}).universe=function(){
+  Array.prototype.forEach.call(document.querySelectorAll('#yuH button'),function(b){b.onclick=function(){show(b.dataset.t)}});
+  if(window._yuPre)tab='map';show(tab)};
+function open(){try{closeDropdownMenu()}catch(e){}go('universe')}
+window.yUniverse=open;
+window.yUniverseOpen=function(name){window._yuPre=name;tab='map';open()};
+try{var m=document.getElementById('dropdownMenu');if(m&&!m.querySelector('[data-yuni]')){var bt=document.createElement('button');bt.setAttribute('data-yuni','1');bt.innerHTML='<span class="ddi">🌌</span>Anime Universe';bt.onclick=open;m.appendChild(bt)}}catch(e){}
+})();
+</script>
 <style id="yuki-tidy">/* v46.89 tidy layer: last in cascade; only evens out nav, spacing, buttons and focus */
 nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 nav button{min-width:0}
@@ -6759,6 +6960,102 @@ return r};f.__yg=1;window.openDetailsModal=f}
 wrap();setTimeout(wrap,1500);setTimeout(wrap,5000);
 })();
 </script>
+<style id="yuki-trailer-css">
+.ytp-tabs{display:flex;gap:8px;margin:4px 0 12px}
+.ytp-tabs button{flex:1;padding:9px 6px;border-radius:12px;border:1px solid var(--b);background:var(--inner);color:var(--s);font-weight:700;font-size:13px}
+.ytp-tabs button.on{background:var(--p);color:#fff;border-color:transparent}
+.ytp-box{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.ytp-box video,.ytp-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.ytp-now{font-size:13px;color:var(--t);font-weight:700;margin:2px 0 8px}
+.ytp-row{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:6px;border-radius:12px;background:var(--inner);border:1px solid var(--line);cursor:pointer}
+.ytp-row.on{border-color:var(--p)}
+.ytp-row .tg{min-width:44px;text-align:center;font-weight:800;font-size:12px;color:var(--p)}
+.ytp-row .ti{flex:1;min-width:0}.ytp-row .ti b{display:block;font-size:13px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ytp-row .ti span{font-size:11px;color:var(--s)}
+.ytp-ext{display:block;text-align:center;margin:8px 0;font-size:12px;color:var(--a)}
+.ytp-note{font-size:12px;color:var(--s);text-align:center;padding:14px 4px}
+</style>
+<script id="yuki-trailer-player">
+/* v47.44 · in-app trailer + OP/ED player: YouTube trailer plays inside the app (embed), anime themes stream from animethemes.moe in a <video> player */
+(function(){
+var TH={},YT={},S={},LASTERR='';
+function nrm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function E(s){return typeof esc==='function'?esc(s):String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function proxy(){return(localStorage.getItem('yukiProxy')||'https://yukiant.brotharu292.workers.dev').replace(/\/+$/,'')}
+async function getJ(u,px){
+ var d=[];
+ async function one(url){var r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+ try{return await one(u)}catch(e){d.push('direct: '+(e&&e.message||e))}
+ try{return await one(proxy()+'/animethemes/'+px)}catch(e){d.push('proxy: '+(e&&e.message||e))}
+ try{await new Promise(function(r){setTimeout(r,800)});return await one(u)}catch(e){d.push('retry: '+(e&&e.message||e))}
+ var er=new Error(d.join(' | '));LASTERR=er.message;throw er}
+async function ytId(a){
+ if(YT[a.name]!==undefined)return YT[a.name];var id='';
+ try{var al=await alId(a);if(al){var r=await aq('query($id:Int){Media(id:$id){trailer{id site}}}',{id:al});var t=r&&r.data&&r.data.Media&&r.data.Media.trailer;if(t&&t.site==='youtube')id=t.id}}catch(e){}
+ if(!id){try{var j=await(await jfetch('https://api.jikan.moe/v4/anime?q='+encodeURIComponent(a.alt||a.name)+'&limit=5&sfw=true')).json();var d=j.data||[];var h=d.find(function(x){return[x.title,x.title_english].some(function(t){return nrm(t)===nrm(a.name)||nrm(t)===nrm(a.alt)})})||d[0];if(h&&h.trailer&&h.trailer.youtube_id)id=h.trailer.youtube_id}catch(e){}}
+ return YT[a.name]=id}
+async function themes(a){
+ if(TH[a.name])return TH[a.name];
+ var INC='&include=animethemes.animethemeentries.videos,animethemes.song.artists,resources&page[size]=6';
+ var al=0,mal=0,names=[a.name,a.alt],fails=0,tries=0;
+ try{al=await alId(a)}catch(e){}
+ try{var m=String(a.siteUrl||'').match(/myanimelist\.net\/anime\/(\d+)/);if(m)mal=+m[1]}catch(e){}
+ try{if(al){var r=await aq('query($id:Int){Media(id:$id){idMal title{romaji english native} synonyms}}',{id:al});var md=r&&r.data&&r.data.Media;if(md){if(md.idMal&&!mal)mal=md.idMal;if(md.title){names.push(md.title.romaji,md.title.english)}(md.synonyms||[]).slice(0,3).forEach(function(x){names.push(x)})}}}catch(e){}
+ names=names.filter(function(x,i,A){return x&&A.indexOf(x)===i});
+ var cand=[];
+ if(al)cand.push('anime?filter[has]=resources&filter[site]=AniList&filter[external_id]='+al+INC);
+ if(mal)cand.push('anime?filter[has]=resources&filter[site]=MyAnimeList&filter[external_id]='+mal+INC);
+ names.forEach(function(n){cand.push('anime?q='+encodeURIComponent(n)+INC)});
+ var best=null;
+ for(var k=0;k<cand.length&&!best;k++){
+  var j;tries++;try{j=await getJ('https://api.animethemes.moe/'+cand[k],cand[k])}catch(e){fails++;continue}
+  var L=j.anime||[];if(!L.length)continue;
+  var byId=k<(al?1:0)+(mal?1:0);
+  best=byId?L[0]:(L.find(function(x){return al&&(x.resources||[]).some(function(r){return r.site==='AniList'&&+r.external_id===+al})})
+   ||L.find(function(x){return mal&&(x.resources||[]).some(function(r){return r.site==='MyAnimeList'&&+r.external_id===+mal})})
+   ||L.find(function(x){return names.some(function(n){return nrm(x.name)===nrm(n)})}))}
+ var out=[];
+ if(best)(best.animethemes||[]).forEach(function(t){
+  var en=(t.animethemeentries||[])[0];if(!en)return;
+  var vs=(en.videos||[]).slice().sort(function(x,y){return(x.overlap==='None'?0:1)-(y.overlap==='None'?0:1)||Math.abs((x.resolution||720)-720)-Math.abs((y.resolution||720)-720)});
+  var v=vs[0];if(!v||!v.link)return;
+  var ar=((t.song&&t.song.artists)||[]).map(function(x){return x.name}).join(', ');
+  out.push({slug:t.slug||t.type,title:(t.song&&t.song.title)||'Unknown song',artist:ar,link:v.link.replace(/^http:/,'https:'),eps:en.episodes||''})});
+ out.sort(function(x,y){return(x.slug[0]===y.slug[0]?0:x.slug[0]==='O'?-1:1)||parseInt(x.slug.replace(/\D/g,'')||0)-parseInt(y.slug.replace(/\D/g,'')||0)});
+ var res={list:out,page:best?'https://animethemes.moe/anime/'+best.slug:'',netFail:!best&&tries>0&&fails===tries,err:LASTERR,names:names};
+ if(!res.netFail)TH[a.name]=res;
+ return res}
+function ytHtml(id,a){
+ if(!id)return'<div class="ytp-note">No trailer found for this anime.</div><a class="ytp-ext" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent((a.alt||a.name)+' anime trailer')+'">🔎 Search on YouTube</a>';
+ if(!/^https?:$/.test(location.protocol))return'<a class="ytp-box" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v='+E(id)+'" style="display:block"><img alt="" src="https://img.youtube.com/vi/'+E(id)+'/hqdefault.jpg" style="width:100%;height:100%;object-fit:cover;opacity:.75"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px">▶️</span></a><div class="ytp-note">YouTube blocks in-app playback when the page is opened as a local file. Tap the picture to watch on YouTube, or use the <b>OP / ED</b> tab (plays inside the app). Host the page on a website (https) and the trailer will play right here.</div>';
+ return'<div class="ytp-box"><iframe src="https://www.youtube-nocookie.com/embed/'+E(id)+'?playsinline=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v='+E(id)+'">↗ Trailer won\'t play? Open on YouTube</a>'}
+function thHtml(d){
+ if(d&&d.netFail)return'<div class="ytp-note">⚠️ Could not reach animethemes.moe (network or proxy blocked). Try again, or check your internet.<br><small style="opacity:.8;word-break:break-all">'+E(d.err||'')+'</small></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+encodeURIComponent(S.a.name)+'">↗ Search on animethemes.moe</a>';
+ if(!d||!d.list.length)return'<div class="ytp-note">No OP/ED videos found on animethemes.moe for this anime.</div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+encodeURIComponent(S.a.name)+'">↗ Search on animethemes.moe</a>';
+ return'<div class="ytp-box"><video id="ytpV" controls playsinline preload="metadata"></video></div><div class="ytp-now" id="ytpN"></div>'
+ +d.list.map(function(t,i){return'<div class="ytp-row" data-i="'+i+'" onclick="yTpPlay('+i+')"><div class="tg">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.artist||'')+(t.eps?' · eps '+E(t.eps):'')+'</span></div><div>▶️</div></div>'}).join('')
+ +'<a class="ytp-ext" target="_blank" rel="noopener" href="'+E(d.page)+'">↗ Open on animethemes.moe</a>'}
+function draw(tab){
+ var s=S,h='<div class="ytp-tabs"><button class="'+(tab==='t'?'on':'')+'" onclick="yTpTab(\'t\')">▶️ Trailer</button><button class="'+(tab==='o'?'on':'')+'" onclick="yTpTab(\'o\')">🎵 OP / ED</button></div>'
+  +(tab==='t'?ytHtml(s.yt,s.a):thHtml(s.th));
+ openX('🎬 '+E(s.a.name).slice(0,40),h);
+ if(tab==='o'&&s.th&&s.th.list.length)yTpPlay(0,true)}
+window.yTpTab=function(t){draw(t)};
+window.yTpPlay=function(i,quiet){
+ var d=S.th;if(!d||!d.list[i])return;var t=d.list[i],v=document.getElementById('ytpV');if(!v)return;
+ v.src=t.link;v.load();if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ var n=document.getElementById('ytpN');if(n)n.textContent=t.slug+' · '+t.title+(t.artist?' — '+t.artist:'');
+ document.querySelectorAll('.ytp-row').forEach(function(r){r.classList.toggle('on',+r.dataset.i===i)});
+ v.onerror=function(){if(n)n.innerHTML='⚠️ This video could not load here. <a target="_blank" rel="noopener" style="color:var(--a)" href="'+E(t.link)+'">Open it directly</a>'}};
+window.xTrailer=async function(){
+ var a=animeList[detailIndex];if(!a)return;
+ openX('🎬 Trailer & OP/ED','<div class="loader">⏳ Loading...</div>');
+ var r=await Promise.all([ytId(a).catch(function(){return''}),themes(a).catch(function(){return null})]);
+ S={a:a,yt:r[0],th:r[1]};
+ draw((r[1]&&r[1].list.length&&(!r[0]||!/^https?:$/.test(location.protocol)))?'o':'t')};
+})();
+</script>
+
 </body></html>
 
 
