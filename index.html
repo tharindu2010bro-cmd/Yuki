@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- CODE MAP (v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.44';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.45';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1405,7 +1405,7 @@ i.src=(window.YW_AV||c||window.YW_IMG)})()</script>
  <div class="fg"><label id="detailProgressLabel"></label><div id="detailEpisodes" style="font-size:.88rem;font-weight:700"></div><div class="bar"><div id="detailProgressFill" class="fill" style="width:0"></div></div></div>
  <div class="qk" id="detailQuick"></div>
  <div class="fg" id="detailSeasonBox"><label>Current Season / Episode</label><div id="detailSeasonPos" class="desc" style="max-height:none"></div></div>
- <div class="xg"><button onclick="xTrailer()"><i>▶️</i><span>Trailer</span></button><button onclick="xChars()"><i>👥</i><span>Characters</span></button><button onclick="xStudio()"><i>🏢</i><span>Same studio</span></button><button onclick="xOrder()"><i>🧭</i><span>Watch order</span></button></div><div class="xg" style="grid-template-columns:1fr!important;margin-top:-6px"><button onclick="xEps()"><i>📺</i><span>Episodes</span></button></div>
+ <div class="xg"><button onclick="xTrailer()"><i>▶️</i><span>Trailer</span></button><button onclick="xChars()"><i>👥</i><span>Characters</span></button><button onclick="xStudio()"><i>🏢</i><span>Same studio</span></button><button onclick="xOrder()"><i>🧭</i><span>Watch order</span></button><button onclick="xEps()"><i>📺</i><span>Episodes</span></button></div>
  <div class="fg"><label>Synopsis / Overview</label><div id="detailDescription" class="desc"></div></div>
  <div class="fg" id="detailNotesContainer"><label>Personal Notes</label><div id="detailNotes" class="desc" style="font-style:italic;max-height:none"></div></div>
  <button class="save b" onclick="closeEditModal();quickComplete(detailIndex)">✅ Mark as completed</button><button class="save b" onclick="switchFromDetailsToEdit()">✏️ Edit details</button>
@@ -1773,7 +1773,7 @@ setInterval(()=>{if(airing&&checkReleased(airing))setTimeout(()=>loadAiring(true
 function seasonInfo(a){if(a.category==='movies')return'';const X=xe(a),E=a.seasonEps&&a.seasonEps.length?a.seasonEps.slice():((a.seasonsCount||1)<=1&&a.total?[a.total-X]:null);if(!E||!E.length)return null;const sum=E.reduce((x,y)=>x+y,0);if(!sum)return null;const w=Math.max(0,Math.min((a.watched||0)-X,sum));let rem=w;const done=E.map(eps=>{const x=Math.max(0,Math.min(rem,eps));rem-=x;return x});const allDone=w>=sum;let idx=done.findIndex((d,i)=>d<E[i]);if(idx===-1)idx=E.length-1;let badge,main,sub,next;if(w<=0){badge='🎬';main='Not started yet';sub='Ready when you are';next=`▶️ Next up: <b>Season 1 · Episode 1</b>`}else if(allDone){badge='🏁';main='All caught up!';sub=`Finished Season ${E.length} · Episode ${E[E.length-1]}`;next=''}else if(done[idx]===0){badge='📍';main=`Season ${idx} complete`;sub=`Episode ${E[idx-1]} was the finale`;next=`▶️ Next up: <b>Season ${idx+1} · Episode 1</b>`}else{badge='📍';main=`Season ${idx+1} · Episode ${done[idx]}`;sub=`${done[idx]} of ${E[idx]} episodes in this season`;next=`▶️ Next up: <b>Season ${idx+1} · Episode ${done[idx]+1}</b>`}const card=`<div class="spcard"><div class="spbadge">${badge}</div><div><div class="spmain">${esc(main)}</div><div class="spsub">${esc(sub)}</div></div></div>${next?`<div class="spnext">${next}</div>`:''}`;const xc=xChips(a),chips=(E.length>1||xc)?`<div class="schips">${(E.length<2&&!xc)?'':E.map((eps,i)=>{const w_i=done[i],pct=eps?Math.round(w_i/eps*100):0,isDone=eps>0&&w_i>=eps,isCur=allDone?i===E.length-1:i===idx;return`<div class="schip${isDone?' done':''}${isCur?' cur':''}"><span>S${i+1}</span><b>${w_i}/${eps}</b>${eps?`<div class="sbar"><span style="width:${pct}%"></span></div>`:''}</div>`}).join('')}${xc}</div>`:'';return card+chips+seasonList(a,E,done)}
 async function loadSeasons(i){const a=animeList[i],b=$('detailSeasonPos');b.innerHTML='<div class="sub">⏳ Loading seasons...</div>';let id=(a.siteUrl||'').match(/anilist\.co\/anime\/(\d+)/)?.[1];if(!id){const d=await fetchAniListData(a.name);id=(d?.siteUrl||'').match(/anime\/(\d+)/)?.[1]}const f=id?await franchise(+id):null;if(!f||!f.episodes){b.innerHTML='<div class="sub">❌ Could not load. Try again later.</div>';return}a.seasonEps=f.parts.map(p=>p.eps);a.seasonNames=f.parts.map(p=>p.t);a.related=f.opt;a.seasonsCount=f.parts.length;a.total=Math.max(f.episodes,a.watched);saveStorage();render();openDetailsModal(i);toast('✅ '+f.parts.length+' seasons · '+a.total+' episodes')}
 function cd(ts){const ms=ts*1000-Date.now();if(ms<=0)return'Out now! 🎉';const m=Math.floor(ms/6e4),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return d>0?`in ${d}d ${h}h`:h>0?`in ${h}h ${m%60}m`:`in ${m}m`}
-setInterval(()=>document.querySelectorAll('[data-t]').forEach(e=>e.innerText=cd(+e.dataset.t)),30000);
+setInterval(()=>document.querySelectorAll('[data-t]').forEach(e=>{const t=+e.dataset.t;if(t>1e9)e.innerText=cd(t)}),30000);
 function airHtml(){const h='<div class="lb" style="display:flex;justify-content:space-between;align-items:center"><span>📡 Airing Next · your Ongoing</span><span style="display:flex;gap:6px"><button class="btn" style="padding:5px 10px;font-size:.72rem" onclick="exportICS()">📅 .ics</button><button class="btn" style="padding:5px 12px;font-size:.75rem" onclick="loadAiring(true)">🔄</button></span></div>';if(airBusy)return`<div class="card">${h}<div class="loader" style="padding:10px">Loading schedule...</div></div>`;if(!airing)return airErr?`<div class="card">${h}<div class="sub">⚠️ Couldn't load the schedule. Tap 🔄 to try again.</div></div>`:'';if(!airing.length)return`<div class="card">${h}<div class="sub">No upcoming episodes found for your Ongoing list.</div></div>`;const z=new Date(),z0=new Date(z.getFullYear(),z.getMonth(),z.getDate());let last='';const grp=t=>{const d=new Date(t*1000),df=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-z0)/864e5);return df<=0?'Today':df===1?'Tomorrow':df<7?'This week':'Later'};return`<div class="card">${h}<div class="sub">${airing.length} of ${airing.length+(airOff||0)} ongoing shows have an upcoming episode</div>`+airing.map(x=>{const idx=animeList.findIndex(a=>a.name===x.name),dt=new Date(x.n.airingAt*1000),g=grp(x.n.airingAt),soon=x.n.airingAt*1000-Date.now()<864e5,mt=x.mt&&x.mt.toLowerCase()!==x.name.toLowerCase()?' · '+x.mt:'',gh=g!==last?(last=g,`<div class="sub" style="margin:12px 0 6px;color:var(--p);font-weight:700">${g}</div>`):'';return gh+`<div class="row" style="margin-bottom:8px;padding:8px;align-items:center${soon?';border-color:var(--a);box-shadow:0 0 12px var(--ag)':''}" ${idx>=0?`onclick="openDetailsModal(${idx})"`:''}><img loading="lazy" decoding="async" src="${esc(x.c||PH)}" alt="" style="width:46px;height:64px"><div class="ri"><div class="rt">${esc(x.name)}</div><div class="rs">${soon?'🔔 ':''}${dt.toLocaleString([],{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}${esc(mt)}</div><div style="margin-top:6px;display:flex;align-items:center;gap:8px"><span class="pill" data-t="${x.n.airingAt}">${cd(x.n.airingAt)}</span><span class="rs" style="margin:0">Ep ${x.n.episode}${x.tot&&x.n.episode===x.tot?' · Finale 🎉':x.tot?' / '+x.tot:''}</span></div></div></div>`}).join('')+`${airOff?`<div class="sub" style="margin-top:6px">💤 ${airOff} Ongoing not airing right now</div>`:''}${airErr?'<div class="sub">⚠️ Showing saved schedule (could not refresh)</div>':''}</div>`}
 function wList(){const it=wish.map((w,i)=>[w,i]).filter(([w])=>!q||w.name.toLowerCase().includes(q)).sort((x,y)=>(y[0].pri||0)-(x[0].pri||0));return it.length?it.map(([w,i])=>`<div class="row" style="cursor:default"><img loading="lazy" decoding="async" src="${esc(w.cover)}" alt=""><div class="ri"><div class="rt">${['','⭐ ','🔥 '][w.pri||0]}${esc(w.name)}</div><div class="rs">${w.format||'ANIME'} • ${w.episodes||'?'} Eps</div><div class="rs">🏷️ ${esc((w.genres||[]).slice(0,3).join(', '))}</div><div class="act" style="margin-top:8px"><button data-n="${esc(w.name)}" data-i="${w.id||''}" onclick="openAddModal(this.dataset.n,this.dataset.i)">▶️ Start Watching</button><button aria-label="Set priority" onclick="setPri(${i})">${['☆ Priority','⭐ Medium','🔥 High'][w.pri||0]}</button><button aria-label="Remove from wishlist" class="e" onclick="removeWishAsk(${i})">🗑️</button></div></div></div>`).join(''):'<div class="loader">💜 Wishlist is empty.<br>Tap 🤍 Wishlist on any anime in Discover.</div>'}
 function vDisc(){return`<div class="sr"><input type="text" id="dInput" placeholder="🔍 Search anime to add..." autocomplete="off" value="${esc(dq)}" oninput="dSearch(this.value)" onkeypress="if(event.key==='Enter')dSearch(this.value,1)"><button class="btn" onclick="dSearch($('dInput').value,1)">Search</button></div>
@@ -6961,24 +6961,65 @@ wrap();setTimeout(wrap,1500);setTimeout(wrap,5000);
 })();
 </script>
 <style id="yuki-trailer-css">
-.ytp-tabs{display:flex;gap:8px;margin:4px 0 12px}
-.ytp-tabs button{flex:1;padding:9px 6px;border-radius:12px;border:1px solid var(--b);background:var(--inner);color:var(--s);font-weight:700;font-size:13px}
-.ytp-tabs button.on{background:var(--p);color:#fff;border-color:transparent}
-.ytp-box{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.ytp-tabs{display:flex;gap:4px;margin:4px 0 14px;padding:4px;border-radius:16px;background:var(--inner);border:1px solid var(--line)}
+.ytp-tabs button{flex:1;padding:10px 6px;border-radius:12px;border:0;background:transparent;color:var(--s);font-weight:800;font-size:13px;transition:.2s}
+.ytp-tabs button.on{background:linear-gradient(135deg,var(--p),var(--a));color:#fff;box-shadow:0 4px 14px var(--pg)}
+.ytp-box{position:relative;display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:18px;overflow:hidden;margin-bottom:12px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .ytp-box video,.ytp-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
-.ytp-now{font-size:13px;color:var(--t);font-weight:700;margin:2px 0 8px}
-.ytp-row{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:6px;border-radius:12px;background:var(--inner);border:1px solid var(--line);cursor:pointer}
-.ytp-row.on{border-color:var(--p)}
-.ytp-row .tg{min-width:44px;text-align:center;font-weight:800;font-size:12px;color:var(--p)}
-.ytp-row .ti{flex:1;min-width:0}.ytp-row .ti b{display:block;font-size:13px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ytp-thumb img{width:100%;height:100%;object-fit:cover;opacity:.8}
+.ytp-pb{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 24px rgba(0,0,0,.5)}
+.ytp-badge{position:absolute;left:10px;top:10px;padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:800}
+.ytp-btn{display:block;text-align:center;padding:13px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--a));color:#fff!important;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 18px var(--pg);margin-bottom:10px}
+.ytp-np{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:10px;border-radius:16px;background:var(--inner);border:1px solid var(--b)}
+.ytp-npt{flex:1;min-width:0}.ytp-npt b{display:block;font-size:14px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ytp-npt span{font-size:11px;color:var(--s)}
+.ytp-ctl{display:flex;gap:6px}.ytp-ctl button{width:38px;height:38px;border-radius:12px;border:1px solid var(--b);background:var(--card);color:var(--t);font-size:15px}
+.ytp-chips{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ytp-chips button{padding:6px 12px;border-radius:99px;border:1px solid var(--b);background:transparent;color:var(--s);font-size:12px;font-weight:700}
+.ytp-chips button.on{background:var(--p);border-color:transparent;color:#fff}
+.ytp-auto{margin-left:auto;font-size:11px;color:var(--s);display:flex;align-items:center;gap:5px}
+.ytp-row{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:8px;border-radius:16px;background:var(--inner);border:1px solid var(--line);cursor:pointer;transition:.18s}
+.ytp-row:active{transform:scale(.98)}
+.ytp-row.on{border-color:var(--p);box-shadow:0 0 0 1px var(--p),0 6px 18px var(--pg)}
+.ytp-row .tg{min-width:48px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-weight:900;font-size:12px;color:#fff;background:linear-gradient(135deg,#8b5cf6,#c084fc)}
+.ytp-row .tg.ed{background:linear-gradient(135deg,#0ea5e9,#38bdf8)}
+.ytp-row .ti{flex:1;min-width:0}.ytp-row .ti b{display:block;font-size:14px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ytp-row .ti span{font-size:11px;color:var(--s)}
-.ytp-ext{display:block;text-align:center;margin:8px 0;font-size:12px;color:var(--a)}
-.ytp-note{font-size:12px;color:var(--s);text-align:center;padding:14px 4px}
+.ytp-row .pl{width:26px;text-align:center;color:var(--p);font-size:16px}
+.ytp-row .bars{display:none;height:16px;align-items:flex-end;justify-content:center;gap:2px}
+.ytp-row .bars i{width:3px;background:var(--p);border-radius:2px;animation:ytpb .8s infinite ease-in-out}
+.ytp-row .bars i:nth-child(2){animation-delay:.2s}.ytp-row .bars i:nth-child(3){animation-delay:.4s}
+.ytp-row.on .ic{display:none}.ytp-row.on .bars{display:flex}
+@keyframes ytpb{0%,100%{height:4px}50%{height:16px}}
+.ytp-ext{display:block;text-align:center;margin:10px 0;font-size:12px;color:var(--a)}
+.ytp-note{font-size:12px;color:var(--s);text-align:center;padding:10px 6px;line-height:1.5}
+.ytp-empty{text-align:center;padding:30px 10px}.ytp-empty .e{font-size:40px;margin-bottom:8px}
+.ytp-empty b{display:block;color:var(--t);margin-bottom:4px}
+.ytp-sec{margin:14px 2px 8px;font-size:12px;font-weight:800;color:var(--s);letter-spacing:.3px;text-transform:uppercase}
+.ytp-vid{display:flex;align-items:center;gap:12px;padding:8px;margin-bottom:8px;border-radius:16px;background:var(--inner);border:1px solid var(--line);cursor:pointer}
+.ytp-vid:active{transform:scale(.98)}
+.ytp-vid .th{position:relative;width:104px;aspect-ratio:16/9;border-radius:11px;overflow:hidden;background:#000;flex:none}
+.ytp-vid .th img{width:100%;height:100%;object-fit:cover;opacity:.85}
+.ytp-vid .th span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;text-shadow:0 2px 8px #000}
+.ytp-vid .ti{flex:1;min-width:0}.ytp-vid .ti b{display:block;font-size:13px;color:var(--t);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ytp-vid .ti span{font-size:11px;color:var(--s)}
+a.ytp-row{text-decoration:none}
+.ytp-chips button.on{background:var(--p);border-color:transparent;color:#fff}
+.ytp-box.aud::after{content:'🎧';position:absolute;inset:0 0 52px 0;display:flex;align-items:center;justify-content:center;font-size:54px;pointer-events:none;background:linear-gradient(135deg,rgba(124,58,237,.6),rgba(56,189,248,.4))}
+.ytp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 14px}
+.ytp-tile{background:var(--inner);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center}
+.ytp-tile b{display:block;font-size:17px;color:var(--t)}.ytp-tile span{font-size:10px;color:var(--s)}
+#yjb{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+#yjb .yjh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;font-size:17px;font-weight:800;color:var(--t)}
+#yjb .yjbd{flex:1;overflow-y:auto;padding:0 16px calc(28px + env(safe-area-inset-bottom,0px))}
 </style>
 <script id="yuki-trailer-player">
 /* v47.44 · in-app trailer + OP/ED player: YouTube trailer plays inside the app (embed), anime themes stream from animethemes.moe in a <video> player */
 (function(){
-var TH={},YT={},S={},LASTERR='';
+var TH={},YT={},S={},LASTERR='',GQLERR='';
+var AUD=false;try{AUD=localStorage.getItem('yukiAudOnly')==='1'}catch(e){}
+function cacheGet(n){try{var o=JSON.parse(localStorage.getItem('yukiThemes_v1')||'{}')[n];if(o&&o.list&&o.list.length&&Date.now()-o.t<12096e5)return{list:o.list,page:o.page,netFail:false,err:'',names:[]}}catch(e){}return null}
+function cacheSet(n,r){try{if(!r||!r.list||!r.list.length)return;var all=JSON.parse(localStorage.getItem('yukiThemes_v1')||'{}');all[n]={t:Date.now(),list:r.list,page:r.page};localStorage.setItem('yukiThemes_v1',JSON.stringify(all))}catch(e){}}
 function nrm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function E(s){return typeof esc==='function'?esc(s):String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function proxy(){return(localStorage.getItem('yukiProxy')||'https://yukiant.brotharu292.workers.dev').replace(/\/+$/,'')}
@@ -6993,15 +7034,85 @@ async function ytId(a){
  if(YT[a.name]!==undefined)return YT[a.name];var id='';
  try{var al=await alId(a);if(al){var r=await aq('query($id:Int){Media(id:$id){trailer{id site}}}',{id:al});var t=r&&r.data&&r.data.Media&&r.data.Media.trailer;if(t&&t.site==='youtube')id=t.id}}catch(e){}
  if(!id){try{var j=await(await jfetch('https://api.jikan.moe/v4/anime?q='+encodeURIComponent(a.alt||a.name)+'&limit=5&sfw=true')).json();var d=j.data||[];var h=d.find(function(x){return[x.title,x.title_english].some(function(t){return nrm(t)===nrm(a.name)||nrm(t)===nrm(a.alt)})})||d[0];if(h&&h.trailer&&h.trailer.youtube_id)id=h.trailer.youtube_id}catch(e){}}
+ if(!id){try{var kr=await fetch('https://kitsu.io/api/edge/anime?filter[text]='+encodeURIComponent(a.alt||a.name)+'&page[limit]=1');var kj=await kr.json();id=(kj.data&&kj.data[0]&&kj.data[0].attributes&&kj.data[0].attributes.youtubeVideoId)||''}catch(e){}}
  return YT[a.name]=id}
-async function themes(a){
+async function gql(q,v){
+ var r,body=JSON.stringify({query:q,variables:v||{}});
+ try{r=await fetch('https://rs.animethemes.moe/graphql',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:body})}
+ catch(e){
+  var gu='https://rs.animethemes.moe/graphql?query='+encodeURIComponent(q)+'&variables='+encodeURIComponent(JSON.stringify(v||{}));
+  try{r=await fetch(proxy()+'/fetch?url='+encodeURIComponent(gu))}catch(e2){throw new Error('GQL net: direct '+(e&&e.message)+' / proxy '+(e2&&e2.message))}
+  if(r.status===403)throw new Error('GQL proxy: host not allowed (add rs.animethemes.moe to worker ALLOW)')}
+ var j;try{j=await r.json()}catch(e){throw new Error('GQL HTTP '+r.status)}
+ if(j&&j.errors&&j.errors.length)throw new Error('GQL: '+String(j.errors[0].message||'').slice(0,160));
+ if(!r.ok)throw new Error('GQL HTTP '+r.status);return j.data}
+function lst(x){if(!x)return[];if(Array.isArray(x))return x;if(x.edges)return x.edges.map(function(e){return e.node});return x.nodes||x.data||[]}
+var TY={};
+function bse(t){while(t&&!t.name&&t.ofType)t=t.ofType;return t&&t.name}
+async function ty(n){
+ if(TY[n])return TY[n];
+ var d=await gql('query($n:String!){__type(name:$n){fields{name args{name} type{name ofType{name ofType{name ofType{name ofType{name}}}}}}}}',{n:n});
+ var o={};((d&&d.__type&&d.__type.fields)||[]).forEach(function(f){o[f.name]=f});return TY[n]=o}
+function pk(f,c){for(var i=0;i<c.length;i++)if(f[c[i]])return c[i];return''}
+async function wrapSel(fd,inner){
+ var bn=bse(fd.type),f=await ty(bn);
+ if(f.edges){var e=await ty(bse(f.edges.type));if(e.node)return'edges{node{'+await inner(bse(e.node.type))+'}}'}
+ if(f.nodes)return'nodes{'+await inner(bse(f.nodes.type))+'}';
+ if(f.data)return'data{'+await inner(bse(f.data.type))+'}';
+ return inner(bn)}
+async function selVideo(tn){var f=await ty(tn);return['link','resolution','overlap'].filter(function(k){return f[k]}).join(' ')||'link'}
+async function selEntry(tn){var f=await ty(tn),p=[];if(f.episodes)p.push('episodes');var v=pk(f,['videos','video']);if(v)p.push('videos:'+v+'{'+await wrapSel(f[v],selVideo)+'}');return p.join(' ')}
+async function selTheme(tn){var f=await ty(tn),p=[];['type','sequence','slug'].forEach(function(k){if(f[k])p.push(k)});
+ if(f.song){var sf=await ty(bse(f.song.type));var tk=pk(sf,['title','name']);
+  if(tk){var ss=await ty(bse(sf[tk].type)),k2=Object.keys(ss);
+   if(k2.length){var u=['primary','english','romaji','native','text','default'].filter(function(k){return ss[k]});if(!u.length)u=k2.slice(0,2);p.push('song{title:'+tk+'{'+u.join(' ')+'}}')}
+   else p.push('song{title:'+tk+'}')}}
+ var e=pk(f,['animethemeentries','entries','animeThemeEntries']);if(e)p.push('animethemeentries:'+e+'{'+await wrapSel(f[e],selEntry)+'}');return p.join(' ')}
+async function selAnime(){var f=await ty('Anime'),p=[];var nm=pk(f,['name','title']);
+ if(nm){var sub=await ty(bse(f[nm].type)),sk=Object.keys(sub);
+  if(sk.length){var use=['primary','english','romaji','native','text','default'].filter(function(k){return sub[k]});if(!use.length)use=sk.slice(0,3);p.push('title:'+nm+'{'+use.join(' ')+'}')}
+  else p.push('name:'+nm)}
+ if(f.slug)p.push('slug');
+ var t=pk(f,['animethemes','themes','animeThemes']);if(t)p.push('animethemes:'+t+'{'+await wrapSel(f[t],selTheme)+'}');
+ return{sel:p.join(' '),fields:Object.keys(f),hasT:!!t}}
+function gqlErr(m){if(m&&GQLERR.indexOf(m)<0&&GQLERR.length<420)GQLERR+=(GQLERR?' ; ':'')+m}
+function gqlBuild(b){
+ if(!b)return null;var out=[];
+ lst(b.animethemes).forEach(function(t){
+  var en=lst(t.animethemeentries)[0];if(!en)return;
+  var vs=lst(en.videos).slice().sort(function(x,y){return(x.overlap==='None'?0:1)-(y.overlap==='None'?0:1)||Math.abs((x.resolution||720)-720)-Math.abs((y.resolution||720)-720)});
+  var v=vs[0];if(!v||!v.link)return;
+  out.push({slug:t.slug||(t.type||'')+(t.sequence||''),title:(function(){var x=t.song&&t.song.title;if(x&&typeof x==='object')x=x.primary||x.english||x.romaji||x.native||x.text||Object.keys(x).map(function(k){return x[k]}).find(Boolean);return x||'Unknown song'})(),artist:'',link:String(v.link).replace(/^http:/,'https:'),eps:en.episodes||''})});
+ return out.length?{list:out,page:'https://animethemes.moe/anime/'+b.slug}:null}
+async function gqlFind(names){
+ GQLERR='';var S0;
+ try{S0=await selAnime()}catch(e){gqlErr(e.message);return null}
+ if(!S0.hasT){gqlErr('Anime fields: '+S0.fields.join(','));return null}
+ var slugs=names.map(function(n){return nrm(n).replace(/ /g,'_')}).filter(function(x,i,A){return x&&A.indexOf(x)===i}).slice(0,4);
+ for(var i=0;i<slugs.length;i++){
+  try{var d=await gql('query($s:String){anime(slug:$s){'+S0.sel+'}}',{s:slugs[i]});var b=d&&d.anime;if(Array.isArray(b))b=b[0];var r=gqlBuild(b);if(r)return r}catch(e){gqlErr(e.message)}}
+ try{var Q=await ty('Query');
+  var cands=Object.keys(Q).filter(function(n){return/^anime/i.test(n)&&Q[n].args&&Q[n].args.some(function(x){return x.name==='search'})});
+  if(!cands.length)gqlErr('Query args: '+Object.keys(Q).filter(function(n){return/^anime/i.test(n)}).map(function(n){return n+'('+(Q[n].args||[]).map(function(x){return x.name}).join(',')+')'}).join(' ').slice(0,160));
+  for(var x=0;x<Math.min(names.length,3);x++)for(var y=0;y<cands.length;y++){
+   try{var inner=await wrapSel(Q[cands[y]],async function(){return S0.sel});
+    var dd=await gql('query($q:String){'+cands[y]+'(search:$q){'+inner+'}}',{q:names[x]});
+    var L=lst(dd&&dd[cands[y]]);var bb=L.find(function(k){var T=[k.name].concat(k.title&&typeof k.title==='object'?Object.keys(k.title).map(function(z){return k.title[z]}):[k.title]);return names.some(function(n){return T.some(function(t){return t&&nrm(t)===nrm(n)})})})||(x===0?L[0]:null);
+    var rr=gqlBuild(bb);if(rr)return rr}catch(e){gqlErr(e.message)}}
+ }catch(e){gqlErr(e.message)}
+ return null}
+async function themes(a,fast){
  if(TH[a.name])return TH[a.name];
- var INC='&include=animethemes.animethemeentries.videos,animethemes.song.artists,resources&page[size]=6';
+ var ck=cacheGet(a.name);if(ck)return TH[a.name]=ck;
+ var INC='&include=resources&page[size]=6',DET='?include=animethemes.animethemeentries.videos,animethemes.song.artists';
  var al=0,mal=0,names=[a.name,a.alt],fails=0,tries=0;
  try{al=await alId(a)}catch(e){}
  try{var m=String(a.siteUrl||'').match(/myanimelist\.net\/anime\/(\d+)/);if(m)mal=+m[1]}catch(e){}
  try{if(al){var r=await aq('query($id:Int){Media(id:$id){idMal title{romaji english native} synonyms}}',{id:al});var md=r&&r.data&&r.data.Media;if(md){if(md.idMal&&!mal)mal=md.idMal;if(md.title){names.push(md.title.romaji,md.title.english)}(md.synonyms||[]).slice(0,3).forEach(function(x){names.push(x)})}}}catch(e){}
  names=names.filter(function(x,i,A){return x&&A.indexOf(x)===i});
+ try{var rm=names.slice(2,4);names=rm.concat(names.filter(function(x){return rm.indexOf(x)<0}))}catch(e){}
+ try{var g=await gqlFind(names);if(g){var gr={list:g.list,page:g.page,netFail:false,err:'',names:names};g.list.sort(function(x,y){return(x.slug[0]===y.slug[0]?0:x.slug[0]==='O'?-1:1)||parseInt(x.slug.replace(/\D/g,'')||0)-parseInt(y.slug.replace(/\D/g,'')||0)});try{await gqlEnrich(g)}catch(e){}cacheSet(a.name,gr);return TH[a.name]=gr}}catch(e){}
+ if(fast)return{list:[],page:'',netFail:false,err:'',names:names};
  var cand=[];
  if(al)cand.push('anime?filter[has]=resources&filter[site]=AniList&filter[external_id]='+al+INC);
  if(mal)cand.push('anime?filter[has]=resources&filter[site]=MyAnimeList&filter[external_id]='+mal+INC);
@@ -7014,6 +7125,9 @@ async function themes(a){
   best=byId?L[0]:(L.find(function(x){return al&&(x.resources||[]).some(function(r){return r.site==='AniList'&&+r.external_id===+al})})
    ||L.find(function(x){return mal&&(x.resources||[]).some(function(r){return r.site==='MyAnimeList'&&+r.external_id===+mal})})
    ||L.find(function(x){return names.some(function(n){return nrm(x.name)===nrm(n)})}))}
+ if(best&&!(best.animethemes&&best.animethemes.length)&&best.slug){
+  var dp='anime/'+encodeURIComponent(best.slug)+DET;
+  try{var dj=await getJ('https://api.animethemes.moe/'+dp,dp);var da=dj.anime;if(Array.isArray(da))da=da[0];if(da){da.slug=da.slug||best.slug;best=da}}catch(e){tries++;fails++}}
  var out=[];
  if(best)(best.animethemes||[]).forEach(function(t){
   var en=(t.animethemeentries||[])[0];if(!en)return;
@@ -7022,40 +7136,207 @@ async function themes(a){
   var ar=((t.song&&t.song.artists)||[]).map(function(x){return x.name}).join(', ');
   out.push({slug:t.slug||t.type,title:(t.song&&t.song.title)||'Unknown song',artist:ar,link:v.link.replace(/^http:/,'https:'),eps:en.episodes||''})});
  out.sort(function(x,y){return(x.slug[0]===y.slug[0]?0:x.slug[0]==='O'?-1:1)||parseInt(x.slug.replace(/\D/g,'')||0)-parseInt(y.slug.replace(/\D/g,'')||0)});
- var res={list:out,page:best?'https://animethemes.moe/anime/'+best.slug:'',netFail:!best&&tries>0&&fails===tries,err:LASTERR,names:names};
+ var res={list:out,page:best?'https://animethemes.moe/anime/'+best.slug:'',netFail:tries>0&&fails===tries&&!out.length,err:(GQLERR?GQLERR+' || ':'')+LASTERR,names:names};
  if(!res.netFail)TH[a.name]=res;
  return res}
+var MC={};
+function jf(u){return typeof jfetch==='function'?jfetch(u):fetch(u)}
+async function jkGet(path){var r=await jf('https://api.jikan.moe/v4/'+path);if(!r.ok)throw new Error('HTTP '+r.status);var j=await r.json();return j.data}
+async function getMal(a){
+ if(MC[a.name]!==undefined)return MC[a.name];var id=0;
+ var m=String(a.siteUrl||'').match(/myanimelist\.net\/anime\/(\d+)/);if(m)id=+m[1];
+ if(!id){try{var al=await alId(a);if(al){var r=await aq('query($id:Int){Media(id:$id){idMal}}',{id:al});id=(r&&r.data&&r.data.Media&&r.data.Media.idMal)||0}}catch(e){}}
+ if(!id){try{var d=await jkGet('anime?q='+encodeURIComponent(a.alt||a.name)+'&limit=5&sfw=true');var h=(d||[]).find(function(x){return[x.title,x.title_english].some(function(t){return nrm(t)===nrm(a.name)||nrm(t)===nrm(a.alt)})})||(d||[])[0];if(h)id=h.mal_id}catch(e){}}
+ return MC[a.name]=id}
+function ytFrom(u){var m=String(u||'').match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/);return m?m[1]:''}
+function parseTh(str){var m=String(str).match(/^(?:#?\d+(?:-\d+)?:\s*)?"(.+?)"\s*(?:by\s+(.+?))?\s*(?:\((?:eps?|ep)[^)]*\))?\s*$/i);return m?{title:m[1],artist:(m[2]||'').trim()}:null}
+function sameT(x,y){var A=nrm(String(x).replace(/\(.*?\)/g,'')),B=nrm(String(y).replace(/\(.*?\)/g,''));return!!(A&&B&&(A===B||A.indexOf(B)>=0||B.indexOf(A)>=0))}
+async function extras(a){
+ var ex={vids:[],mt:[]},mal=0;
+ try{mal=await getMal(a)}catch(e){}
+ if(!mal)return ex;
+ var seen={};function add(v){if(v.yt&&!seen[v.yt]){seen[v.yt]=1;ex.vids.push(v)}}
+ try{var vd=await jkGet('anime/'+mal+'/videos');
+  ((vd&&vd.promo)||[]).forEach(function(p){add({kind:'pv',title:p.title||'Trailer',yt:(p.trailer&&(p.trailer.youtube_id||ytFrom(p.trailer.url||p.trailer.embed_url)))||''})});
+  ((vd&&vd.music_videos)||[]).forEach(function(p){add({kind:'mv',title:(p.title||'Music video')+((p.meta&&p.meta.author)?' — '+p.meta.author:''),yt:(p.video&&(p.video.youtube_id||ytFrom(p.video.url||p.video.embed_url)))||''})})}catch(e){}
+ if(!ex.vids.length){try{var sr=await fetch('https://shikimori.io/api/animes/'+mal+'/videos');if(sr.ok){(await sr.json()).forEach(function(v){add({kind:/^(op|ed)$/i.test(v.kind)?'mv':'pv',title:v.name||String(v.kind||'video').toUpperCase(),yt:ytFrom(v.url||v.player_url)})})}}catch(e){}}
+ try{var th=await jkGet('anime/'+mal+'/themes');
+  ((th&&th.openings)||[]).forEach(function(x,i){var o=parseTh(x);if(o){o.slug='OP'+(i+1);ex.mt.push(o)}});
+  ((th&&th.endings)||[]).forEach(function(x,i){var o=parseTh(x);if(o){o.slug='ED'+(i+1);ex.mt.push(o)}})}catch(e){}
+ return ex}
+function moreHtml(v){
+ if(!v||!v.length)return'';
+ return'<div class="ytp-sec">More videos · PVs & music videos</div>'+v.slice(0,12).map(function(x,i){return'<div class="ytp-vid" onclick="yTpWatch('+i+')"><div class="th"><img loading="lazy" alt="" src="https://img.youtube.com/vi/'+E(x.yt)+'/mqdefault.jpg"><span>▶</span></div><div class="ti"><b>'+E(x.title)+'</b><span>'+(x.kind==='mv'?'🎵 Music video':'🎞️ PV / Promo')+'</span></div></div>'}).join('')}
+window.yTpWatch=function(i){var x=S.vids&&S.vids[i];if(!x)return;var f=document.querySelector('.ytp-box iframe');
+ if(f&&/^https?:$/.test(location.protocol)){f.src='https://www.youtube-nocookie.com/embed/'+x.yt+'?autoplay=1&playsinline=1&rel=0';var bx=f.parentNode;if(bx.scrollIntoView)bx.scrollIntoView({block:'nearest',behavior:'smooth'})}
+ else window.open('https://www.youtube.com/watch?v='+x.yt,'_blank')};
+function fbHtml(mt,name){
+ if(!mt||!mt.length)return'';
+ return'<div class="ytp-sec">From MyAnimeList · tap to find on YouTube</div>'+mt.map(function(t){var ed=/^ED/i.test(t.slug);return'<a class="ytp-row" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(name+' '+t.title+' '+(t.artist||'')+(ed?' ending':' opening'))+'"><div class="tg'+(ed?' ed':'')+'">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.artist||'')+'</span></div><div class="pl"><span class="ic">🔎</span></div></a>'}).join('')}
 function ytHtml(id,a){
- if(!id)return'<div class="ytp-note">No trailer found for this anime.</div><a class="ytp-ext" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent((a.alt||a.name)+' anime trailer')+'">🔎 Search on YouTube</a>';
- if(!/^https?:$/.test(location.protocol))return'<a class="ytp-box" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v='+E(id)+'" style="display:block"><img alt="" src="https://img.youtube.com/vi/'+E(id)+'/hqdefault.jpg" style="width:100%;height:100%;object-fit:cover;opacity:.75"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px">▶️</span></a><div class="ytp-note">YouTube blocks in-app playback when the page is opened as a local file. Tap the picture to watch on YouTube, or use the <b>OP / ED</b> tab (plays inside the app). Host the page on a website (https) and the trailer will play right here.</div>';
- return'<div class="ytp-box"><iframe src="https://www.youtube-nocookie.com/embed/'+E(id)+'?playsinline=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v='+E(id)+'">↗ Trailer won\'t play? Open on YouTube</a>'}
+ var q='https://www.youtube.com/results?search_query='+encodeURIComponent((a.alt||a.name)+' anime trailer');
+ if(!id)return'<div class="ytp-empty"><div class="e">🎞️</div><b>No trailer found</b><span class="ytp-note">We could not find a trailer for this anime.</span></div><a class="ytp-btn" target="_blank" rel="noopener" href="'+q+'">🔎 Search on YouTube</a>'+moreHtml(S.vids);
+ var w='https://www.youtube.com/watch?v='+E(id),btn='<a class="ytp-btn" target="_blank" rel="noopener" href="'+w+'">▶ Watch trailer on YouTube</a>';
+ if(!/^https?:$/.test(location.protocol))return'<a class="ytp-box ytp-thumb" target="_blank" rel="noopener" href="'+w+'"><img alt="" src="https://img.youtube.com/vi/'+E(id)+'/hqdefault.jpg"><span class="ytp-pb">▶</span><span class="ytp-badge">YouTube</span></a>'+btn+'<div class="ytp-note">Opened from a local file, so YouTube can\'t play inside the app. Try the <b>OP / ED</b> tab (plays in-app), or host the page on https to play trailers here.</div>'+moreHtml(S.vids);
+ return'<div class="ytp-box"><iframe src="https://www.youtube-nocookie.com/embed/'+E(id)+'?playsinline=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+btn+moreHtml(S.vids)}
 function thHtml(d){
- if(d&&d.netFail)return'<div class="ytp-note">⚠️ Could not reach animethemes.moe (network or proxy blocked). Try again, or check your internet.<br><small style="opacity:.8;word-break:break-all">'+E(d.err||'')+'</small></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+encodeURIComponent(S.a.name)+'">↗ Search on animethemes.moe</a>';
- if(!d||!d.list.length)return'<div class="ytp-note">No OP/ED videos found on animethemes.moe for this anime.</div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+encodeURIComponent(S.a.name)+'">↗ Search on animethemes.moe</a>';
- return'<div class="ytp-box"><video id="ytpV" controls playsinline preload="metadata"></video></div><div class="ytp-now" id="ytpN"></div>'
- +d.list.map(function(t,i){return'<div class="ytp-row" data-i="'+i+'" onclick="yTpPlay('+i+')"><div class="tg">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.artist||'')+(t.eps?' · eps '+E(t.eps):'')+'</span></div><div>▶️</div></div>'}).join('')
+ var q=encodeURIComponent(S.a.name);
+ if(d&&d.netFail)return'<div class="ytp-empty"><div class="e">📡</div><b>Could not reach animethemes.moe</b><span class="ytp-note">Check your internet and try again.<br><small style="opacity:.7;word-break:break-all">'+E(d.err||'')+'</small></span></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+q+'">↗ Search on animethemes.moe</a>'+fbHtml(S.mt,S.a.name);
+ if(!d||!d.list.length)return'<div class="ytp-empty"><div class="e">🎵</div><b>No OP/ED found</b><span class="ytp-note">animethemes.moe has no videos for this anime yet.</span></div><a class="ytp-ext" target="_blank" rel="noopener" href="https://animethemes.moe/search/'+q+'">↗ Search on animethemes.moe</a>'+fbHtml(S.mt,S.a.name);
+ var L=d.list,nO=L.filter(function(t){return!/^ED/i.test(t.slug)}).length,nE=L.length-nO;
+ function chip(k,l){return'<button data-f="'+k+'" class="'+(S.f===k?'on':'')+'" onclick="yTpFilter(\''+k+'\')">'+l+'</button>'}
+ return'<div class="ytp-box"><video id="ytpV" controls playsinline preload="metadata"></video></div>'
+ +'<div class="ytp-np"><div class="ytp-npt"><b id="ytpN">—</b><span id="ytpS"></span></div><div class="ytp-ctl"><button aria-label="Previous" onclick="yTpStep(-1)">⏮</button><button aria-label="Next" onclick="yTpStep(1)">⏭</button></div></div>'
+ +'<div class="ytp-chips">'+chip('all','All '+L.length)+chip('op','OP '+nO)+chip('ed','ED '+nE)+'<button id="ytpAud" class="'+(AUD?'on':'')+'" onclick="yTpAud()">🎧 Audio only</button><label class="ytp-auto"><input type="checkbox" id="ytpA" checked> Auto-next</label></div>'
+ +L.map(function(t,i){var ed=/^ED/i.test(t.slug);return'<div class="ytp-row" data-i="'+i+'" data-t="'+(ed?'ed':'op')+'" onclick="yTpPlay('+i+')"><div class="tg'+(ed?' ed':'')+'">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+(t.artist?E(t.artist)+' · ':'')+(t.eps?'Episodes '+E(t.eps):(ed?'Ending':'Opening'))+'</span></div><div class="pl"><span class="ic">▶</span><span class="bars"><i></i><i></i><i></i></span></div></div>'}).join('')
  +'<a class="ytp-ext" target="_blank" rel="noopener" href="'+E(d.page)+'">↗ Open on animethemes.moe</a>'}
 function draw(tab){
  var s=S,h='<div class="ytp-tabs"><button class="'+(tab==='t'?'on':'')+'" onclick="yTpTab(\'t\')">▶️ Trailer</button><button class="'+(tab==='o'?'on':'')+'" onclick="yTpTab(\'o\')">🎵 OP / ED</button></div>'
   +(tab==='t'?ytHtml(s.yt,s.a):thHtml(s.th));
- openX('🎬 '+E(s.a.name).slice(0,40),h);
- if(tab==='o'&&s.th&&s.th.list.length)yTpPlay(0,true)}
+ openX('🎬 '+E(String(s.a.name).slice(0,34)),h);
+ if(tab==='o'&&s.th&&s.th.list.length)yTpPlay(S.cur||0,true)}
 window.yTpTab=function(t){draw(t)};
+window.yTpAud=function(){AUD=!AUD;try{localStorage.setItem('yukiAudOnly',AUD?'1':'0')}catch(e){}
+ var b=document.getElementById('ytpAud');if(b)b.classList.toggle('on',AUD);var v=document.getElementById('ytpV');if(!v||S.cur==null)return;
+ var t=v.currentTime,pa=v.paused;yTpPlay(S.cur,true);v.addEventListener('loadedmetadata',function f(){v.removeEventListener('loadedmetadata',f);try{v.currentTime=t}catch(e){}if(!pa){var p=v.play();if(p&&p.catch)p.catch(function(){})}})};
+window.yTpFilter=function(f){S.f=f;
+ document.querySelectorAll('.ytp-row').forEach(function(r){r.style.display=(f==='all'||r.dataset.t===f)?'':'none'});
+ document.querySelectorAll('.ytp-chips button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f)})};
+window.yTpStep=function(d){
+ var rows=[].slice.call(document.querySelectorAll('.ytp-row')).filter(function(r){return r.style.display!=='none'});
+ if(!rows.length)return;var k=rows.findIndex(function(r){return+r.dataset.i===S.cur});
+ k=(k<0?0:(k+d+rows.length)%rows.length);yTpPlay(+rows[k].dataset.i)};
 window.yTpPlay=function(i,quiet){
- var d=S.th;if(!d||!d.list[i])return;var t=d.list[i],v=document.getElementById('ytpV');if(!v)return;
- v.src=t.link;v.load();if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
- var n=document.getElementById('ytpN');if(n)n.textContent=t.slug+' · '+t.title+(t.artist?' — '+t.artist:'');
+ var d=S.th;if(!d||!d.list[i])return;var t=d.list[i],v=document.getElementById('ytpV');if(!v)return;S.cur=i;
+ var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();if(v.parentNode)v.parentNode.classList.toggle('aud',!!au);if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ var n=document.getElementById('ytpN'),sb=document.getElementById('ytpS');
+ if(n)n.textContent=t.slug+' · '+t.title;if(sb)sb.textContent=(t.artist?t.artist+' · ':'')+(t.eps?'Episodes '+t.eps:'');
  document.querySelectorAll('.ytp-row').forEach(function(r){r.classList.toggle('on',+r.dataset.i===i)});
- v.onerror=function(){if(n)n.innerHTML='⚠️ This video could not load here. <a target="_blank" rel="noopener" style="color:var(--a)" href="'+E(t.link)+'">Open it directly</a>'}};
+ var on=document.querySelector('.ytp-row.on');if(on&&on.scrollIntoView&&!quiet)try{on.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}
+ v.onended=function(){var c=document.getElementById('ytpA');if(c&&c.checked)yTpStep(1)};
+ v.onerror=function(){if(sb)sb.innerHTML='⚠️ Could not load. <a target="_blank" rel="noopener" style="color:var(--a)" href="'+E(t.link)+'">Open directly</a>'}};
 window.xTrailer=async function(){
  var a=animeList[detailIndex];if(!a)return;
- openX('🎬 Trailer & OP/ED','<div class="loader">⏳ Loading...</div>');
- var r=await Promise.all([ytId(a).catch(function(){return''}),themes(a).catch(function(){return null})]);
- S={a:a,yt:r[0],th:r[1]};
- draw((r[1]&&r[1].list.length&&(!r[0]||!/^https?:$/.test(location.protocol)))?'o':'t')};
+ openX('🎬 Trailer & OP/ED','<div class="loader">⏳ Loading trailers, themes & songs…</div>');
+ var r=await Promise.all([ytId(a).catch(function(){return''}),themes(a).catch(function(){return null}),extras(a).catch(function(){return{vids:[],mt:[]}})]);
+ var yt=r[0],th=r[1],ex=r[2];
+ if(!yt&&ex.vids.length)yt=ex.vids[0].yt;
+ var vids=ex.vids.filter(function(v){return v.yt!==yt});
+ if(th&&th.list&&ex.mt.length)th.list.forEach(function(t){if(t.artist)return;var h=ex.mt.find(function(m){return sameT(m.title,t.title)});if(h)t.artist=h.artist});
+ S={a:a,yt:yt,th:th,vids:vids,mt:ex.mt,f:'all',cur:0};
+ draw((th&&th.list&&th.list.length&&(!yt||!/^https?:$/.test(location.protocol)))?'o':'t')};
+
+/* ===== v47.45 · artists + audio enrichment, Similar anime, Scores & Watch, Theme Jukebox ===== */
+function namesIn(o,out){if(!o||typeof o!=='object')return;if(Array.isArray(o)){o.forEach(function(x){namesIn(x,out)});return}
+ if(o.artist!==undefined){var n=o.alias||(o.artist&&o.artist.name);if(n)out.push(n);return}
+ if(typeof o.name==='string'){out.push(o.name);return}Object.keys(o).forEach(function(k){namesIn(o[k],out)})}
+async function artistSel(sf){
+ if(sf.artists){var i1=await wrapSel(sf.artists,async function(tn){var ft=await ty(tn);return ft.name?'name':''});return i1?'artists{'+i1+'}':''}
+ if(sf.performances){var i2=await wrapSel(sf.performances,async function(tn){var pf=await ty(tn),o=[];if(pf.alias)o.push('alias');if(pf.artist){var at=await ty(bse(pf.artist.type));o.push(Object.keys(at).length?(at.name?'artist{name}':''):'artist{... on Artist{name}}')}return o.join(' ')});return i2?'performances{'+i2+'}':''}
+ return''}
+async function selThemeA(tn){var f=await ty(tn),p=['slug','type','sequence'].filter(function(k){return f[k]});
+ if(f.song){var sf=await ty(bse(f.song.type));var as=await artistSel(sf);if(as)p.push('song{'+as+'}')}return p.join(' ')}
+async function selThemeV(tn){var f=await ty(tn),p=['slug','type','sequence'].filter(function(k){return f[k]});
+ var e=pk(f,['animethemeentries','entries','animeThemeEntries']);if(!e)return p.join(' ');
+ var en=await wrapSel(f[e],async function(et){var ef=await ty(et),v=pk(ef,['videos','video']);if(!v)return'';
+  return'videos:'+v+'{'+await wrapSel(ef[v],async function(vt){var vf=await ty(vt);return'link'+(vf.audio?' audio{link}':'')})+'}'});
+ p.push('animethemeentries:'+e+'{'+en+'}');return p.join(' ')}
+async function gqlEnrich(g){
+ var slug=(g.page||'').split('/anime/')[1];if(!slug)return;
+ var A=await ty('Anime'),tk=pk(A,['animethemes','themes','animeThemes']);if(!tk)return;
+ function key(t){return t.slug||((t.type||'')+(t.sequence||''))}
+ await Promise.all([
+  (async function(){try{var sel=await wrapSel(A[tk],selThemeA);var d=await gql('query($s:String){anime(slug:$s){animethemes:'+tk+'{'+sel+'}}}',{s:slug});
+   lst(d&&d.anime&&d.anime.animethemes).forEach(function(t){var it=g.list.find(function(x){return x.slug===key(t)});if(!it)return;var o=[];namesIn(t.song,o);o=o.filter(function(x,i,B){return x&&B.indexOf(x)===i});if(o.length)it.artist=o.slice(0,3).join(', ')})}catch(e){}})(),
+  (async function(){try{var sel=await wrapSel(A[tk],selThemeV);var d=await gql('query($s:String){anime(slug:$s){animethemes:'+tk+'{'+sel+'}}}',{s:slug});
+   lst(d&&d.anime&&d.anime.animethemes).forEach(function(t){var it=g.list.find(function(x){return x.slug===key(t)});if(!it)return;
+    var en=lst(t.animethemeentries)[0];if(!en)return;var vs=lst(en.videos);
+    var v=vs.find(function(x){return String(x.link||'').replace(/^http:/,'https:')===it.link})||vs.find(function(x){return x.audio&&x.audio.link});
+    if(v&&v.audio&&v.audio.link)it.audio=String(v.audio.link).replace(/^http:/,'https:')})}catch(e){}})()])}
+
+/* Similar anime */
+window.yRec=async function(){var a=animeList[detailIndex];if(!a)return;xLoad('🎯 Similar anime');var rows=[];
+ try{var id=await alId(a);if(id){var r=await aq('query($id:Int){Media(id:$id){recommendations(sort:RATING_DESC,perPage:15){nodes{rating mediaRecommendation{id title{romaji english} coverImage{large} averageScore format episodes seasonYear}}}}}',{id:id});
+  var N=(r&&r.data&&r.data.Media&&r.data.Media.recommendations&&r.data.Media.recommendations.nodes)||[];
+  N.forEach(function(n){var m=n.mediaRecommendation;if(!m||(n.rating!=null&&n.rating<0))return;var t=(m.title&&(m.title.english||m.title.romaji))||'?';
+   rows.push({id:m.id,t:t,img:m.coverImage&&m.coverImage.large,s:[m.format,m.seasonYear,m.episodes?m.episodes+' eps':'',m.averageScore?'★ '+(m.averageScore/10).toFixed(1):''].filter(Boolean).join(' · ')})})}}catch(e){}
+ if(!rows.length){try{var sj=await(await jfetch('https://api.jikan.moe/v4/anime?q='+encodeURIComponent(a.alt||a.name)+'&limit=3&sfw=true')).json();var mid=sj.data&&sj.data[0]&&sj.data[0].mal_id;
+  if(mid){var rj=await(await jfetch('https://api.jikan.moe/v4/anime/'+mid+'/recommendations')).json();
+   (rj.data||[]).slice(0,15).forEach(function(x){var e=x.entry||{};rows.push({id:0,t:e.title||'?',img:e.images&&e.images.jpg&&e.images.jpg.image_url,s:x.votes?x.votes+' votes':''})})}}catch(e){}}
+ rows=rows.filter(function(x){try{return!inLib(x.t,x.id)}catch(e){return true}});
+ openX('🎯 Similar anime',rows.length?rows.map(function(x){return xRow(x.img,x.t,x.s,xBtn(x.t,x.id,0))}).join(''):'<div class="loader">No recommendations found.</div>')};
+
+/* Scores & where to watch */
+window.yScores=async function(){var a=animeList[detailIndex];if(!a)return;xLoad('📊 Scores & Watch');var al=null,jk=null,mal=0;
+ try{var id=await alId(a);if(id){var r=await aq('query($id:Int){Media(id:$id){idMal averageScore popularity favourites externalLinks{site url type} nextAiringEpisode{episode airingAt}}}',{id:id});al=r&&r.data&&r.data.Media}}catch(e){}
+ try{mal=al&&al.idMal;if(!mal){var sj=await(await jfetch('https://api.jikan.moe/v4/anime?q='+encodeURIComponent(a.alt||a.name)+'&limit=3&sfw=true')).json();mal=sj.data&&sj.data[0]&&sj.data[0].mal_id}
+  if(mal){var j=await(await jfetch('https://api.jikan.moe/v4/anime/'+mal)).json();jk=j.data}}catch(e){}
+ function tile(v,l){return v?'<div class="ytp-tile"><b>'+E(v)+'</b><span>'+l+'</span></div>':''}
+ var T=tile(al&&al.averageScore?(al.averageScore/10).toFixed(1):'','AniList ★')+tile(jk&&jk.score?jk.score:'','MAL ★')+tile(jk&&jk.rank?'#'+jk.rank:'','MAL rank')+tile(jk&&jk.popularity?'#'+jk.popularity:'','Popularity')+tile(jk&&jk.members?jk.members.toLocaleString():'','Members')+tile(al&&al.favourites?al.favourites.toLocaleString():'','Favourites');
+ var h=T?'<div class="ytp-grid">'+T+'</div>':'<div class="ytp-note">No score data found.</div>';
+ if(al&&al.nextAiringEpisode){var d=new Date(al.nextAiringEpisode.airingAt*1000);h+='<div class="ytp-np"><div class="ytp-npt"><b>📅 Episode '+al.nextAiringEpisode.episode+' airs</b><span>'+E(d.toLocaleString([],{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}))+' (your time)</span></div></div>'}
+ var st=((al&&al.externalLinks)||[]).filter(function(l){return l.type==='STREAMING'&&l.url});
+ h+='<div class="ytp-now" style="margin-top:6px">Where to watch</div>'+(st.length?st.map(function(l){return'<a class="ytp-btn" target="_blank" rel="noopener" href="'+E(l.url)+'">▶ '+E(l.site)+'</a>'}).join(''):'<div class="ytp-note">No streaming links listed.</div>');
+ if(mal)h+='<a class="ytp-ext" target="_blank" rel="noopener" href="https://myanimelist.net/anime/'+mal+'">↗ Open on MyAnimeList</a>';
+ openX('📊 Scores & Watch',h)};
+function mountX(){var g=document.querySelector('.xg');if(!g||g.querySelector('[data-yxb]'))return;
+ [['yRec()','🎯','Similar'],['yScores()','📊','Scores']].forEach(function(b){var e=document.createElement('button');e.setAttribute('data-yxb','1');e.setAttribute('onclick',b[0]);e.innerHTML='<i>'+b[1]+'</i><span>'+b[2]+'</span>';g.appendChild(e)})}
+(function(){var o=window.openDetailsModal;if(typeof o==='function'&&!o.__yx){var f=function(){var r=o.apply(this,arguments);try{mountX()}catch(e){}return r};f.__yx=1;window.openDetailsModal=f}})();
+mountX();setTimeout(mountX,1500);setTimeout(mountX,5000);
+
+/* Theme Jukebox */
+var JB=null;
+function jbView(){var v=JB.all.map(function(_,i){return i}).filter(function(i){return JB.f==='all'||JB.all[i].k===JB.f});if(JB.shuf)v.sort(function(a,b){return JB.all[a].r-JB.all[b].r});return v}
+function jbList(){var L=document.getElementById('yjL');if(!L||!JB)return;
+ L.innerHTML=jbView().map(function(i){var t=JB.all[i];return'<div class="ytp-row'+(i===JB.cur?' on':'')+'" data-i="'+i+'" onclick="yJbPlay('+i+')"><div class="tg'+(t.k==='ed'?' ed':'')+'">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.an)+(t.artist?' · '+E(t.artist):'')+'</span></div><div class="pl"><span class="ic">▶</span><span class="bars"><i></i><i></i><i></i></span></div></div>'}).join('')}
+function jbSoon(){if(JB&&!JB.tm)JB.tm=setTimeout(function(){if(JB){JB.tm=0;jbList()}},400)}
+function jbProg(){var e=document.getElementById('yjP');if(!e||!JB)return;e.textContent=JB.fin?(JB.all.length?JB.all.length+' songs from your list':'No OP/ED found for your list.'):'Scanning your list… '+JB.done+'/'+JB.tot+' · '+JB.all.length+' songs'}
+async function jbScan(){
+ var list=(typeof animeList!=='undefined'?animeList:[]).filter(function(a){return a&&a.name}),idx=0;JB.tot=list.length;jbProg();
+ async function w(){while(JB&&!JB.stop&&idx<list.length){var a=list[idx++],r=null;try{r=await themes(a,true)}catch(e){}if(!JB||JB.stop)return;
+  if(r&&r.list)r.list.forEach(function(t){JB.all.push({an:a.name,slug:t.slug,title:t.title,artist:t.artist||'',link:t.link,audio:t.audio||'',k:/^ED/i.test(t.slug)?'ed':'op',r:Math.random()})});
+  JB.done++;jbProg();jbSoon();if(JB.cur<0&&JB.all.length)yJbPlay(0,true);
+  await new Promise(function(z){setTimeout(z,300)})}}
+ await Promise.all([w(),w()]);if(JB){JB.fin=true;jbProg();jbList()}}
+window.yJuke=function(){try{closeDropdownMenu()}catch(e){}if(JB&&JB.R)JB.R.remove();
+ var R=document.createElement('div');R.id='yjb';
+ R.innerHTML='<div class="yjh"><b>🎧 Theme Jukebox</b><button class="ib" aria-label="Close" onclick="yJbClose()">✕</button></div><div class="yjbd"><div class="ytp-box"><video id="yjV" controls playsinline preload="metadata"></video></div>'
+  +'<div class="ytp-np"><div class="ytp-npt"><b id="yjN">Tap a song to play</b><span id="yjS"></span></div><div class="ytp-ctl"><button aria-label="Previous" onclick="yJbStep(-1)">⏮</button><button aria-label="Next" onclick="yJbStep(1)">⏭</button></div></div>'
+  +'<div class="ytp-chips"><button data-f="all" class="on" onclick="yJbF(\'all\')">All</button><button data-f="op" onclick="yJbF(\'op\')">OP</button><button data-f="ed" onclick="yJbF(\'ed\')">ED</button><button id="yjSh" onclick="yJbShuf()">🔀 Shuffle</button><button id="yjAu" class="'+(AUD?'on':'')+'" onclick="yJbAud()">🎧 Audio</button></div>'
+  +'<div class="ytp-note" id="yjP"></div><div id="yjL"></div></div>';
+ document.body.appendChild(R);document.body.style.overflow='hidden';JB={R:R,all:[],cur:-1,f:'all',shuf:false,stop:false,done:0,tot:0,fin:false,tm:0};jbScan()};
+window.yJbClose=function(){if(!JB)return;JB.stop=true;try{var v=document.getElementById('yjV');if(v){v.pause();v.removeAttribute('src');v.load()}}catch(e){}if(JB.R)JB.R.remove();JB=null;document.body.style.overflow=''};
+window.yJbF=function(f){if(!JB)return;JB.f=f;document.querySelectorAll('#yjb .ytp-chips button[data-f]').forEach(function(b){b.classList.toggle('on',b.dataset.f===f)});jbList()};
+window.yJbShuf=function(){if(!JB)return;JB.shuf=!JB.shuf;JB.all.forEach(function(x){x.r=Math.random()});var b=document.getElementById('yjSh');if(b)b.classList.toggle('on',JB.shuf);jbList()};
+window.yJbStep=function(d){if(!JB)return;var v=jbView();if(!v.length)return;var k=v.indexOf(JB.cur);k=k<0?0:(k+d+v.length)%v.length;yJbPlay(v[k])};
+window.yJbPlay=function(i,quiet){var t=JB&&JB.all[i],v=document.getElementById('yjV');if(!t||!v)return;JB.cur=i;
+ var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();if(v.parentNode)v.parentNode.classList.toggle('aud',!!au);if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ var n=document.getElementById('yjN'),sb=document.getElementById('yjS');if(n)n.textContent=t.slug+' · '+t.title;if(sb)sb.textContent=t.an+(t.artist?' · '+t.artist:'');
+ document.querySelectorAll('#yjL .ytp-row').forEach(function(r){r.classList.toggle('on',+r.dataset.i===i)});
+ var on=document.querySelector('#yjL .ytp-row.on');if(on&&on.scrollIntoView&&!quiet)try{on.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}
+ v.onended=function(){yJbStep(1)};v.onerror=function(){if(sb)sb.textContent='⚠️ Could not load, skipping…';setTimeout(function(){if(JB&&JB.cur===i)yJbStep(1)},1500)};
+ try{if('mediaSession' in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.artist||t.an,album:t.an});navigator.mediaSession.setActionHandler('nexttrack',function(){yJbStep(1)});navigator.mediaSession.setActionHandler('previoustrack',function(){yJbStep(-1)})}}catch(e){}};
+window.yJbAud=function(){AUD=!AUD;try{localStorage.setItem('yukiAudOnly',AUD?'1':'0')}catch(e){}var b=document.getElementById('yjAu');if(b)b.classList.toggle('on',AUD);
+ var v=document.getElementById('yjV');if(!v||!JB||JB.cur<0)return;var t=v.currentTime,pa=v.paused;yJbPlay(JB.cur,true);
+ v.addEventListener('loadedmetadata',function f(){v.removeEventListener('loadedmetadata',f);try{v.currentTime=t}catch(e){}if(!pa){var p=v.play();if(p&&p.catch)p.catch(function(){})}})};
+function mountJ(){var m=document.getElementById('dropdownMenu');if(!m||m.querySelector('[data-yjuke]'))return;
+ var b=document.createElement('button');b.setAttribute('data-yjuke','1');b.onclick=function(){yJuke()};b.innerHTML='<span class="ddi">🎧</span>Theme Jukebox';
+ var ref=m.querySelector('[data-ytier]')||m.querySelector('[data-ywrap]')||m.querySelector('[data-yspace]');if(ref&&ref.parentNode)ref.parentNode.insertBefore(b,ref.nextSibling);else m.appendChild(b)}
+mountJ();setTimeout(mountJ,2000);setTimeout(mountJ,5400);setTimeout(mountJ,9000);
 })();
 </script>
 
+<style id="yuki-xg-tidy">
+html body .xg{display:grid!important;grid-template-columns:repeat(12,1fr)!important;gap:8px!important;margin:2px 0 14px!important}
+html body .xg button{grid-column:span 3;min-width:0}
+html body .xg button[onclick^="xTrailer"]{order:1}
+html body .xg button[onclick^="xEps"]{order:2}
+html body .xg button[onclick^="xOrder"]{order:3}
+html body .xg button[onclick^="xChars"]{order:4}
+html body .xg button[onclick^="yRec"]{order:5;grid-column:span 4}
+html body .xg button[onclick^="yScores"]{order:6;grid-column:span 4}
+html body .xg button[onclick^="xStudio"]{order:7;grid-column:span 4}
+</style>
 </body></html>
 
 
