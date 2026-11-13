@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- CODE MAP (v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
+<!-- CODE MAP (v47.46: Theme Jukebox rebuilt as a full custom player (pinned player, seek, repeat, search). v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.45';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.50';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1303,6 +1303,16 @@ nav button:active{transform:scale(.93)}
 /* long lists only paint what is on screen */
 .lgrid>*{content-visibility:auto;contain-intrinsic-size:auto 132px}
 </style>
+<style id="yuki-fab-chip-fix">
+html body .lfr .lchip{display:flex;flex-wrap:wrap;justify-content:center;column-gap:5px;row-gap:1px;max-width:100%;width:max-content;box-sizing:border-box}
+html body .lfr .lchip .lcp{white-space:nowrap;min-width:0}
+html body .lgrid .ac26 .lfr{min-width:0;max-width:100%}
+/* idle: the + button tucks into the right edge so it never covers -1 / +1 Ep */
+html body.fab-idle .fab{transform:translateX(50px)!important;opacity:.85!important;transition:transform .25s,opacity .25s!important}
+html body.fab-idle .fab:active{transform:translateX(0)!important}
+/* Jukebox: keep the seek bar out of the Android edge back-gesture zone */
+html body #yjb .yjp{padding-left:34px;padding-right:34px}
+</style>
 </head><body>
 <script>var vNews;</script>
 
@@ -1488,9 +1498,9 @@ function xChips(a){const g={};xList(a).filter(x=>x.c).forEach(x=>{const t=xTy(x)
 function xShort(n,base){const b=String(base||'').trim().toLowerCase(),t=String(n||'').trim();if(b.length>=6&&t.toLowerCase().startsWith(b)){const r=t.slice(b.length).replace(/^[\s:\-–—!?.]+/,'').trim();if(r.length>=3)return r}return t}
 function seasonList(a,E,done){const nm=a.seasonNames&&a.seasonNames.length===E.length?a.seasonNames:null,X=xList(a).filter(x=>x.c).sort((p,q)=>(p.y||9999)-(q.y||9999));if(E.length<2&&!X.length)return'';const row=(tag,cls,name,meta,ok,full)=>`<div class="tlr ${cls}${ok?' ok':''}" title="${esc(full||name)}"><span class="tlg">${esc(tag)}</span><div class="tlb"><div class="tln">${esc(name)}</div>${meta?`<div class="tlm">${esc(meta)}</div>`:''}</div><i class="tlk">${ok?'✓':''}</i></div>`;const S=E.map((eps,i)=>row('S'+(i+1),'t-sn',nm?nm[i]:'Season '+(i+1),eps?eps+' episodes':'',eps>0&&done[i]>=eps)).join(''),base=nm?nm[0]:'';const R=X.map(x=>{const t=xTy(x);const meta=[x.y||'',x.e?x.e+' ep'+(x.e>1?'s':''):'',x.s==='NOT_YET_RELEASED'?'Upcoming':''].filter(Boolean).join(' · ');return row(t[0],t[1]+' tlx',xShort(x.n,base),meta,!!x.c,x.n)}).join('');return`<div class="tl">${S}${R?'<div class="tlh">Watched extras</div>'+R:''}</div>`}
 function seasonBarsOld(a){const X=xe(a),E=a.seasonEps&&a.seasonEps.length?a.seasonEps:((a.seasonsCount||1)<=1&&a.total?[a.total-X]:null);if(!E)return'';let rem=(a.watched||0)-X;return'<div class="sbs">'+E.map((n,i)=>{const d=Math.max(0,Math.min(rem,n));rem-=d;return`<div class="rbr"><span>Season ${i+1}</span><div class="bar"><div class="fill" style="width:${n?d/n*100:0}%"></div></div><b>${d}/${n}</b></div>`}).join('')+(X?`<div class="rbr"><span>✨ Extras</span><div class="bar"><div class="fill" style="width:100%"></div></div><b>${X}</b></div>`:'')+'</div>'}
-const SEQ_KEY='yukiSeq_v1',SEQ_HIDE='yukiSeqHide_v1',nrm=x=>(x||'').toLowerCase().replace(/[^a-z0-9]+/g,''),titleOk=(q,t)=>{const a=nrm(q);if(!a||!t)return true;const c=[t.english,t.romaji,t.native].map(nrm).filter(Boolean);return !c.length||c.some(b=>b.includes(a.slice(0,12))||a.includes(b.slice(0,12)))},idOf=a=>(a.siteUrl||'').match(/anilist\.co\/anime\/(\d+)/)?.[1];
+const SEQ_KEY='yukiSeq_v2',SEQ_HIDE='yukiSeqHide_v1',nrm=x=>(x||'').toLowerCase().replace(/[^a-z0-9]+/g,''),titleOk=(q,t)=>{const a=nrm(q);if(!a||!t)return true;const c=[t.english,t.romaji,t.native].map(nrm).filter(Boolean);return !c.length||c.some(b=>b.includes(a.slice(0,12))||a.includes(b.slice(0,12)))},idOf=a=>(a.siteUrl||'').match(/anilist\.co\/anime\/(\d+)/)?.[1];
 let seq=null,ySeqLoading=false,seqAt=0,seqFail=0;
-async function loadSeq(force){if(ySeqLoading||(!force&&((seq&&Date.now()-seqAt<432e5)||Date.now()-seqFail<6e4)))return;if(!seq&&!force){try{const c=JSON.parse(localStorage.getItem(SEQ_KEY));if(c&&Date.now()-c.at<432e5){seq=c.list;seqAt=c.at;if(view==='home')render();return}}catch(e){yLog(e)}}const L=animeList.filter(a=>a.category==='completed').slice(0,60);if(!L.length){seq=[];seqAt=Date.now();return}ySeqLoading=true;try{const F='id title{english romaji} relations{edges{relationType node{id type format status startDate{year}title{english romaji}coverImage{medium}}}}',out=[];for(let c=0;c<L.length;c+=8){const ch=L.slice(c,c+8),vs={};const q='query('+ch.map((a,i)=>idOf(a)?`$v${i}:Int`:`$v${i}:String`).join(',')+'){'+ch.map((a,i)=>`m${i}:Media(${idOf(a)?`id:$v${i}`:`search:$v${i},sort:SEARCH_MATCH`},type:ANIME){${F}}`).join(' ')+'}';ch.forEach((a,i)=>vs['v'+i]=idOf(a)?+idOf(a):a.name);const j=await aq(q,vs);if(!j)throw 0;ch.forEach((a,i)=>{let m=j.data?.['m'+i];if(m&&!idOf(a)&&!titleOk(a.name,m.title))m=null;out.push({a,m})})}const have=new Set(animeList.flatMap(a=>[nrm(a.name),nrm(a.alt)]).filter(Boolean)),ids=new Set(animeList.map(idOf).filter(Boolean).map(Number)),seen=new Set(),res=[],F2=['TV','TV_SHORT','ONA','OVA','MOVIE'],ST=['RELEASING','FINISHED','NOT_YET_RELEASED'];out.forEach(({a,m})=>(m?.relations?.edges||[]).forEach(e=>{const n=e.node;if(e.relationType!=='SEQUEL'||n.type!=='ANIME'||!F2.includes(n.format)||!ST.includes(n.status)||seen.has(n.id)||ids.has(n.id))return;const t=n.title.english||n.title.romaji;if(have.has(nrm(t))||have.has(nrm(n.title.romaji)))return;seen.add(n.id);res.push({id:n.id,t,c:n.coverImage?.medium||'',f:n.format,s:n.status,y:n.startDate?.year||0,from:a.name})}));res.sort((x,y)=>ST.indexOf(x.s)-ST.indexOf(y.s));seq=res;seqAt=Date.now();try{localStorage.setItem(SEQ_KEY,JSON.stringify({at:seqAt,list:res}))}catch(e){yLog(e)}}catch{seqFail=Date.now()}ySeqLoading=false;if(view==='home')render()}
+async function loadSeq(force){if(ySeqLoading||(!force&&((seq&&Date.now()-seqAt<432e5)||Date.now()-seqFail<6e4)))return;if(!seq&&!force){try{const c=JSON.parse(localStorage.getItem(SEQ_KEY));if(c&&Date.now()-c.at<432e5){seq=c.list;seqAt=c.at;if(view==='home')render();return}}catch(e){yLog(e)}}const L=animeList.filter(a=>a.category==='completed').slice(0,60);if(!L.length){seq=[];seqAt=Date.now();return}ySeqLoading=true;try{const F='id title{english romaji} relations{edges{relationType node{id type format status startDate{year}title{english romaji}coverImage{medium}}}}',out=[];for(let c=0;c<L.length;c+=8){const ch=L.slice(c,c+8),vs={};const q='query('+ch.map((a,i)=>idOf(a)?`$v${i}:Int`:`$v${i}:String`).join(',')+'){'+ch.map((a,i)=>`m${i}:Media(${idOf(a)?`id:$v${i}`:`search:$v${i},sort:SEARCH_MATCH`},type:ANIME){${F}}`).join(' ')+'}';ch.forEach((a,i)=>vs['v'+i]=idOf(a)?+idOf(a):a.name);const j=await aq(q,vs);if(!j)throw 0;ch.forEach((a,i)=>{let m=j.data?.['m'+i];if(m&&!idOf(a)&&!titleOk(a.name,m.title))m=null;out.push({a,m})})}const have=new Set(animeList.flatMap(a=>[nrm(a.name),nrm(a.alt)]).filter(Boolean)),ids=new Set(animeList.map(idOf).filter(Boolean).map(Number)),seen=new Set(),res=[],F2=['TV','TV_SHORT','ONA','OVA','MOVIE'],ST=['RELEASING','FINISHED','NOT_YET_RELEASED'];out.forEach(({a,m})=>{const E=m?.relations?.edges||[],tk=Math.max(0,Math.max((a.seasonEps||[]).length,a.seasonsCount||0)-1),mine=new Set(E.filter(e=>e.relationType==='SEQUEL'&&['TV','TV_SHORT'].includes(e.node.format)).sort((p,q)=>(p.node.startDate?.year||9999)-(q.node.startDate?.year||9999)).slice(0,tk).map(e=>e.node.id).concat((a.extras||[]).map(x=>x.id)));E.forEach(e=>{const n=e.node;if(e.relationType!=='SEQUEL'||n.type!=='ANIME'||!F2.includes(n.format)||!ST.includes(n.status)||seen.has(n.id)||ids.has(n.id)||mine.has(n.id))return;const t=n.title.english||n.title.romaji;if(have.has(nrm(t))||have.has(nrm(n.title.romaji)))return;seen.add(n.id);res.push({id:n.id,t,c:n.coverImage?.medium||'',f:n.format,s:n.status,y:n.startDate?.year||0,from:a.name})})});res.sort((x,y)=>ST.indexOf(x.s)-ST.indexOf(y.s));seq=res;seqAt=Date.now();try{localStorage.setItem(SEQ_KEY,JSON.stringify({at:seqAt,list:res}))}catch(e){yLog(e)}}catch{seqFail=Date.now()}ySeqLoading=false;if(view==='home')render()}
 function seqHidden(){try{return JSON.parse(localStorage.getItem(SEQ_HIDE))||[]}catch{return[]}}
 function hSeq(){if(!seq)return'';const hide=seqHidden(),have=new Set(animeList.flatMap(a=>[nrm(a.name),nrm(a.alt)]));const L=seq.filter(x=>!hide.includes(x.id)&&!have.has(nrm(x.t))).slice(0,6);if(!L.length)return'';const lbl=x=>(x.f==='MOVIE'?'Movie':'Sequel')+' · '+({RELEASING:'Airing now',FINISHED:'Out now',NOT_YET_RELEASED:'Coming '+(x.y||'soon')})[x.s];return`<div class="card sqc"><b>🔔 Sequel alert</b><div class="sub" style="margin-bottom:8px">New parts of anime you finished</div>${L.map(x=>`<div class="sqr"><img src="${esc(x.c||PH)}" alt="" loading="lazy"><div class="sqt"><b>${esc(x.t)}</b><div class="sub">${lbl(x)} · after ${esc(x.from)}</div></div><button class="btn" onclick="seqAdd(${x.id})">＋ Add</button><button class="ib" aria-label="Dismiss" onclick="seqHide(${x.id})">✕</button></div>`).join('')}</div>`}
 function seqAdd(id){const x=(seq||[]).find(y=>y.id===id);if(x)openAddModal(x.t,id)}
@@ -3291,15 +3301,20 @@ vHome0=function(){let h=_vh();if(!animeList||!animeList.length)return h;
  return h.replace('<div class="sec"><span>',card+'<div class="sec"><span>')};
 /* 4 · premiere reminders */
 const RK='yukiRemind_v1',rl=()=>{try{return JSON.parse(localStorage.getItem(RK))||[]}catch(e){return[]}},rn={};
-window.remTog=function(id){const l=rl(),i=l.findIndex(r=>r.id===id),m=rn[id];if(i>=0){l.splice(i,1);toast('🔕 Reminder removed')}else if(m){l.push({id,name:m.n,at:m.at,ep:m.ep||0});toast(m.ep?'🔔 I\'ll remind you when Ep '+m.ep+' airs':'🔔 I\'ll remind you on premiere day')}storeSet(RK,JSON.stringify(l));render()};
+/* v47.50: bell reminders are now scheduled with the phone's own alarm, so they arrive on time even when the app is closed */
+const RLN=()=>{try{const w=window.yNativeNotif;return w&&w.ln&&w.ln()||null}catch(e){return null}},rid=id=>900000000+(Math.abs(+id||0)%1000000);
+async function rSched(r){const ln=RLN();if(!ln||!(r.at>Date.now()))return false;try{let p=await ln.checkPermissions();if(p.display!=='granted')p=await ln.requestPermissions();if(p.display!=='granted')return false;await ln.schedule({notifications:[{id:rid(r.id),title:'🎬 '+r.name,body:r.ep?'Episode '+r.ep+' is out. Time to watch!':'Premieres today. Add it to your list?',schedule:{at:new Date(r.at),allowWhileIdle:true}}]});return true}catch(e){return false}}
+async function rCancel(id){const ln=RLN();if(ln)try{await ln.cancel({notifications:[{id:rid(id)}]})}catch(e){}}
+async function reArm(){try{const L=rl(),now=Date.now();let ch=false;for(const r of L){if(r.at>now&&!r.nat&&await rSched(r)){r.nat=1;ch=true}}if(ch)storeSet(RK,JSON.stringify(L))}catch(e){}}
+window.remTog=function(id){const l=rl(),i=l.findIndex(r=>r.id===id),m=rn[id];if(i>=0){l.splice(i,1);rCancel(id);toast('🔕 Reminder removed')}else if(m){const nr={id,name:m.n,at:m.at,ep:m.ep||0,cover:m.cover||''};l.push(nr);rSched(nr).then(ok=>{if(ok){const L=rl(),x=L.find(z=>z.id===id);if(x){x.nat=1;storeSet(RK,JSON.stringify(L))}}});toast(m.ep?'🔔 I\'ll remind you when Ep '+m.ep+' airs':'🔔 I\'ll remind you on premiere day')}storeSet(RK,JSON.stringify(l));render()};
 const _sc=seasonCard;
 /* v24: the bell shows on every card that has a known air time (next episode of airing shows, premiere date of upcoming ones). Shows with no exact date yet (TBA / month only) have no bell because there is nothing to schedule. */
 seasonCard=function(x){let h=_sc(x);try{const n=x.title.english||x.title.romaji,d=x.startDate||{},live=x.nextAiringEpisode;let m=null;
- if(live&&live.airingAt*1000>Date.now())m={n,at:live.airingAt*1000,ep:live.episode};
- else if(x.status==='NOT_YET_RELEASED'&&d.year&&d.month&&d.day&&new Date(d.year,d.month-1,d.day,9).getTime()>Date.now())m={n,at:new Date(d.year,d.month-1,d.day,9).getTime(),ep:0};
+ if(live&&live.airingAt*1000>Date.now())m={n,at:live.airingAt*1000,ep:live.episode,cover:(x.coverImage&&(x.coverImage.extraLarge||x.coverImage.large))||''};
+ else if(x.status==='NOT_YET_RELEASED'&&d.year&&d.month&&d.day&&new Date(d.year,d.month-1,d.day,9).getTime()>Date.now())m={n,at:new Date(d.year,d.month-1,d.day,9).getTime(),ep:0,cover:(x.coverImage&&(x.coverImage.extraLarge||x.coverImage.large))||''};
  if(m){rn[x.id]=m;const on=rl().some(r=>r.id===x.id);h=h.replace(/<\/div>\s*$/,`<button class="y7bell${on?' on':''}" aria-label="${m.ep?'Remind me when the next episode airs':'Remind me on premiere day'}" onclick="remTog(${x.id})">${on?'🔔':'🔕'}</button></div>`)}}catch(e){yLog(e)}return h};
-function remCheck(){try{const l=rl(),now=Date.now(),due=l.filter(r=>r.at<=now);if(!due.length)return;due.forEach(r=>{const t=r.ep?'🎬 '+r.name+' Ep '+r.ep+' is out now!':'🎬 '+r.name+' premieres today!';toast(t);yNotify('🎬 '+r.name,{body:r.ep?'Episode '+r.ep+' is out. Time to watch!':'Premieres today. Add it to your list?'})});storeSet(RK,JSON.stringify(l.filter(r=>r.at>now)))}catch(e){yLog(e)}}
-setTimeout(remCheck,3000);setInterval(remCheck,6e5);
+function remCheck(){try{const l=rl(),now=Date.now(),due=l.filter(r=>r.at<=now);if(!due.length)return;due.forEach(r=>{const t=r.ep?'🎬 '+r.name+' Ep '+r.ep+' is out now!':'🎬 '+r.name+' premieres today!';toast(t);if(r.nat)return;yNotify('🎬 '+r.name,(function(){var cv=r.cover||'';if(!cv)try{var q=(typeof animeList!=='undefined'?animeList:[]).find(function(a){return a&&a.name===r.name});cv=q&&q.cover&&q.cover.indexOf('http')===0?q.cover:''}catch(e){}var o={body:r.ep?'Episode '+r.ep+' is out. Time to watch!':'Premieres today. Add it to your list?'};if(cv){o.icon=cv;o.image=cv}return o})())});storeSet(RK,JSON.stringify(l.filter(r=>r.at>now)))}catch(e){yLog(e)}}
+setTimeout(function(){reArm().then(remCheck)},3000);setInterval(remCheck,6e5);
 })();
 </script>
 
@@ -3596,7 +3611,7 @@ html[data-theme=light] .acb{background:rgba(20,16,30,.72)}
 (function(){
 /* episode card */
 const pips=a=>{const tot=a.total||0,w=a.watched||0;if(false)return'<div class="pips">'+Array.from({length:tot},(_,k)=>`<i class="${k<w?(k===w-1&&w<tot?'cur':'on'):''}"></i>`).join('')+'</div>';const p=tot>0?Math.min(100,Math.round(w/tot*100)):(a.category==='completed'&&w>0?100:0);return`<div class="pbar"><i style="width:${p}%"></i></div>`};
-const leftChip=a=>{const t=a.total||0,w=a.watched||0;if(a.category==='completed')return'';if(!(t>0)||a.category!=='ongoing')return'<div class="lfr"><span class="lchip off">&nbsp;</span></div>';const un=unairedEps(a),l=Math.max(0,t-un-w),u=Math.min(un,Math.max(0,t-w)),tx=(l?'⏳ '+l+' ep'+(l===1?'':'s')+' left':'')+(u?(l?' · ':'')+'📅 '+u+' upcoming':'');return(tx?'<div class="lfr"><span class="lchip">'+tx+'</span></div>':'')};
+const leftChip=a=>{const t=a.total||0,w=a.watched||0;if(a.category==='completed')return'';if(!(t>0)||a.category!=='ongoing')return'<div class="lfr"><span class="lchip off">&nbsp;</span></div>';const un=unairedEps(a),l=Math.max(0,t-un-w),u=Math.min(un,Math.max(0,t-w)),tx=(l?'<span class="lcp">⏳ '+l+' ep'+(l===1?'':'s')+' left'+(u?' ·':'')+'</span>':'')+(u?'<span class="lcp">📅 '+u+' upcoming</span>':'');return(tx?'<div class="lfr"><span class="lchip">'+tx+'</span></div>':'')};
 const xtra=a=>{const it=[],g=gl(a);if(a.studio&&a.category!=='movies')it.push('🏢 '+esc(a.studio));if(g.length>2)it.push('🎭 '+g.slice(2,6).map(esc).join(', '));const d=String(a.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();if(d.length>30)it.push('<span class="xd">'+esc(d.length>220?d.slice(0,220)+'…':d)+'</span>');return it.length?'<div class="acx">'+it.map(x=>'<div class="xi">'+x+'</div>').join('')+'</div>':''};
 window.fitCards=function(){document.querySelectorAll('.lgrid .acx').forEach(c=>{c.style.visibility='';const it=[...c.children];it.forEach(x=>{x.style.display='';x.classList.remove('cl')});if(c.clientHeight<13){c.style.visibility='hidden';return}let k=it.length;while(k>0&&c.scrollHeight>c.clientHeight+1){const x=it[--k];if(x.querySelector('.xd')||x.classList.contains('xd')){/* try fewer lines */x.classList.add('cl');if(c.scrollHeight<=c.clientHeight+1)break;x.classList.remove('cl')}x.style.display='none'}})};
 const CATL={ongoing:'Watching',completed:'Completed',movies:'Movie',dropped:'Dropped'};
@@ -3622,7 +3637,7 @@ window.ycWeekOpen=function(){
 })();
 </script>
 <script>/* v28 · floating buttons fade when idle */
-(function(){let t;const w=()=>{document.body.classList.remove('fab-idle');clearTimeout(t);t=setTimeout(()=>document.body.classList.add('fab-idle'),2500)};['touchstart','scroll','click'].forEach(e=>window.addEventListener(e,w,{passive:true,capture:true}));w()})();
+(function(){let t;const w=()=>{document.body.classList.remove('fab-idle');clearTimeout(t);t=setTimeout(()=>document.body.classList.add('fab-idle'),1200)};['scroll'].forEach(e=>window.addEventListener(e,w,{passive:true,capture:true}));w()})();
 </script>
 <script>/* v28b · chat button lives in the header */
 (function(){const _r=window.render;if(typeof _r!=='function')return;window.render=function(){const o=_r.apply(this,arguments);try{const top=document.querySelector('.top'),av=document.getElementById('topAv');if(top&&av&&!top.querySelector('.ychd')){const b=document.createElement('button');b.className='ib ychd';b.setAttribute('aria-label','Chat with Yuki');b.textContent='💬';b.onclick=()=>ycOpen();top.insertBefore(b,av)}}catch(e){}return o}})();
@@ -4635,6 +4650,7 @@ window.yDevCopy=function(){
 const $=id=>document.getElementById(id);
 const esc=()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
 const OV=[
+ ['#yjb',()=>window.yJbClose&&yJbClose()],
  ['#ycApiModal.show',()=>window.ycCloseApiSettings&&ycCloseApiSettings()],
  ['#xO',e=>e.remove()],
  ['#dupO',e=>e.remove()],
@@ -6466,7 +6482,7 @@ window.yCloud={ui:ui,up:function(){up(false)},down:down,gen:function(){var c=doc
 .yu .yr{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--b,rgba(255,255,255,.08))}
 .yu .yr:last-child{border-bottom:0}
 .yu .yr img{width:42px;height:60px;object-fit:cover;border-radius:8px;flex:none;background:var(--inner,#222)}
-.yu .yr .yi{min-width:0;flex:1}
+.yu .yr .yuI{min-width:0;flex:1;display:block;width:auto;height:auto;line-height:1.25;margin:0;overflow-wrap:anywhere}
 .yu .yr b{display:block;font-size:13.5px;line-height:1.25}
 .yu .yr small{display:block;opacity:.7;font-size:11.5px;margin-top:2px}
 .yu .yn{flex:none;width:24px;text-align:center;font-size:11px;opacity:.55;font-weight:700}
@@ -6492,6 +6508,10 @@ window.yCloud={ui:ui,up:function(){up(false)},down:down,gen:function(){var c=doc
 .yu .yinfo{margin-top:8px}
 .yu .yw{opacity:.75;font-size:12.5px;padding:10px 2px}
 .yu input.t{width:100%;box-sizing:border-box}
+.yu input.t{padding:12px 14px;border-radius:14px;border:1px solid var(--b,rgba(255,255,255,.14));background:var(--inner,rgba(255,255,255,.06));color:var(--t,#eee);font:inherit;font-size:14px;outline:0}
+.yu input.t::placeholder{color:var(--s,#a9b4c8);opacity:.8}
+.yu input.t:focus{border-color:var(--p,#8b5cf6)}
+.yu button.go{border:0;border-radius:14px;padding:12px 18px;font:inherit;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--p,#8b5cf6),var(--a,#38bdf8));cursor:pointer;min-height:46px}
 </style>
 <script id="yuki-universe">/* v47.43 · Anime Universe: franchise map, hidden gems, timeline, airing in Sri Lanka time */
 (function(){
@@ -6562,12 +6582,12 @@ function mapHtml(R){
 window.yuSel=function(id){
   if(!cur)return;var n=cur.list.filter(function(x){return x.id===id})[0],e=$('yuInfo');if(!n||!e)return;
   var a=findLib(n),s=st(a);
-  e.innerHTML='<div class="yr"><div class="yn">#'+n.no+'</div><img src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yi"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:'',n.averageScore?'⭐ '+n.averageScore:''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}
+  e.innerHTML='<div class="yr"><div class="yn">#'+n.no+'</div><img src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yuI"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:'',n.averageScore?'⭐ '+n.averageScore:''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}
 function listHtml(R){
   var L=R.list.filter(function(n){return fmode==='main'?isMain(n):fmode==='todo'?st(findLib(n)).k!=='done':true});
   if(!L.length)return '<div class="yw">Nothing to show for this filter.</div>';
   return L.map(function(n){var a=findLib(n),s=st(a);
-    return '<div class="yr"><div class="yn">'+n.no+'</div><img loading="lazy" src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yi"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:(n.id===R.root?'Starting point':''),n.status==='NOT_YET_RELEASED'?'Not released yet':''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}).join('')}
+    return '<div class="yr"><div class="yn">'+n.no+'</div><img loading="lazy" src="'+esc((n.coverImage&&n.coverImage.medium)||'')+'" alt=""><div class="yuI"><b>'+esc(ttl(n))+'</b><small>'+esc([n.format,n.startDate&&n.startDate.year,n.episodes?n.episodes+' eps':'',n.rel?REL_LBL[n.rel]:(n.id===R.root?'Starting point':''),n.status==='NOT_YET_RELEASED'?'Not released yet':''].filter(Boolean).join(' · '))+'</small></div>'+(a?'<span class="yb '+s.k+'">'+s.t+'</span>':addBtn(n))+'</div>'}).join('')}
 function drawMap(R){
   var T=R.list.length,done=R.list.filter(function(n){return st(findLib(n)).k==='done'}).length,mains=R.list.filter(isMain),
       next=mains.filter(function(n){return st(findLib(n)).k!=='done'&&n.status!=='NOT_YET_RELEASED'})[0],pc=T?Math.round(done/T*100):0,root=R.list.filter(function(n){return n.id===R.root})[0];
@@ -6601,7 +6621,7 @@ async function findGems(){
     M=M.slice(0,12);
     if(!M.length){o.innerHTML='<div class="card yw">No new gems for this mix. Try other genres or tap again.</div>';return}
     o.innerHTML='<div class="card">'+M.map(function(m){var sh=(m.genres||[]).filter(function(g){return gsel.indexOf(g)>-1});
-      return '<div class="yr"><img loading="lazy" src="'+esc(m.coverImage&&m.coverImage.medium||'')+'" alt=""><div class="yi"><b>'+esc(ttl(m))+'</b><small>⭐ '+m.averageScore+' · '+(m.popularity>=1000?Math.round(m.popularity/1000)+'k':m.popularity)+' fans only · '+esc(m.format||'')+(m.episodes?' · '+m.episodes+' eps':'')+(m.seasonYear?' · '+m.seasonYear:'')+'</small><small>Matches your taste: '+esc(sh.join(', ')||'genre mix')+'</small></div>'+addBtn(m)+'</div>'}).join('')+'</div>'}
+      return '<div class="yr"><img loading="lazy" src="'+esc(m.coverImage&&m.coverImage.medium||'')+'" alt=""><div class="yuI"><b>'+esc(ttl(m))+'</b><small>⭐ '+m.averageScore+' · '+(m.popularity>=1000?Math.round(m.popularity/1000)+'k':m.popularity)+' fans only · '+esc(m.format||'')+(m.episodes?' · '+m.episodes+' eps':'')+(m.seasonYear?' · '+m.seasonYear:'')+'</small><small>Matches your taste: '+esc(sh.join(', ')||'genre mix')+'</small></div>'+addBtn(m)+'</div>'}).join('')+'</div>'}
   catch(e){o.innerHTML='<div class="card yw">⚠️ '+esc(e&&e.message||e)+'</div>'}}
 function gemMount(){
   Array.prototype.forEach.call(document.querySelectorAll('#yuGc button'),function(b){b.onclick=function(){var g=b.dataset.g,i=gsel.indexOf(g);if(i>-1)gsel.splice(i,1);else gsel.push(g);b.classList.toggle('on')}});
@@ -6630,7 +6650,7 @@ function tlView(){
    '<div class="ymb">'+mo.map(function(o){return '<div title="'+MON[o.i-1]+': '+o.x.eps+' eps" style="height:'+Math.max(3,Math.round(o.x.eps/mx*100))+'%"></div>'}).join('')+'</div><div class="yml">'+MON.map(function(m){return '<span>'+m[0]+'</span>'}).join('')+'</div></div>'+
    '<div class="card">'+mo.slice().reverse().filter(function(o){return o.x.eps>0}).map(function(o){
      var A=Object.keys(o.x.a).sort(function(a,b){return o.x.a[b]-o.x.a[a]});
-     return '<details><summary><span>'+MON[o.i-1]+' '+tlYear+'</span><span style="opacity:.7;font-weight:500">'+o.x.eps+' eps · '+A.length+' anime</span></summary>'+A.map(function(n){var a=animeList.filter(function(y){return y.name===n})[0];return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||'')+'" alt=""><div class="yi"><b>'+esc(n)+'</b><small>'+o.x.a[n]+' episodes</small></div></div>'}).join('')+(A.length?'':'<div class="yw">Episode count only (older data has no titles).</div>')+'</details>'}).join('')+'</div>'}
+     return '<details><summary><span>'+MON[o.i-1]+' '+tlYear+'</span><span style="opacity:.7;font-weight:500">'+o.x.eps+' eps · '+A.length+' anime</span></summary>'+A.map(function(n){var a=animeList.filter(function(y){return y.name===n})[0];return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||'')+'" alt=""><div class="yuI"><b>'+esc(n)+'</b><small>'+o.x.a[n]+' episodes</small></div></div>'}).join('')+(A.length?'':'<div class="yw">Episode count only (older data has no titles).</div>')+'</details>'}).join('')+'</div>'}
 function tlMount(){Array.prototype.forEach.call(document.querySelectorAll('#yuY button'),function(b){b.onclick=function(){tlYear=b.dataset.y;show('tl')}})}
 
 /* ---------- 4. Airing in Sri Lanka time ---------- */
@@ -6641,7 +6661,7 @@ function airView(){
   if(!A.length)return '<div class="card yw">No upcoming episodes for your Ongoing list.</div>';
   var now=Date.now();
   return '<div class="card"><div class="l">Sri Lanka time (GMT+5:30)</div>'+A.map(function(x){var ms=x.n.airingAt*1000-now,d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),tag=ms<=0?'aired':(d>0?d+'d '+h+'h':h>0?h+'h '+m+'m':m+'m'),a=animeList.filter(function(y){return y.name===x.name})[0];
-    return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||x.c||'')+'" alt=""><div class="yi"><b>'+esc(x.name)+'</b><small>Episode '+x.n.episode+(x.tot?' / '+x.tot:'')+'</small><small>'+lk(x.n.airingAt,{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:true})+'</small></div><span class="yb '+(ms>0&&ms<864e5?'part':'list')+'">'+(ms>0?'⏳ ':'')+tag+'</span></div>'}).join('')+'</div>'}
+    return '<div class="yr"><img loading="lazy" src="'+esc((a&&a.cover)||x.c||'')+'" alt=""><div class="yuI"><b>'+esc(x.name)+'</b><small>Episode '+x.n.episode+(x.tot?' / '+x.tot:'')+'</small><small>'+lk(x.n.airingAt,{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:true})+'</small></div><span class="yb '+(ms>0&&ms<864e5?'part':'list')+'">'+(ms>0?'⏳ ':'')+tag+'</span></div>'}).join('')+'</div>'}
 function airMount(){var b=$('yuAl');if(!b)return;b.onclick=function(){b.disabled=true;b.textContent='⏳ Loading…';try{loadAiring(true)}catch(e){}var t=0,iv=setInterval(function(){t+=700;var ok=G(function(){return Array.isArray(airing)},false);if(ok||t>14000){clearInterval(iv);if(tab==='air'&&$('yuB'))show('air')}},700)}}
 
 /* ---------- page shell ---------- */
@@ -6715,14 +6735,14 @@ fix();setTimeout(fix,0);setTimeout(fix,1500)})();
 <script id="yuki-exit">
 (function(){var last=0,done=0;
 function plug(){try{var C=window.Capacitor||(window.top&&window.top.Capacitor);return C&&C.Plugins&&C.Plugins.App||null}catch(e){return null}}
-function layer(){return document.querySelector('.ov.active,.dd.active,.ysb.show,.xb.show')}
+function layer(){return document.getElementById('yjb')||document.querySelector('.ov.active,.dd.active,.ysb.show,.xb.show')}
 function handle(){var l=layer();
  if(l){var c=l.querySelector('.x,.ddx,[aria-label="Close"],[aria-label="Close menu"]');if(c)c.click();else if(l.classList.contains('ysb')||l.classList.contains('xb'))l.remove();else l.classList.remove('active','show');return 'stay'}
  if(typeof view!=='undefined'&&view!=='home'&&typeof go==='function'){go('home');return 'stay'}
  var n=Date.now();if(n-last<2000)return 'exit';last=n;try{toast('Press back again to exit 👋')}catch(e){}return 'stay'}
 function nat(){var A=plug();if(!A||!A.addListener)return false;A.addListener('backButton',function(){if(handle()==='exit'){try{A.exitApp()}catch(e){}}});return true}
 function web(){if(done)return;done=1;try{history.pushState({yk:1},'');window.addEventListener('popstate',function(){if(handle()==='exit')history.go(-1);else history.pushState({yk:1},'')})}catch(e){}}
-if(!nat())setTimeout(function(){if(!nat())web()},800)})();
+if(!nat())setTimeout(function(){nat()},800)})();/* v47.47: web fallback removed - v40 back system already handles it; the duplicate popstate listener closed the Jukebox right after opening */
 </script>
 <script id="yuki-polish-js-2">/* page transition on every navigation */
 (function(){function wrap(n){var f=window[n];if(typeof f!=='function'||f.__y)return;var w=function(){var r=f.apply(this,arguments);try{var m=document.getElementById('main');if(m){m.classList.remove('yIn');void m.offsetWidth;m.classList.add('yIn')}}catch(e){}return r};w.__y=1;window[n]=w}
@@ -7286,36 +7306,64 @@ mountX();setTimeout(mountX,1500);setTimeout(mountX,5000);
 
 /* Theme Jukebox */
 var JB=null;
-function jbView(){var v=JB.all.map(function(_,i){return i}).filter(function(i){return JB.f==='all'||JB.all[i].k===JB.f});if(JB.shuf)v.sort(function(a,b){return JB.all[a].r-JB.all[b].r});return v}
+function jbView(){var q=(JB.q||'').toLowerCase(),v=JB.all.map(function(_,i){return i}).filter(function(i){var t=JB.all[i];return(JB.f==='all'||t.k===JB.f)&&(!q||(t.title+' '+t.an+' '+(t.artist||'')+' '+t.slug).toLowerCase().indexOf(q)>-1)});if(JB.shuf)v.sort(function(a,b){return JB.all[a].r-JB.all[b].r});return v}
 function jbList(){var L=document.getElementById('yjL');if(!L||!JB)return;
- L.innerHTML=jbView().map(function(i){var t=JB.all[i];return'<div class="ytp-row'+(i===JB.cur?' on':'')+'" data-i="'+i+'" onclick="yJbPlay('+i+')"><div class="tg'+(t.k==='ed'?' ed':'')+'">'+E(t.slug)+'</div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.an)+(t.artist?' · '+E(t.artist):'')+'</span></div><div class="pl"><span class="ic">▶</span><span class="bars"><i></i><i></i><i></i></span></div></div>'}).join('')}
+ L.innerHTML=jbView().map(function(i){var t=JB.all[i];return'<div class="ytp-row'+(i===JB.cur?' on':'')+'" data-i="'+i+'" onclick="yJbPlay('+i+')"><div class="jbth'+(t.k==='ed'?' ed':'')+'">'+(t.cover?'<img src="'+E(t.cover)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()">':'')+'<em>'+E(t.slug)+'</em></div><div class="ti"><b>'+E(t.title)+'</b><span>'+E(t.an)+(t.artist?' · '+E(t.artist):'')+'</span></div><div class="pl"><span class="ic">▶</span><span class="bars"><i></i><i></i><i></i></span></div></div>'}).join('')||(JB.q?'<div class="ytp-note">No matches</div>':'')}
 function jbSoon(){if(JB&&!JB.tm)JB.tm=setTimeout(function(){if(JB){JB.tm=0;jbList()}},400)}
 function jbProg(){var e=document.getElementById('yjP');if(!e||!JB)return;e.textContent=JB.fin?(JB.all.length?JB.all.length+' songs from your list':'No OP/ED found for your list.'):'Scanning your list… '+JB.done+'/'+JB.tot+' · '+JB.all.length+' songs'}
 async function jbScan(){
  var list=(typeof animeList!=='undefined'?animeList:[]).filter(function(a){return a&&a.name}),idx=0;JB.tot=list.length;jbProg();
  async function w(){while(JB&&!JB.stop&&idx<list.length){var a=list[idx++],r=null;try{r=await themes(a,true)}catch(e){}if(!JB||JB.stop)return;
-  if(r&&r.list)r.list.forEach(function(t){JB.all.push({an:a.name,slug:t.slug,title:t.title,artist:t.artist||'',link:t.link,audio:t.audio||'',k:/^ED/i.test(t.slug)?'ed':'op',r:Math.random()})});
+  if(r&&r.list)r.list.forEach(function(t){JB.all.push({an:a.name,slug:t.slug,title:t.title,artist:t.artist||'',link:t.link,audio:t.audio||'',cover:(a.cover&&a.cover!==(typeof PH!=='undefined'?PH:''))?a.cover:'',k:/^ED/i.test(t.slug)?'ed':'op',r:Math.random()})});
   JB.done++;jbProg();jbSoon();if(JB.cur<0&&JB.all.length)yJbPlay(0,true);
   await new Promise(function(z){setTimeout(z,300)})}}
  await Promise.all([w(),w()]);if(JB){JB.fin=true;jbProg();jbList()}}
+var JI={p:'<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',z:'<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+ pv:'<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12l8.5 6V6z"/></svg>',nx:'<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>',
+ sh:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>',
+ rp:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>'};
+function jbArt(t){if(t.cover)return[{src:t.cover,sizes:'512x512'}];try{var h=0,q=t.title+t.an,c=document.createElement('canvas');c.width=c.height=256;for(var i=0;i<q.length;i++)h=(h*31+q.charCodeAt(i))%360;
+ var x=c.getContext('2d'),g=x.createLinearGradient(0,0,256,256);g.addColorStop(0,'hsl('+h+',70%,50%)');g.addColorStop(1,'hsl('+((h+50)%360)+',75%,34%)');x.fillStyle=g;x.fillRect(0,0,256,256);
+ x.fillStyle='rgba(0,0,0,.28)';x.beginPath();x.arc(128,128,86,0,7);x.fill();x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=4;x.stroke();
+ x.fillStyle='#fff';x.font='bold 54px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t.slug||'♪',128,130);
+ return[{src:c.toDataURL('image/png'),sizes:'256x256',type:'image/png'}]}catch(e){return[]}}
+function jbF(s){s=Math.floor(s);if(!isFinite(s)||s<0)s=0;return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function jbState(){var v=document.getElementById('yjV'),B=document.getElementById('yjb');if(!v||!B)return;var pz=v.paused;B.classList.toggle('pz',pz);
+ var a=document.getElementById('yjA');if(a)a.classList.toggle('pl',!pz);var p=document.getElementById('yjPP');if(p)p.innerHTML=pz?JI.p:JI.z}
+function jbBind(){var v=document.getElementById('yjV'),R=document.getElementById('yjR');if(!v||!R)return;
+ function tick(){var d=v.duration,c=v.currentTime||0,ok=isFinite(d)&&d>0,C=document.getElementById('yjC'),U=document.getElementById('yjU');if(C)C.textContent=jbF(c);if(U)U.textContent=ok?jbF(d):'0:00';
+  if(!JB||!JB.sk){var pc=ok?c/d*100:0;R.value=pc*10;R.style.setProperty('--pc',pc+'%')}}
+ v.ontimeupdate=v.onloadedmetadata=v.ondurationchange=tick;v.onplay=v.onplaying=v.onpause=jbState;
+ R.onpointerdown=R.ontouchstart=function(){if(JB)JB.sk=1};R.onpointerup=R.ontouchend=R.onchange=function(){if(JB)JB.sk=0};
+ R.oninput=function(){var d=v.duration;JB.sk=1;R.style.setProperty('--pc',(R.value/10)+'%');if(isFinite(d)&&d>0){v.currentTime=R.value/1000*d;var C=document.getElementById('yjC');if(C)C.textContent=jbF(v.currentTime)}};
+ jbState()}
+function jbEnd(){var v=document.getElementById('yjV');if(!JB||!v)return;if(JB.rep===2){v.currentTime=0;var p=v.play();if(p&&p.catch)p.catch(function(){});return}
+ var vw=jbView();if(JB.rep===0&&vw.length&&vw.indexOf(JB.cur)===vw.length-1){jbState();return}yJbStep(1)}
+window.yJbToggle=function(){var v=document.getElementById('yjV');if(!v||!JB)return;if(JB.cur<0){var w=jbView();if(w.length)yJbPlay(w[0]);return}if(v.paused){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()};
+window.yJbRep=function(){if(!JB)return;JB.rep=(JB.rep+1)%3;var b=document.getElementById('yjRp');if(b){b.classList.toggle('on',JB.rep>0);b.classList.toggle('one',JB.rep===2)}try{toast(['Repeat off','Repeat all','Repeat one'][JB.rep])}catch(e){}};
+window.yJbQ=function(q){if(!JB)return;JB.q=String(q||'').trim();jbList()};
 window.yJuke=function(){try{closeDropdownMenu()}catch(e){}if(JB&&JB.R)JB.R.remove();
  var R=document.createElement('div');R.id='yjb';
- R.innerHTML='<div class="yjh"><b>🎧 Theme Jukebox</b><button class="ib" aria-label="Close" onclick="yJbClose()">✕</button></div><div class="yjbd"><div class="ytp-box"><video id="yjV" controls playsinline preload="metadata"></video></div>'
-  +'<div class="ytp-np"><div class="ytp-npt"><b id="yjN">Tap a song to play</b><span id="yjS"></span></div><div class="ytp-ctl"><button aria-label="Previous" onclick="yJbStep(-1)">⏮</button><button aria-label="Next" onclick="yJbStep(1)">⏭</button></div></div>'
-  +'<div class="ytp-chips"><button data-f="all" class="on" onclick="yJbF(\'all\')">All</button><button data-f="op" onclick="yJbF(\'op\')">OP</button><button data-f="ed" onclick="yJbF(\'ed\')">ED</button><button id="yjSh" onclick="yJbShuf()">🔀 Shuffle</button><button id="yjAu" class="'+(AUD?'on':'')+'" onclick="yJbAud()">🎧 Audio</button></div>'
+ R.innerHTML='<div class="yjh"><b>🎧 Theme Jukebox</b><button class="ib" aria-label="Close" onclick="yJbClose()">✕</button></div>'
+  +'<div class="yjp"><div class="yjart" id="yjA"><img id="yjI" alt=""><div class="yjdisc"><span id="yjT">♪</span></div><video id="yjV" playsinline preload="metadata"></video></div>'
+  +'<div class="yjtt"><b id="yjN">Tap a song to play</b><span id="yjS"></span></div>'
+  +'<div class="yjsk"><input type="range" id="yjR" min="0" max="1000" value="0" aria-label="Seek"><div class="yjtm"><span id="yjC">0:00</span><span id="yjU">0:00</span></div></div>'
+  +'<div class="yjct"><button id="yjSh" aria-label="Shuffle" onclick="yJbShuf()">'+JI.sh+'</button><button aria-label="Previous" onclick="yJbStep(-1)">'+JI.pv+'</button><button class="big" id="yjPP" aria-label="Play/Pause" onclick="yJbToggle()">'+JI.p+'</button><button aria-label="Next" onclick="yJbStep(1)">'+JI.nx+'</button><button id="yjRp" class="on" aria-label="Repeat" onclick="yJbRep()">'+JI.rp+'</button></div></div>'
+  +'<div class="yjbd"><input class="yjq" id="yjQ" type="search" placeholder="🔍 Search song, anime, artist…" oninput="yJbQ(this.value)">'
+  +'<div class="ytp-chips"><button data-f="all" class="on" onclick="yJbF(\'all\')">All</button><button data-f="op" onclick="yJbF(\'op\')">OP</button><button data-f="ed" onclick="yJbF(\'ed\')">ED</button><button id="yjAu" class="'+(AUD?'on':'')+'" onclick="yJbAud()">🎧 Audio</button></div>'
   +'<div class="ytp-note" id="yjP"></div><div id="yjL"></div></div>';
- document.body.appendChild(R);document.body.style.overflow='hidden';JB={R:R,all:[],cur:-1,f:'all',shuf:false,stop:false,done:0,tot:0,fin:false,tm:0};jbScan()};
+ document.body.appendChild(R);document.body.style.overflow='hidden';JB={R:R,all:[],cur:-1,f:'all',q:'',rep:1,sk:0,shuf:false,stop:false,done:0,tot:0,fin:false,tm:0};jbBind();jbScan()};
 window.yJbClose=function(){if(!JB)return;JB.stop=true;try{var v=document.getElementById('yjV');if(v){v.pause();v.removeAttribute('src');v.load()}}catch(e){}if(JB.R)JB.R.remove();JB=null;document.body.style.overflow=''};
 window.yJbF=function(f){if(!JB)return;JB.f=f;document.querySelectorAll('#yjb .ytp-chips button[data-f]').forEach(function(b){b.classList.toggle('on',b.dataset.f===f)});jbList()};
 window.yJbShuf=function(){if(!JB)return;JB.shuf=!JB.shuf;JB.all.forEach(function(x){x.r=Math.random()});var b=document.getElementById('yjSh');if(b)b.classList.toggle('on',JB.shuf);jbList()};
 window.yJbStep=function(d){if(!JB)return;var v=jbView();if(!v.length)return;var k=v.indexOf(JB.cur);k=k<0?0:(k+d+v.length)%v.length;yJbPlay(v[k])};
 window.yJbPlay=function(i,quiet){var t=JB&&JB.all[i],v=document.getElementById('yjV');if(!t||!v)return;JB.cur=i;
- var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();if(v.parentNode)v.parentNode.classList.toggle('aud',!!au);if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();var A=document.getElementById('yjA');if(A){A.classList.toggle('vid',!au);var I=document.getElementById('yjI');if(I){if(t.cover){I.onerror=function(){A.classList.remove('cv')};I.src=t.cover;A.classList.add('cv')}else{I.removeAttribute('src');A.classList.remove('cv')}}var h=0,s=t.title+t.an;for(var q=0;q<s.length;q++)h=(h*31+s.charCodeAt(q))%360;document.getElementById('yjb').style.setProperty('--jh',h);var T=document.getElementById('yjT');if(T)T.textContent=t.slug}if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
  var n=document.getElementById('yjN'),sb=document.getElementById('yjS');if(n)n.textContent=t.slug+' · '+t.title;if(sb)sb.textContent=t.an+(t.artist?' · '+t.artist:'');
  document.querySelectorAll('#yjL .ytp-row').forEach(function(r){r.classList.toggle('on',+r.dataset.i===i)});
  var on=document.querySelector('#yjL .ytp-row.on');if(on&&on.scrollIntoView&&!quiet)try{on.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}
- v.onended=function(){yJbStep(1)};v.onerror=function(){if(sb)sb.textContent='⚠️ Could not load, skipping…';setTimeout(function(){if(JB&&JB.cur===i)yJbStep(1)},1500)};
- try{if('mediaSession' in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.artist||t.an,album:t.an});navigator.mediaSession.setActionHandler('nexttrack',function(){yJbStep(1)});navigator.mediaSession.setActionHandler('previoustrack',function(){yJbStep(-1)})}}catch(e){}};
+ v.onended=function(){jbEnd()};v.onerror=function(){if(sb)sb.textContent='⚠️ Could not load, skipping…';setTimeout(function(){if(JB&&JB.cur===i)yJbStep(1)},1500)};
+ try{if('mediaSession' in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.artist||t.an,album:t.an,artwork:jbArt(t)});navigator.mediaSession.setActionHandler('nexttrack',function(){yJbStep(1)});navigator.mediaSession.setActionHandler('previoustrack',function(){yJbStep(-1)});navigator.mediaSession.setActionHandler('play',function(){v.play()});navigator.mediaSession.setActionHandler('pause',function(){v.pause()})}}catch(e){}};
 window.yJbAud=function(){AUD=!AUD;try{localStorage.setItem('yukiAudOnly',AUD?'1':'0')}catch(e){}var b=document.getElementById('yjAu');if(b)b.classList.toggle('on',AUD);
  var v=document.getElementById('yjV');if(!v||!JB||JB.cur<0)return;var t=v.currentTime,pa=v.paused;yJbPlay(JB.cur,true);
  v.addEventListener('loadedmetadata',function f(){v.removeEventListener('loadedmetadata',f);try{v.currentTime=t}catch(e){}if(!pa){var p=v.play();if(p&&p.catch)p.catch(function(){})}})};
@@ -7336,6 +7384,142 @@ html body .xg button[onclick^="xChars"]{order:4}
 html body .xg button[onclick^="yRec"]{order:5;grid-column:span 4}
 html body .xg button[onclick^="yScores"]{order:6;grid-column:span 4}
 html body .xg button[onclick^="xStudio"]{order:7;grid-column:span 4}
+</style>
+<style id="yuki-simple-css">
+.ysm{margin:12px 0}
+.ysm>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-radius:14px;border:1px solid var(--b,rgba(255,255,255,.14));background:var(--inner,rgba(255,255,255,.05));color:var(--t,#eee);font-weight:700;font-size:.88rem}
+.ysm>summary::-webkit-details-marker{display:none}
+.ysm>summary::after{content:"▾";opacity:.7;transition:transform .2s}
+.ysm[open]>summary::after{transform:rotate(180deg)}
+.ysm[open]>summary{margin-bottom:10px}
+.ysm>summary small{font-weight:600;opacity:.7;margin-left:auto;margin-right:6px}
+</style>
+<script id="yuki-simple">/* v47.46 · simpler Home / Library / Profile: same features, less clutter (secondary parts fold away) */
+(function(){
+function parse(h){var t=document.createElement('template');t.innerHTML=h;return t.content}
+function html(f){var d=document.createElement('div');d.appendChild(f);return d.innerHTML}
+function det(id,title,sub,open,inner,cls){return '<details class="ysm" id="'+id+'"'+(open?' open':'')+' ontoggle="window.'+id+'O=this.open;try{localStorage.setItem(\''+id+'\',this.open?1:0)}catch(e){}"><summary><span>'+title+'</span>'+(sub?'<small>'+sub+'</small>':'')+'</summary>'+inner+'</details>'}
+function was(id){if(window[id+'O']!==undefined)return window[id+'O'];try{return localStorage.getItem(id)==='1'}catch(e){return false}}
+/* HOME: greeting + Continue Watching first, the rest folds into one panel */
+if(typeof vHome==='function'){var oH=vHome;vHome=function(){var h=oH.apply(this,arguments);try{
+ var f=parse(h),K=[].slice.call(f.children),hero=K.filter(function(k){return k.classList.contains('hh')})[0],hi=K.findIndex(function(k){return k.classList.contains('cw-head')});
+ if(!hero||hi<0)return h;
+ var top=[hero],i=hi;top.push(K[i++]);while(K[i]&&K[i].classList.contains('cw-slide')){top.push(K[i++])}
+ var rest=K.filter(function(k){return top.indexOf(k)<0}),inner=rest.map(function(k){return k.outerHTML}).join('');
+ return top.map(function(k){return k.outerHTML}).join('')+det('ysHome','📊 Level, airing & stats','',was('ysHome'),inner)
+}catch(e){return h}}}
+/* LIBRARY: sort & filter controls fold away (auto-open when a filter is active) */
+if(typeof vLib==='function'){var oL=vLib;vLib=function(){var h=oL.apply(this,arguments);try{
+ var f=parse(h),K=[].slice.call(f.children),S=K.filter(function(k){return k.classList.contains('sr')&&k.querySelector('select')});
+ if(!S.length)return h;
+ var cnt=(S[S.length-1].querySelector('span.sub')||{}).textContent||'',act=false;
+ try{act=!!(genreF||progF||window.yScoreF||(sortBy&&sortBy!=='default'))}catch(e){}
+ var first=S[0],box=document.createElement('div');box.innerHTML=det('ysLib','⚙️ Sort & filters',cnt,act||window.ysLibO===true,S.map(function(k){return k.outerHTML}).join(''));
+ K.forEach(function(k){if(k===first)f.insertBefore(box.firstChild,k)});
+ S.forEach(function(k){k.remove()});
+ return html(f)
+}catch(e){return h}}}
+/* PROFILE: the seven backup / restore buttons fold into one row */
+if(typeof vProf==='function'){var oP=vProf;vProf=function(){var h=oP.apply(this,arguments);try{
+ var f=parse(h),m=f.querySelector('.menu');if(!m)return h;
+ var B=[].slice.call(m.children).filter(function(b){return b.tagName==='BUTTON'&&/Save Backup|Share Backup|Auto Backups|Cloud backup|Restore|Merge Backup/.test(b.textContent)});
+ if(B.length<2)return h;
+ var box=document.createElement('div');box.innerHTML=det('ysBk','💾 Backup & restore','',was('ysBk'),'<div class="menu">'+B.map(function(b){return b.outerHTML}).join('')+'</div>');
+ m.insertBefore(box.firstChild,B[0]);B.forEach(function(b){b.remove()});
+ return html(f)
+}catch(e){return h}}}
+setTimeout(function(){try{if(window.animeList||typeof animeList!=='undefined'){if(['home','library','profile'].indexOf(view)>-1&&!document.querySelector('#main .ysm'))render()}}catch(e){}},300);
+})();
+</script>
+<style id="yuki-msgbtn-fix">
+html body .top .ychd{position:relative;overflow:visible;background:var(--icon-bg)!important;border:1px solid var(--b)!important;box-shadow:var(--card-shadow)!important;color:var(--p)!important}
+html body.ycun-on .top .ychd::after{top:-3px!important;right:-3px!important;width:10px!important;height:10px!important;border:2px solid var(--bg)!important;box-shadow:none!important;animation:none!important;background:var(--p)!important}
+html body .top .ychd:active{transform:scale(.94)}
+</style>
+<style id="yuki-avatar-fix">
+html body .top #topAv{width:38px;height:38px;flex:none;border:2px solid var(--p);box-shadow:0 0 0 2px var(--bg)!important;background-size:cover!important;background-position:center 25%!important;background-repeat:no-repeat!important;animation:none}
+html body .top #topAv:active{transform:scale(.94)}
+</style>
+<style id="yuki-lchip-fix">
+html body .lfr{min-width:0}
+html body .lfr .lchip{flex-wrap:wrap;justify-content:center;row-gap:1px;max-width:100%;box-sizing:border-box;min-width:0;white-space:normal;line-height:1.25;border-radius:14px;font-size:.68rem;padding:3px 10px}
+</style>
+<style id="yuki-jukebox-fix">
+#yjb .ytp-box.aud{background:linear-gradient(135deg,#5b21b6,#0369a1)}
+#yjb .ytp-box.aud::after{inset:0 0 56px 0!important;background:linear-gradient(135deg,#6d28d9,#0284c7)!important;font-size:60px!important}
+#yjb .ytp-box.aud video{background:transparent}
+#yjb .ytp-row .tg{flex:none;width:58px;min-width:58px;box-sizing:border-box}
+#yjb .ytp-row{margin-bottom:8px;min-height:60px}
+#yjb .ytp-row .ti span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#yjb .ytp-chips{gap:8px}
+#yjb .ytp-chips button{min-height:36px}
+#yjb .ytp-note{margin:4px 0 12px;text-align:center}
+</style>
+<style id="yuki-jukebox-player">
+#yjb{background:radial-gradient(130% 55% at 50% 0,hsla(var(--jh,270),65%,30%,.8),transparent 72%),var(--bg)}
+#yjb .yjp{flex:none;padding:0 22px 6px}
+#yjb .yjart{position:relative;width:min(56vw,30vh);aspect-ratio:1;margin:2px auto 16px;border-radius:26px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(var(--jh,270),70%,50%),hsl(calc(var(--jh,270) + 50),75%,34%));box-shadow:0 18px 46px hsla(var(--jh,270),80%,50%,.45);transform:scale(.9);transition:transform .35s,box-shadow .35s}
+#yjb .yjart.pl{transform:scale(1)}
+#yjb .yjdisc{width:66%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.28);background:repeating-radial-gradient(circle,rgba(0,0,0,.16) 0 2px,transparent 2px 5px),radial-gradient(circle,rgba(255,255,255,.22),rgba(0,0,0,.35));animation:yjspin 10s linear infinite;animation-play-state:paused}
+#yjb .yjart.pl .yjdisc{animation-play-state:running}
+#yjb .yjdisc span{width:42%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);color:#fff;font-weight:900;font-size:clamp(14px,4.4vw,20px)}
+#yjb .yjart video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none}
+#yjb .yjart.vid{width:100%;aspect-ratio:16/9;border-radius:20px}
+#yjb .yjart.vid video{display:block}#yjb .yjart.vid .yjdisc{display:none}
+@keyframes yjspin{to{transform:rotate(360deg)}}
+#yjb .yjtt{text-align:center;margin-bottom:6px}
+#yjb .yjtt b{display:block;font-size:20px;font-weight:800;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#yjb .yjtt span{display:block;font-size:13px;color:var(--s);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#yjb .yjsk{margin:6px 0 2px}
+#yjb .yjsk input{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:0;display:block;--pc:0%}
+#yjb .yjsk input::-webkit-slider-runnable-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--p) var(--pc),rgba(255,255,255,.18) var(--pc))}
+#yjb .yjsk input::-moz-range-track{height:5px;border-radius:5px;background:rgba(255,255,255,.18)}
+#yjb .yjsk input::-moz-range-progress{height:5px;border-radius:5px;background:var(--p)}
+#yjb .yjsk input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;margin-top:-5.5px;box-shadow:0 0 0 4px hsla(var(--jh,270),80%,60%,.3)}
+#yjb .yjsk input::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:#fff}
+#yjb .yjtm{display:flex;justify-content:space-between;font-size:11px;color:var(--s);font-variant-numeric:tabular-nums}
+#yjb .yjct{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 10px}
+#yjb .yjct button{width:46px;height:46px;border-radius:50%;border:0;background:transparent;color:var(--t);display:flex;align-items:center;justify-content:center;position:relative;-webkit-tap-highlight-color:transparent}
+#yjb .yjct button:active{transform:scale(.9)}
+#yjb .yjct button.big{width:68px;height:68px;background:#fff;color:#111;box-shadow:0 8px 24px hsla(var(--jh,270),80%,50%,.5)}
+#yjb .yjct #yjSh,#yjb .yjct #yjRp{color:var(--s)}
+#yjb .yjct #yjSh.on,#yjb .yjct #yjRp.on{color:var(--p)}
+#yjb .yjct #yjRp.one::after{content:'1';position:absolute;font-size:9px;font-weight:900;top:50%;left:50%;transform:translate(-50%,-50%)}
+#yjb .yjq{width:100%;box-sizing:border-box;margin:4px 0 10px;padding:12px 16px;border-radius:14px;border:1px solid var(--b);background:var(--inner);color:var(--t);font-size:14px;outline:none}
+#yjb .yjq:focus{border-color:var(--p)}
+#yjb.pz .ytp-row .bars i{animation-play-state:paused}
+@media(max-height:640px){#yjb .yjart:not(.vid){width:min(40vw,24vh)}}
+</style>
+<style id="yuki-jukebox-theme">
+#yjb .yjp{padding:0 22px 2px}
+#yjb .yjart:not(.vid){width:min(46vw,24vh);margin:0 auto 10px}
+#yjb .yjart.vid{width:min(100%,calc(24vh*16/9));margin:0 auto 10px}
+#yjb .yjtt b{font-size:18px}
+#yjb .yjct{padding:0 4px 6px}#yjb .yjct button.big{width:60px;height:60px}
+#yjb .yjsk input::-webkit-slider-thumb{width:14px;height:14px;margin-top:-4.5px;box-shadow:0 1px 4px rgba(0,0,0,.4),0 0 0 3px hsla(var(--jh,270),80%,60%,.25)}
+#yjb .yjsk input::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--p) var(--pc),var(--tk,rgba(255,255,255,.2)) var(--pc))}
+#yjb .yjsk input::-moz-range-track{background:var(--tk,rgba(255,255,255,.2))}
+[data-theme="light"] #yjb{--tk:rgba(40,20,80,.16);background:radial-gradient(130% 50% at 50% 0,hsla(var(--jh,270),80%,80%,.55),transparent 72%),var(--bg)}
+[data-theme="light"] #yjb .yjart{box-shadow:0 12px 30px hsla(var(--jh,270),70%,45%,.3)}
+[data-theme="light"] #yjb .yjct button.big{background:var(--p);color:#fff;box-shadow:0 8px 20px hsla(var(--jh,270),70%,45%,.35)}
+[data-theme="light"] #yjb .yjct #yjSh,[data-theme="light"] #yjb .yjct #yjRp{color:#6b6280}
+[data-theme="light"] #yjb .yjct #yjSh.on,[data-theme="light"] #yjb .yjct #yjRp.on{color:var(--p)}
+[data-theme="light"] #yjb .yjq{box-shadow:0 1px 3px rgba(60,40,90,.08)}
+@media(max-height:640px){#yjb .yjart:not(.vid){width:min(34vw,20vh)}}
+</style>
+<style id="yuki-jukebox-thumbs">
+#yjb .jbth{position:relative;width:48px;height:64px;border-radius:12px;overflow:hidden;flex:none;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(135deg,#a78bfa,#c084fc)}
+#yjb .jbth.ed{background:linear-gradient(135deg,#38bdf8,#60a5fa)}
+#yjb .jbth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#yjb .jbth em{position:relative;font-style:normal;font-weight:800;font-size:10px;line-height:1;color:#fff;background:rgba(0,0,0,.62);padding:3px 6px;margin-bottom:4px;border-radius:6px;letter-spacing:.2px}
+#yjb .jbth:not(:has(img)){align-items:center}#yjb .jbth:not(:has(img)) em{background:none;font-size:13px;margin:0}
+#yjb .yjart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+#yjb .yjart.cv:not(.vid) img{display:block}#yjb .yjart.cv .yjdisc{display:none}
+#yjb .yjsk input{height:32px}
+#yjb .yjsk input::-webkit-slider-runnable-track{height:4px;border-radius:4px}
+#yjb .yjsk input::-webkit-slider-thumb{width:16px;height:16px;margin-top:-6px;background:var(--p);border:2px solid #fff;box-sizing:border-box;box-shadow:0 1px 5px rgba(0,0,0,.45);transition:transform .12s}
+#yjb .yjsk input:active::-webkit-slider-thumb{transform:scale(1.45)}
+#yjb .yjsk input::-moz-range-thumb{width:16px;height:16px;background:var(--p);border:2px solid #fff;box-sizing:border-box}
 </style>
 </body></html>
 
