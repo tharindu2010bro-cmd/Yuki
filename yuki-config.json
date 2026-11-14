@@ -1,5 +1,5 @@
 {
-  "v": 50,
+  "v": 51,
   "sources": {
     "off": [],
     "order": [
@@ -18,13 +18,13 @@
   },
   "proxy": "https://yukiant.brotharu292.workers.dev",
   "notice": {
-    "id": "31754501",
+    "id": "1850725664",
     "title": "New update",
-    "text": "Widget",
+    "text": "Junkbox with background play",
     "url": ""
   },
   "app": {
-    "build": "47.30",
+    "build": "47.51",
     "url": "https://tharindu2010bro-cmd.github.io/Yuki/yuki-apk-download.html"
   }
 }
