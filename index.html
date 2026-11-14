@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- CODE MAP (v47.46: Theme Jukebox rebuilt as a full custom player (pinned player, seek, repeat, search). v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
+<!-- CODE MAP (v47.49: Reddit news falls back to old.reddit.com; Developer options news check also tries the phone directly + public proxies like the app does. v47.48: Jukebox background play hook (needs widget.py v47.47 APK). v47.47: Jukebox video fullscreen button (CSS fullscreen, rotates to landscape in portrait; back button exits it); Jukebox no longer auto-closes on open. v47.46: Theme Jukebox rebuilt as a full custom player (pinned player, seek, repeat, search). v47.43: new yuki-universe script + yuki-universe-css (Anime Universe page: franchise map, hidden gems, timeline, airing in Sri Lanka time), view 'universe' added to render(). (v47.16: in-app Services list now matches the status page: Hosting group, Shikimori (.one), Jikan news). (v47.15): 55 style blocks (yuki-app-layout-fix added at end of body: nav, FAB, spacing). Scripts: yuki-v17-js, yuki-collab-memory-patch, yuki-v23-patch, yuki-ported-v36-js, yuki-unread-dot, yuki-v36-js, yuki-v35-js, yuki-v37-js, yuki-v38-js, yuki-v40-js, yuki-v41-js, yuki-v42-js, yuki-v43-js, yuki-v46-js, yuki-v47-js, yuki-v50-js, yuki-fix-net-v1, yuki-extras-row, yuki-ov-records, yuki-news, yuki-polish-js, yuki-guard, yuki-default-avatar-v4535, yuki-autobackup, yuki-tools, yuki-ai-lab, yuki-space, yuki-cloud, yuki-tidy-js. Main app is the first big <script>; every yuki-* script is a self-contained add-on that mounts into #dropdownMenu / render(). Shared overrides live in #yuki-tidy at the end of <body>. -->
 <html lang="en"><head><script>try{if(window.Capacitor||location.hostname==='localhost'){var _s=document.createElement('style');_s.id='yApkUi';_s.textContent='html:root{--yw:10px !important}*,*::before,*::after{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}body{background-attachment:scroll !important}.av.lg,.lvg,.lvg .sh,.lvg .tw,.lvu-in i,.dd.active .ddr i{animation:none !important}';document.head.appendChild(_s)}}catch(e){}</script>
-<script>window.YUKI_BUILD='47.50';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
+<script>window.YUKI_BUILD='47.51';window.YUKI_OTA=true;/* OTA page swap is ON. While the downloaded copy loads in the iframe, a branded splash covers the swap (no blank dark screen) *//* OTA loader: runs a newer downloaded copy of this page (see remote-control script at the end) */
 (function(){try{var B=window.YUKI_BUILD,o=localStorage.getItem('yukiOta_v1');if(!o)return;if(window.YUKI_OTA===false){localStorage.removeItem('yukiOta_v1');localStorage.removeItem('yukiOtaTry');return}var j=JSON.parse(o),n=+(localStorage.getItem('yukiOtaTry')||0);
 function c(a,b){a=String(a).split('.');b=String(b).split('.');for(var i=0;i<4;i++){var x=+a[i]||0,y=+b[i]||0;if(x!==y)return x>y?1:-1}return 0}
 var d=c(j.build,B);if(d<=0){if(d<0)localStorage.removeItem('yukiOta_v1');return}
@@ -1302,16 +1302,6 @@ nav button:active{transform:scale(.93)}
 <style id="yuki-speed">
 /* long lists only paint what is on screen */
 .lgrid>*{content-visibility:auto;contain-intrinsic-size:auto 132px}
-</style>
-<style id="yuki-fab-chip-fix">
-html body .lfr .lchip{display:flex;flex-wrap:wrap;justify-content:center;column-gap:5px;row-gap:1px;max-width:100%;width:max-content;box-sizing:border-box}
-html body .lfr .lchip .lcp{white-space:nowrap;min-width:0}
-html body .lgrid .ac26 .lfr{min-width:0;max-width:100%}
-/* idle: the + button tucks into the right edge so it never covers -1 / +1 Ep */
-html body.fab-idle .fab{transform:translateX(50px)!important;opacity:.85!important;transition:transform .25s,opacity .25s!important}
-html body.fab-idle .fab:active{transform:translateX(0)!important}
-/* Jukebox: keep the seek bar out of the Android edge back-gesture zone */
-html body #yjb .yjp{padding-left:34px;padding-right:34px}
 </style>
 </head><body>
 <script>var vNews;</script>
@@ -3611,7 +3601,7 @@ html[data-theme=light] .acb{background:rgba(20,16,30,.72)}
 (function(){
 /* episode card */
 const pips=a=>{const tot=a.total||0,w=a.watched||0;if(false)return'<div class="pips">'+Array.from({length:tot},(_,k)=>`<i class="${k<w?(k===w-1&&w<tot?'cur':'on'):''}"></i>`).join('')+'</div>';const p=tot>0?Math.min(100,Math.round(w/tot*100)):(a.category==='completed'&&w>0?100:0);return`<div class="pbar"><i style="width:${p}%"></i></div>`};
-const leftChip=a=>{const t=a.total||0,w=a.watched||0;if(a.category==='completed')return'';if(!(t>0)||a.category!=='ongoing')return'<div class="lfr"><span class="lchip off">&nbsp;</span></div>';const un=unairedEps(a),l=Math.max(0,t-un-w),u=Math.min(un,Math.max(0,t-w)),tx=(l?'<span class="lcp">⏳ '+l+' ep'+(l===1?'':'s')+' left'+(u?' ·':'')+'</span>':'')+(u?'<span class="lcp">📅 '+u+' upcoming</span>':'');return(tx?'<div class="lfr"><span class="lchip">'+tx+'</span></div>':'')};
+const leftChip=a=>{const t=a.total||0,w=a.watched||0;if(a.category==='completed')return'';if(!(t>0)||a.category!=='ongoing')return'<div class="lfr"><span class="lchip off">&nbsp;</span></div>';const un=unairedEps(a),l=Math.max(0,t-un-w),u=Math.min(un,Math.max(0,t-w)),tx=(l?'⏳ '+l+' ep'+(l===1?'':'s')+' left':'')+(u?(l?' · ':'')+'📅 '+u+' upcoming':'');return(tx?'<div class="lfr"><span class="lchip">'+tx+'</span></div>':'')};
 const xtra=a=>{const it=[],g=gl(a);if(a.studio&&a.category!=='movies')it.push('🏢 '+esc(a.studio));if(g.length>2)it.push('🎭 '+g.slice(2,6).map(esc).join(', '));const d=String(a.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();if(d.length>30)it.push('<span class="xd">'+esc(d.length>220?d.slice(0,220)+'…':d)+'</span>');return it.length?'<div class="acx">'+it.map(x=>'<div class="xi">'+x+'</div>').join('')+'</div>':''};
 window.fitCards=function(){document.querySelectorAll('.lgrid .acx').forEach(c=>{c.style.visibility='';const it=[...c.children];it.forEach(x=>{x.style.display='';x.classList.remove('cl')});if(c.clientHeight<13){c.style.visibility='hidden';return}let k=it.length;while(k>0&&c.scrollHeight>c.clientHeight+1){const x=it[--k];if(x.querySelector('.xd')||x.classList.contains('xd')){/* try fewer lines */x.classList.add('cl');if(c.scrollHeight<=c.clientHeight+1)break;x.classList.remove('cl')}x.style.display='none'}})};
 const CATL={ongoing:'Watching',completed:'Completed',movies:'Movie',dropped:'Dropped'};
@@ -3637,7 +3627,7 @@ window.ycWeekOpen=function(){
 })();
 </script>
 <script>/* v28 · floating buttons fade when idle */
-(function(){let t;const w=()=>{document.body.classList.remove('fab-idle');clearTimeout(t);t=setTimeout(()=>document.body.classList.add('fab-idle'),1200)};['scroll'].forEach(e=>window.addEventListener(e,w,{passive:true,capture:true}));w()})();
+(function(){let t;const w=()=>{document.body.classList.remove('fab-idle');clearTimeout(t);t=setTimeout(()=>document.body.classList.add('fab-idle'),2500)};['touchstart','scroll','click'].forEach(e=>window.addEventListener(e,w,{passive:true,capture:true}));w()})();
 </script>
 <script>/* v28b · chat button lives in the header */
 (function(){const _r=window.render;if(typeof _r!=='function')return;window.render=function(){const o=_r.apply(this,arguments);try{const top=document.querySelector('.top'),av=document.getElementById('topAv');if(top&&av&&!top.querySelector('.ychd')){const b=document.createElement('button');b.className='ib ychd';b.setAttribute('aria-label','Chat with Yuki');b.textContent='💬';b.onclick=()=>ycOpen();top.insertBefore(b,av)}}catch(e){}return o}})();
@@ -4545,15 +4535,16 @@ const WK=()=>{try{return(localStorage.getItem('yukiProxy')||'https://yukiant.bro
 const enc=encodeURIComponent;
 const jget=async(u,ms)=>{const r=await fetch(u,{signal:tmo(ms||10000),cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r};
 const reach=(u,ms)=>async()=>{await fetch(u,{mode:'no-cors',cache:'no-store',signal:tmo(ms||10000)})};
-const PX=[['your proxy',u=>WK()+'/fetch?url='+enc(u)]];
-const feedChk=u=>async()=>{let last='';for(const [n,f] of PX){try{const t=await (await jget(f(u),9000)).text();if(/<item|<entry/.test(t))return 'via '+n;last=n+': no items'}catch(e){last=n+': '+((e&&e.name==='AbortError')?'timeout':(e&&e.message)||'failed')}}throw new Error(last||'all routes failed')};
+const PX=[['your proxy',u=>WK()+'/fetch?url='+enc(u)],['public proxy',u=>'https://api.allorigins.win/raw?url='+enc(u)],['public proxy 2',u=>'https://corsproxy.io/?url='+enc(u)]];
+const NH=()=>{try{const C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.CapacitorHttp||null}catch(e){return null}};
+const feedChk=u=>async()=>{let last='';const H=NH();if(H&&H.get){try{const r=await H.get({url:u,readTimeout:9000,connectTimeout:9000});if(r.status===200&&/<item|<entry/.test(String(r.data)))return 'via phone (direct)';last='phone: HTTP '+r.status}catch(e){last='phone: '+((e&&e.message)||'failed')}}for(const [n,f] of PX){try{const t=await (await jget(f(u),9000)).text();if(/<item|<entry/.test(t))return 'via '+n;last=n+': no items'}catch(e){last=n+': '+((e&&e.name==='AbortError')?'timeout':(e&&e.message)||'failed')}}throw new Error(last||'all routes failed')};
 const ANN='https://www.animenewsnetwork.com/all/rss.xml';
 const pxTest=f=>async()=>{const t=await (await jget(f(ANN),10000)).text();if(!/<item/.test(t))throw new Error('no items in reply')};
 [
  {id:'dvN1',grp:'news',name:'Anime News Network',go:feedChk(ANN)},
  {id:'dvN2',grp:'news',name:'MyAnimeList news',go:feedChk('https://myanimelist.net/rss/news.xml')},
  {id:'dvN3',grp:'news',name:'Crunchyroll news',go:feedChk('https://cr-news-api-service.prd.crunchyrollsvc.com/v1/en-US/rss')},
- {id:'dvN4',grp:'news',name:'Reddit r/anime',go:feedChk('https://www.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=5')},
+ {id:'dvN4',grp:'news',name:'Reddit r/anime',go:async()=>{try{return await feedChk('https://www.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=5')()}catch(e){return await feedChk('https://old.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=5')()}}},
  {id:'dvTm',grp:'anime',name:'Trace.moe',go:async()=>{const j=await (await jget('https://api.trace.moe/me')).json();if(!j)throw new Error('bad response')}},
  {id:'dvWk',grp:'anime',name:'Wikipedia',go:async()=>{const j=await (await jget('https://en.wikipedia.org/api/rest_v1/page/summary/Naruto')).json();if(!j.title)throw new Error('bad response')}},
  {id:'dvG1',grp:'ai',name:'Google Gemini',go:reach('https://generativelanguage.googleapis.com/')},
@@ -4650,6 +4641,7 @@ window.yDevCopy=function(){
 const $=id=>document.getElementById(id);
 const esc=()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
 const OV=[
+ ['#yjb .yjart.fs',()=>window.yJbFs&&yJbFs(0)],
  ['#yjb',()=>window.yJbClose&&yJbClose()],
  ['#ycApiModal.show',()=>window.ycCloseApiSettings&&ycCloseApiSettings()],
  ['#xO',e=>e.remove()],
@@ -5265,7 +5257,7 @@ if(!natHttp())r.push(function(){return ftxt(u,6000).then(parse)});return r}
 function tag(a,s){return a.map(function(i){i.s=s.id;i.sn=s.name;return i})}
 function feed(s){return retry(function(){return race(routes(s.url,parseXml,true),900,s.id).then(function(a){return tag(a,s)})})}
 function reddit(){var u='https://www.reddit.com/r/anime/search.rss?q=flair%3ANews&restrict_sr=1&sort=new&limit=25';
-return retry(function(){return race(routes(u,parseAtom,false),900,'reddit').then(function(a){return tag(a,{id:'rd',name:'r/anime'})})})}
+var u2=u.replace('https://www.reddit.com','https://old.reddit.com');return retry(function(){return race(routes(u,parseAtom,false),900,'reddit').catch(function(){return race(routes(u2,parseAtom,false),900,'reddit2')}).then(function(a){return tag(a,{id:'rd',name:'r/anime'})})})}
 async function jget(u){try{return await ftxt(u,12000)}catch(e){if(/429/.test(e.message)){await sleep(1400);return await ftxt(u,12000)}throw e}}
 async function jikanOnce(){var out=[];var list=(JSON.parse(await jget('https://api.jikan.moe/v4/top/anime?filter=airing&sfw=true&limit=6')).data||[]).slice(0,6);
 for(var k=0;k<list.length;k++){try{var d=(JSON.parse(await jget('https://api.jikan.moe/v4/anime/'+list[k].mal_id+'/news')).data||[]).slice(0,6).map(function(i){return{t:i.title,l:i.url,d:txt(i.excerpt).slice(0,180),i:(i.images&&i.images.jpg&&i.images.jpg.image_url)||'',ts:ts(i.date),s:'mal',sn:'MyAnimeList'}});out=out.concat(d)}catch(e){DBG.push('jikan#'+k+': '+(e&&e.message||e))}
@@ -6735,14 +6727,14 @@ fix();setTimeout(fix,0);setTimeout(fix,1500)})();
 <script id="yuki-exit">
 (function(){var last=0,done=0;
 function plug(){try{var C=window.Capacitor||(window.top&&window.top.Capacitor);return C&&C.Plugins&&C.Plugins.App||null}catch(e){return null}}
-function layer(){return document.getElementById('yjb')||document.querySelector('.ov.active,.dd.active,.ysb.show,.xb.show')}
+function layer(){return document.querySelector('.ov.active,.dd.active,.ysb.show,.xb.show')}
 function handle(){var l=layer();
  if(l){var c=l.querySelector('.x,.ddx,[aria-label="Close"],[aria-label="Close menu"]');if(c)c.click();else if(l.classList.contains('ysb')||l.classList.contains('xb'))l.remove();else l.classList.remove('active','show');return 'stay'}
  if(typeof view!=='undefined'&&view!=='home'&&typeof go==='function'){go('home');return 'stay'}
  var n=Date.now();if(n-last<2000)return 'exit';last=n;try{toast('Press back again to exit 👋')}catch(e){}return 'stay'}
 function nat(){var A=plug();if(!A||!A.addListener)return false;A.addListener('backButton',function(){if(handle()==='exit'){try{A.exitApp()}catch(e){}}});return true}
 function web(){if(done)return;done=1;try{history.pushState({yk:1},'');window.addEventListener('popstate',function(){if(handle()==='exit')history.go(-1);else history.pushState({yk:1},'')})}catch(e){}}
-if(!nat())setTimeout(function(){nat()},800)})();/* v47.47: web fallback removed - v40 back system already handles it; the duplicate popstate listener closed the Jukebox right after opening */
+if(!nat())setTimeout(function(){nat()},800)})();/* v47.47: duplicate web back-handler removed (it closed the Jukebox right after opening) */
 </script>
 <script id="yuki-polish-js-2">/* page transition on every navigation */
 (function(){function wrap(n){var f=window[n];if(typeof f!=='function'||f.__y)return;var w=function(){var r=f.apply(this,arguments);try{var m=document.getElementById('main');if(m){m.classList.remove('yIn');void m.offsetWidth;m.classList.add('yIn')}}catch(e){}return r};w.__y=1;window[n]=w}
@@ -7328,7 +7320,13 @@ function jbArt(t){if(t.cover)return[{src:t.cover,sizes:'512x512'}];try{var h=0,q
  x.fillStyle='#fff';x.font='bold 54px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t.slug||'♪',128,130);
  return[{src:c.toDataURL('image/png'),sizes:'256x256',type:'image/png'}]}catch(e){return[]}}
 function jbF(s){s=Math.floor(s);if(!isFinite(s)||s<0)s=0;return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
-function jbState(){var v=document.getElementById('yjV'),B=document.getElementById('yjb');if(!v||!B)return;var pz=v.paused;B.classList.toggle('pz',pz);
+/* v47.47: tell the Android app to stay alive while the Jukebox plays (background play). Harmless in a browser. */
+var jbNat={on:0,t:0,k:''};
+function jbNative(play){try{var C=window.Capacitor,P=C&&C.Plugins&&C.Plugins.YukiAudio;if(!P)return;
+ if(play){clearTimeout(jbNat.t);jbNat.t=0;var tt=document.getElementById('yjN'),ss=document.getElementById('yjS'),k=(tt?tt.textContent:'')+'|'+(ss?ss.textContent:'');
+  if(!jbNat.on||k!==jbNat.k){jbNat.on=1;jbNat.k=k;P.start({title:tt?tt.textContent:'Yuki Jukebox',text:ss?ss.textContent:''})}}
+ else if(jbNat.on&&!jbNat.t){jbNat.t=setTimeout(function(){jbNat.t=0;jbNat.on=0;jbNat.k='';try{P.stop()}catch(e){}},4000)}}catch(e){}}
+function jbState(){var v=document.getElementById('yjV'),B=document.getElementById('yjb');if(!v||!B)return;var pz=v.paused;jbNative(!pz);B.classList.toggle('pz',pz);
  var a=document.getElementById('yjA');if(a)a.classList.toggle('pl',!pz);var p=document.getElementById('yjPP');if(p)p.innerHTML=pz?JI.p:JI.z}
 function jbBind(){var v=document.getElementById('yjV'),R=document.getElementById('yjR');if(!v||!R)return;
  function tick(){var d=v.duration,c=v.currentTime||0,ok=isFinite(d)&&d>0,C=document.getElementById('yjC'),U=document.getElementById('yjU');if(C)C.textContent=jbF(c);if(U)U.textContent=ok?jbF(d):'0:00';
@@ -7345,7 +7343,7 @@ window.yJbQ=function(q){if(!JB)return;JB.q=String(q||'').trim();jbList()};
 window.yJuke=function(){try{closeDropdownMenu()}catch(e){}if(JB&&JB.R)JB.R.remove();
  var R=document.createElement('div');R.id='yjb';
  R.innerHTML='<div class="yjh"><b>🎧 Theme Jukebox</b><button class="ib" aria-label="Close" onclick="yJbClose()">✕</button></div>'
-  +'<div class="yjp"><div class="yjart" id="yjA"><img id="yjI" alt=""><div class="yjdisc"><span id="yjT">♪</span></div><video id="yjV" playsinline preload="metadata"></video></div>'
+  +'<div class="yjp"><div class="yjart" id="yjA"><img id="yjI" alt=""><div class="yjdisc"><span id="yjT">♪</span></div><video id="yjV" playsinline preload="metadata"></video><button type="button" class="yjfs" id="yjFs" aria-label="Fullscreen" onclick="yJbFs()">⛶</button></div>'
   +'<div class="yjtt"><b id="yjN">Tap a song to play</b><span id="yjS"></span></div>'
   +'<div class="yjsk"><input type="range" id="yjR" min="0" max="1000" value="0" aria-label="Seek"><div class="yjtm"><span id="yjC">0:00</span><span id="yjU">0:00</span></div></div>'
   +'<div class="yjct"><button id="yjSh" aria-label="Shuffle" onclick="yJbShuf()">'+JI.sh+'</button><button aria-label="Previous" onclick="yJbStep(-1)">'+JI.pv+'</button><button class="big" id="yjPP" aria-label="Play/Pause" onclick="yJbToggle()">'+JI.p+'</button><button aria-label="Next" onclick="yJbStep(1)">'+JI.nx+'</button><button id="yjRp" class="on" aria-label="Repeat" onclick="yJbRep()">'+JI.rp+'</button></div></div>'
@@ -7353,17 +7351,20 @@ window.yJuke=function(){try{closeDropdownMenu()}catch(e){}if(JB&&JB.R)JB.R.remov
   +'<div class="ytp-chips"><button data-f="all" class="on" onclick="yJbF(\'all\')">All</button><button data-f="op" onclick="yJbF(\'op\')">OP</button><button data-f="ed" onclick="yJbF(\'ed\')">ED</button><button id="yjAu" class="'+(AUD?'on':'')+'" onclick="yJbAud()">🎧 Audio</button></div>'
   +'<div class="ytp-note" id="yjP"></div><div id="yjL"></div></div>';
  document.body.appendChild(R);document.body.style.overflow='hidden';JB={R:R,all:[],cur:-1,f:'all',q:'',rep:1,sk:0,shuf:false,stop:false,done:0,tot:0,fin:false,tm:0};jbBind();jbScan()};
-window.yJbClose=function(){if(!JB)return;JB.stop=true;try{var v=document.getElementById('yjV');if(v){v.pause();v.removeAttribute('src');v.load()}}catch(e){}if(JB.R)JB.R.remove();JB=null;document.body.style.overflow=''};
+window.yJbClose=function(){if(!JB)return;JB.stop=true;try{clearTimeout(jbNat.t);jbNat.t=0;jbNat.on=0;jbNat.k='';var _P=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.YukiAudio;if(_P)_P.stop()}catch(e){}try{var v=document.getElementById('yjV');if(v){v.pause();v.removeAttribute('src');v.load()}}catch(e){}if(JB.R)JB.R.remove();JB=null;document.body.style.overflow=''};
 window.yJbF=function(f){if(!JB)return;JB.f=f;document.querySelectorAll('#yjb .ytp-chips button[data-f]').forEach(function(b){b.classList.toggle('on',b.dataset.f===f)});jbList()};
 window.yJbShuf=function(){if(!JB)return;JB.shuf=!JB.shuf;JB.all.forEach(function(x){x.r=Math.random()});var b=document.getElementById('yjSh');if(b)b.classList.toggle('on',JB.shuf);jbList()};
 window.yJbStep=function(d){if(!JB)return;var v=jbView();if(!v.length)return;var k=v.indexOf(JB.cur);k=k<0?0:(k+d+v.length)%v.length;yJbPlay(v[k])};
 window.yJbPlay=function(i,quiet){var t=JB&&JB.all[i],v=document.getElementById('yjV');if(!t||!v)return;JB.cur=i;
- var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();var A=document.getElementById('yjA');if(A){A.classList.toggle('vid',!au);var I=document.getElementById('yjI');if(I){if(t.cover){I.onerror=function(){A.classList.remove('cv')};I.src=t.cover;A.classList.add('cv')}else{I.removeAttribute('src');A.classList.remove('cv')}}var h=0,s=t.title+t.an;for(var q=0;q<s.length;q++)h=(h*31+s.charCodeAt(q))%360;document.getElementById('yjb').style.setProperty('--jh',h);var T=document.getElementById('yjT');if(T)T.textContent=t.slug}if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ var au=AUD&&t.audio;v.src=au?t.audio:t.link;v.load();var A=document.getElementById('yjA');if(A){A.classList.toggle('vid',!au);if(au)A.classList.remove('fs');var I=document.getElementById('yjI');if(I){if(t.cover){I.onerror=function(){A.classList.remove('cv')};I.src=t.cover;A.classList.add('cv')}else{I.removeAttribute('src');A.classList.remove('cv')}}var h=0,s=t.title+t.an;for(var q=0;q<s.length;q++)h=(h*31+s.charCodeAt(q))%360;document.getElementById('yjb').style.setProperty('--jh',h);var T=document.getElementById('yjT');if(T)T.textContent=t.slug}if(!quiet){var p=v.play();if(p&&p.catch)p.catch(function(){})}
  var n=document.getElementById('yjN'),sb=document.getElementById('yjS');if(n)n.textContent=t.slug+' · '+t.title;if(sb)sb.textContent=t.an+(t.artist?' · '+t.artist:'');
  document.querySelectorAll('#yjL .ytp-row').forEach(function(r){r.classList.toggle('on',+r.dataset.i===i)});
  var on=document.querySelector('#yjL .ytp-row.on');if(on&&on.scrollIntoView&&!quiet)try{on.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}
  v.onended=function(){jbEnd()};v.onerror=function(){if(sb)sb.textContent='⚠️ Could not load, skipping…';setTimeout(function(){if(JB&&JB.cur===i)yJbStep(1)},1500)};
  try{if('mediaSession' in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.artist||t.an,album:t.an,artwork:jbArt(t)});navigator.mediaSession.setActionHandler('nexttrack',function(){yJbStep(1)});navigator.mediaSession.setActionHandler('previoustrack',function(){yJbStep(-1)});navigator.mediaSession.setActionHandler('play',function(){v.play()});navigator.mediaSession.setActionHandler('pause',function(){v.pause()})}}catch(e){}};
+window.yJbFs=function(on){var A=document.getElementById('yjA'),B=document.getElementById('yjFs'),v=document.getElementById('yjV');if(!A||!A.classList.contains('vid'))return;
+ var f=on===undefined?!A.classList.contains('fs'):!!on;A.classList.toggle('fs',f);if(B){B.textContent=f?'✕':'⛶';B.setAttribute('aria-label',f?'Exit fullscreen':'Fullscreen')}
+ if(v)v.onclick=f?function(){if(v.paused){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()}:null};
 window.yJbAud=function(){AUD=!AUD;try{localStorage.setItem('yukiAudOnly',AUD?'1':'0')}catch(e){}var b=document.getElementById('yjAu');if(b)b.classList.toggle('on',AUD);
  var v=document.getElementById('yjV');if(!v||!JB||JB.cur<0)return;var t=v.currentTime,pa=v.paused;yJbPlay(JB.cur,true);
  v.addEventListener('loadedmetadata',function f(){v.removeEventListener('loadedmetadata',f);try{v.currentTime=t}catch(e){}if(!pa){var p=v.play();if(p&&p.catch)p.catch(function(){})}})};
@@ -7454,6 +7455,14 @@ html body .lfr .lchip{flex-wrap:wrap;justify-content:center;row-gap:1px;max-widt
 #yjb .ytp-chips{gap:8px}
 #yjb .ytp-chips button{min-height:36px}
 #yjb .ytp-note{margin:4px 0 12px;text-align:center}
+</style>
+<style id="yuki-jukebox-fs">
+#yjb .yjfs{display:none;position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:10px;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;z-index:3;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+#yjb .yjart.vid .yjfs{display:flex}
+#yjb .yjart.fs{position:fixed!important;top:0;left:0;z-index:30;width:100vw!important;width:100dvw!important;height:100vh!important;height:100dvh!important;max-width:none!important;margin:0!important;border-radius:0!important;aspect-ratio:auto!important;transform:none!important;box-shadow:none!important;background:#000}
+#yjb .yjart.fs video{display:block;object-fit:contain}
+#yjb .yjart.fs .yjfs{top:calc(10px + env(safe-area-inset-top,0px));bottom:auto;right:10px;width:44px;height:44px;font-size:22px}
+@media(orientation:portrait){#yjb .yjart.fs{width:100vh!important;width:100dvh!important;height:100vw!important;height:100dvw!important;left:100vw;left:100dvw;transform-origin:0 0;transform:rotate(90deg)!important}}
 </style>
 <style id="yuki-jukebox-player">
 #yjb{background:radial-gradient(130% 55% at 50% 0,hsla(var(--jh,270),65%,30%,.8),transparent 72%),var(--bg)}
