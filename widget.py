@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Adds an Android home-screen widget ("Airing soon") to the generated Capacitor project.
 Run in the workflow AFTER `npx cap add android` / `cap sync`. Safe to run twice.
-v47.42: the Photo frame widget was removed; the Airing soon widget was rebuilt (adapts to its size, live countdown, 12/24h clock)."""
+v47.47: Jukebox background play (foreground service + WebView keep-alive). v47.42: the Photo frame widget was removed; the Airing soon widget was rebuilt (adapts to its size, live countdown, 12/24h clock)."""
 import json, os, re, glob
 
 cfg = json.load(open('capacitor.config.json')) if os.path.exists('capacitor.config.json') else {}
@@ -653,13 +653,111 @@ w(os.path.join(RES, 'drawable', 'ic_yuki_notify.xml'), '''<?xml version="1.0" en
 </vector>
 ''')
 
+
+# ---------- Jukebox background play: foreground service keeps the app (and its WebView audio) alive ----------
+w(os.path.join(JAVA, 'YukiAudioService.java'), r'''package __PKG__;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
+import android.os.IBinder;
+import android.os.PowerManager;
+
+/** Runs while the Jukebox is playing so Android does not freeze the app when you leave it. */
+public class YukiAudioService extends Service {
+    static volatile boolean running = false;
+    private PowerManager.WakeLock lock;
+
+    @Override public IBinder onBind(Intent i) { return null; }
+
+    @Override
+    public int onStartCommand(Intent i, int flags, int startId) {
+        try {
+            String title = i == null ? null : i.getStringExtra("title");
+            String text = i == null ? null : i.getStringExtra("text");
+            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationChannel ch = new NotificationChannel("yuki_audio", "Jukebox playback", NotificationManager.IMPORTANCE_LOW);
+                ch.setShowBadge(false);
+                nm.createNotificationChannel(ch);
+            }
+            Intent open = getPackageManager().getLaunchIntentForPackage(getPackageName());
+            PendingIntent pi = open == null ? null : PendingIntent.getActivity(this, 7002, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(this, "yuki_audio") : new Notification.Builder(this);
+            b.setSmallIcon(R.drawable.ic_yuki_notify);
+            b.setContentTitle(title == null || title.isEmpty() ? "Yuki Jukebox" : title);
+            b.setContentText(text == null ? "" : text);
+            b.setOngoing(true);
+            if (pi != null) b.setContentIntent(pi);
+            Notification n = b.build();
+            if (Build.VERSION.SDK_INT >= 29) startForeground(7002, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+            else startForeground(7002, n);
+            if (lock == null) {
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                lock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "yuki:jukebox");
+                lock.setReferenceCounted(false);
+                lock.acquire(6 * 60 * 60 * 1000L);
+            }
+            running = true;
+        } catch (Throwable t) { }
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        running = false;
+        try { if (lock != null && lock.isHeld()) lock.release(); } catch (Throwable t) { }
+        lock = null;
+        super.onDestroy();
+    }
+}
+'''.replace('__PKG__', PKG))
+
+w(os.path.join(JAVA, 'YukiAudioPlugin.java'), r'''package __PKG__;
+
+import android.content.Intent;
+import android.os.Build;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+
+/** The page calls start() while the Jukebox plays and stop() when it pauses or closes. */
+@CapacitorPlugin(name = "YukiAudio")
+public class YukiAudioPlugin extends Plugin {
+    @PluginMethod
+    public void start(PluginCall call) {
+        try {
+            Intent i = new Intent(getContext(), YukiAudioService.class)
+                .putExtra("title", call.getString("title", "Yuki Jukebox"))
+                .putExtra("text", call.getString("text", ""));
+            if (Build.VERSION.SDK_INT >= 26) getContext().startForegroundService(i);
+            else getContext().startService(i);
+        } catch (Throwable t) { }
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void stop(PluginCall call) {
+        try { getContext().stopService(new Intent(getContext(), YukiAudioService.class)); } catch (Throwable t) { }
+        call.resolve();
+    }
+}
+'''.replace('__PKG__', PKG))
+
 # ---------- MainActivity: register the plugins ----------
 mains = glob.glob(os.path.join(JAVA, 'MainActivity.java')) or glob.glob(os.path.join(APP, 'java', '**', 'MainActivity.java'), recursive=True)
 if not mains:
     raise SystemExit('MainActivity.java not found')
 p = mains[0]
 s = open(p, encoding='utf-8').read()
-REG = ['YukiWidgetPlugin', 'YukiFilePlugin', 'YukiSyncPlugin']
+REG = ['YukiWidgetPlugin', 'YukiFilePlugin', 'YukiSyncPlugin', 'YukiAudioPlugin']
 if 'registerPlugin(' not in s:
     if 'import android.os.Bundle;' not in s:
         s = re.sub(r'(package [^;]+;)', lambda m: m.group(1) + '\nimport android.os.Bundle;', s, count=1)
@@ -677,6 +775,32 @@ else:
     for r in REG:
         if r not in s:
             s = s.replace('super.onCreate(savedInstanceState);', 'registerPlugin(%s.class);\n        super.onCreate(savedInstanceState);' % r, 1)
+# keep the WebView (and its audio) running when the app is not in front, but only while the Jukebox service is on
+if 'YukiAudioService.running' not in s:
+    keep = '''
+    private void yukiKeepAlive() {
+        try {
+            if (YukiAudioService.running && getBridge() != null && getBridge().getWebView() != null) {
+                getBridge().getWebView().onResume();
+                getBridge().getWebView().resumeTimers();
+            }
+        } catch (Throwable t) { }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        yukiKeepAlive();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        yukiKeepAlive();
+    }
+'''
+    i = s.rstrip().rfind('}')
+    s = s[:i] + keep + '}\n'
 open(p, 'w', encoding='utf-8').write(s)
 
 # ---------- manifest: receivers + permissions ----------
@@ -704,8 +828,10 @@ if 'YukiSyncReceiver' not in m:
         <receiver android:name=".YukiNotifyReceiver" android:exported="false"/>
 '''
     m = m.replace('</application>', rec + '    </application>', 1)
-for perm in ('SCHEDULE_EXACT_ALARM', 'RECEIVE_BOOT_COMPLETED', 'INTERNET'):
+if 'YukiAudioService' not in m:
+    m = m.replace('</application>', '\n        <service android:name=".YukiAudioService" android:exported="false" android:foregroundServiceType="mediaPlayback"/>\n    </application>', 1)
+for perm in ('SCHEDULE_EXACT_ALARM', 'RECEIVE_BOOT_COMPLETED', 'INTERNET', 'FOREGROUND_SERVICE', 'FOREGROUND_SERVICE_MEDIA_PLAYBACK', 'WAKE_LOCK', 'POST_NOTIFICATIONS'):
     if 'android.permission.' + perm not in m:
         m = m.replace('<application', '<uses-permission android:name="android.permission.%s"/>\n    <application' % perm, 1)
 open(M, 'w', encoding='utf-8').write(m)
-print('Airing soon widget + file + background sync added for', PKG)
+print('Airing soon widget + file + background sync + jukebox background play added for', PKG)
